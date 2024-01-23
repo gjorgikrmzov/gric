@@ -1,9 +1,35 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, router } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { NativeWindStyleSheet } from "nativewind";
+import * as SecureStore from 'expo-secure-store'
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+
+
+const CLERK_PUBLISHABLE_KEY='pk_test_cHJvZm91bmQtb3dsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ'
+
+
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return
+    }
+  },
+}
+
+NativeWindStyleSheet.setOutput({
+  default: "native",
+});
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -12,7 +38,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(auth)/signin',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -20,8 +46,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
+    'heavy': require('../assets/fonts/Montserrat-BlackItalic.ttf'),
+    'regular': require('../assets/fonts/Montserrat-Regular.ttf'),
+    'medium': require('../assets/fonts/Montserrat-Medium.ttf'),
+    'semibold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
+    'bold': require('../assets/fonts/Montserrat-Bold.ttf'),
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -39,18 +68,33 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <RootLayoutNav />
+    </ClerkProvider>
+  )
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
 
+  const { isLoaded, isSignedIn } = useAuth()
+
+  useEffect(() => {
+    if(isLoaded && isSignedIn) {
+      router.replace('/(tabs)/')
+    } else {
+      router.replace('/(auth)/signin')
+    }
+  }, [isLoaded])
+  
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <Stack>
+      <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)/location" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="search" options={{ headerShown: false }} />
+      <Stack.Screen name="notifications" options={{ headerShown: false }} />
+      <Stack.Screen name="profile" options={{ headerShown: false }} />
+    </Stack>
   );
 }
