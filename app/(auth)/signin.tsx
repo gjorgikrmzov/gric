@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as WebBrowser from "expo-web-browser";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { useAuth, useOAuth } from "@clerk/clerk-expo";
+import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -29,13 +29,13 @@ const Page = () => {
     } catch (err) {
       console.error("OAuth error", err);
     }
-    router.replace('/(auth)/location');
+    router.replace('/(tabs)/');
   }, [startOAuthFlow]);
 
   return (
 
-      <View className='bg-[#131313] flex flex-col justify-between  py-16 pt-28 h-full px-8 z-20'>
-      <Image source={require('../../assets/images/bg.jpg')} className="w-screen h-screen bottom-0 right-0 top-0 absolute" />
+      <View className='bg-[#0b0b0b] flex flex-col justify-between  py-16 pt-28 h-full px-8 z-20'>
+      <Image source={require('../../assets/images/bg-0.jpg')} className="w-screen h-screen bottom-0 right-0 top-0 absolute" />
         <StatusBar style='light' />
 
         <View className=''>
@@ -46,7 +46,6 @@ const Page = () => {
 
         <View>
           <View className='mb-3'>
-            {/* <Image source={require('../../assets/images/welcome.png')} /> */}
             <Text className='text-white/80 text-lg mt-2 text-center' style={{ fontFamily: 'medium' }}>Добредојдовте на нашата апликација за достава на храна!</Text>
           </View>
 

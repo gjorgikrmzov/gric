@@ -1,12 +1,12 @@
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NativeWindStyleSheet } from "nativewind";
 import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import SplashComponent from '../components/splashScreen';
 
-
-const CLERK_PUBLISHABLE_KEY='pk_test_cHJvZm91bmQtb3dsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ'
+const CLERK_PUBLISHABLE_KEY = 'pk_test_cHJvZm91bmQtb3dsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ'
 
 
 const tokenCache = {
@@ -38,11 +38,11 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(auth)/signin',
+  initialRouteName: '(tabs)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+SplashScreen.hideAsync(); // Optional: Hide the native splash screen
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -51,22 +51,30 @@ export default function RootLayout() {
     'medium': require('../assets/fonts/Montserrat-Medium.ttf'),
     'semibold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
     'bold': require('../assets/fonts/Montserrat-Bold.ttf'),
+    'extrabold': require('../assets/fonts/Montserrat-ExtraBold.ttf'),
+    'extraboldI': require('../assets/fonts/Montserrat-ExtraBoldItalic.ttf'),
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  const [splashVisible, setSplashVisible] = useState(true);
 
   useEffect(() => {
+    // Hide the splash screen when loaded
     if (loaded) {
-      SplashScreen.hideAsync();
+      setTimeout(() => {
+        setSplashVisible(false);
+      }, 1000); // Adjust the duration as needed
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  useEffect(() => {
+    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+    if (error) throw error;
+  }, [error]);
+
+  if (!loaded || splashVisible) {
+    return <SplashComponent />;
   }
+
 
   return (
     <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
@@ -80,21 +88,23 @@ function RootLayoutNav() {
   const { isLoaded, isSignedIn } = useAuth()
 
   useEffect(() => {
-    if(isLoaded && isSignedIn) {
-      router.replace('/(tabs)/')
+    if (isLoaded && !isSignedIn) {
+      router.push('/(auth)/signin')
     } else {
-      router.replace('/(auth)/signin')
+      router.push('/(tabs)/')
     }
   }, [isLoaded])
-  
+
   return (
     <Stack>
       <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/location" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false, }} />
       <Stack.Screen name="search" options={{ headerShown: false }} />
+      <Stack.Screen name="categories" options={{ headerShown: false }} />
       <Stack.Screen name="notifications" options={{ headerShown: false }} />
       <Stack.Screen name="profile" options={{ headerShown: false }} />
+      <Stack.Screen name="(modals)/manageLocation" options={{ headerShown: false, presentation: "modal" }} />
     </Stack>
   );
 }
