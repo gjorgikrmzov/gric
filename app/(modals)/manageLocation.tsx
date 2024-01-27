@@ -7,10 +7,14 @@ import { TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import Geocoding from 'react-native-geocoding';
 
+const googleApiKey: string | undefined = process.env.GOOGLE_API;
 
-Geocoding.init("AIzaSyCx8TbmRb49VZX2zKEk1hmp3GuYtepbNEM");
-
-
+// Check if the key is defined before passing it to Geocoding.init
+if (googleApiKey !== undefined) {
+  Geocoding.init(googleApiKey);
+} else {
+  console.error("Google API key is not defined");
+}
 const Page = () => {
 
   const [location, setLocation] = useState<expoLocation.LocationObject | null>(null);

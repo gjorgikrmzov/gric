@@ -61,10 +61,10 @@ const Page = () => {
         </View>
 
 
-        <View className='mt-10 mb-4 flex-1 flex flex-col'>
+        <View className='mt-12 flex-1 flex flex-col'>
 
           <View className='flex flex-col'>
-            <Text className='text-[#e0e0e0]/60 uppercase' style={{ fontFamily: 'extrabold' }}>поставки</Text>
+            <Text className='text-[#e0e0e0]' style={{ fontFamily: 'extrabold' }}>Поставки</Text>
             <TouchableOpacity onPress={() => router.replace('/(tabs)/orders')} className='py-6 flex-row items-center  border-b border-[#e0e0e0]/20  flex'>
               <View className='w-10 h-10 flex justify-center items-center bg-[#e0e0e0]/10 rounded-xl'>
                 <DirectboxNotif variant="Bulk" size={24} color={Colors.primary} />
