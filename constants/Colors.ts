@@ -1,8 +1,7 @@
 export default {
-  primary: '#ff4b19',
-  dark: '#0A0908',
-  dark2: '#0b0b0b',
-  white: '#E0E2DB',
+  primary: '#6BA368',
+  dark: '#0b0b0b',
+  white: '#FAFAFA',
   transparentwhite: '#e0e2db27',
-  gray50: '#0000007a'
+  gray50: '#0b0b0b25'
 }

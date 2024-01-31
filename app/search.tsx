@@ -58,7 +58,7 @@ const Page = () => {
   return (
     <SafeAreaView className='bg-[#0b0b0b]'>
       <View className='px-6 py-4 h-full bg-[#0b0b0b]'>
-        <StatusBar style='light' />
+
 
         <View className='flex w-full flex-row items-center justify-between'>
           <TouchableOpacity className='bg-[#e0e0e0] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
@@ -70,28 +70,28 @@ const Page = () => {
         </View>
 
 
-          <View className='flex relative px-4 mt-8 justify-between items-center flex-row text-[#e0e0e0] text-[16px] bg-[#e0e0e0]/5 rounded-2xl focus:border-white/60'>
-            <View className='flex flex-row w-[85%] items-center gap-x-3'>
-              {
-                isFocused ?
-                  (
-                    <TouchableOpacity onPress={() => router.back()} className=' flex justify-center items-center'>
-                      <ArrowLeft size={22} color={Colors.white} variant='Broken' />
-                    </TouchableOpacity>
+        <View className='flex relative px-4 mt-8 justify-between items-center flex-row text-[#e0e0e0] text-[16px] bg-[#e0e0e0]/5 rounded-2xl focus:border-white/60'>
+          <View className='flex flex-row w-[85%] items-center gap-x-3'>
+            {
+              isFocused ?
+                (
+                  <TouchableOpacity onPress={() => router.back()} className=' flex justify-center items-center'>
+                    <ArrowLeft size={22} color={Colors.white} variant='Broken' />
+                  </TouchableOpacity>
 
-                  ) :
+                ) :
 
-                  (
-                    <SearchNormal1 size={22} color={Colors.white} className='flex justify-center items-center' variant='Broken' />)
-              }
-              <TextInput onFocus={handleFocus}
-                onBlur={handleBlur} ref={inputRef} style={{ fontFamily: 'medium' }} value={search} onChangeText={onChangeInput} placeholder='Пребарај' className='text-[#e0e0e0] text-[16px] w-full py-5 ' placeholderTextColor={Colors.white} />
-            </View>
-
-            <TouchableOpacity onPress={() => setsearch('')} className={close ? 'flex justify-center  items-center opacity-100' : ' opacity-0'}>
-              <CloseSquare size={24} color={Colors.white} variant='Bulk' />
-            </TouchableOpacity>
+                (
+                  <SearchNormal1 size={22} color={Colors.white} className='flex justify-center items-center' variant='Broken' />)
+            }
+            <TextInput onFocus={handleFocus}
+              onBlur={handleBlur} ref={inputRef} style={{ fontFamily: 'medium' }} value={search} onChangeText={onChangeInput} placeholder='Пребарај' className='text-[#e0e0e0] text-[16px] w-full py-5 ' placeholderTextColor={Colors.white} />
           </View>
+
+          <TouchableOpacity onPress={() => setsearch('')} className={close ? 'flex justify-center  items-center opacity-100' : ' opacity-0'}>
+            <CloseSquare size={24} color={Colors.white} variant='Bold' />
+          </TouchableOpacity>
+        </View>
 
         <View className='top-10'>
           <Text className='text-white/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>

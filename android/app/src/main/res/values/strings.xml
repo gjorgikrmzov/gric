@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">gric</string>
+  <string name="app_name">gric</string>
+  <string name="expo_runtime_version">1.0.0</string>
 </resources>

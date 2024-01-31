@@ -1,39 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, StyleSheet, Image } from 'react-native';
+import { router } from 'expo-router';
+import React, { useEffect } from 'react';
+import { StyleSheet, Image, View } from 'react-native';
 
 const SplashComponent = () => {
-    const [appLoaded, setAppLoaded] = useState(false);
-    const fadeAnim = useRef(new Animated.Value(1)).current;
-
-    useEffect(() => {
-        // Simulate app loading time (you may replace this with actual loading logic)
-        setTimeout(() => {
-            // Set appLoaded to true to trigger fade-out animation
-            setAppLoaded(true);
-        }, 2000); // Adjust the duration to simulate loading time
-    }, []);
-
-    useEffect(() => {
-        // Fade-out animation when the app is loaded
-        if (appLoaded) {
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 900, // Adjust the duration as needed
-                useNativeDriver: true,
-            }).start();
-        }
-    }, [appLoaded, fadeAnim]);
+    
     return (
-        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <View style={[styles.container]}>
             <Image
                 source={require('../assets/images/splash.png')}
                 style={styles.image}
                 resizeMode="contain" 
-                onLoad={() => setAppLoaded(true)}// Adjust the resizeMode as needed
             />
             
             {/* Add any other content for your splash screen */}
-        </Animated.View>
+        </View>
     );
 };
 

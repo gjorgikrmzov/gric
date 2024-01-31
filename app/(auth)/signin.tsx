@@ -10,7 +10,7 @@ import Colors from "../../constants/Colors";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const Page = () => {
+const Signin = () => {
 
   // Warm up the android browser to improve UX
   useWarmUpBrowser();
@@ -58,4 +58,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Signin;

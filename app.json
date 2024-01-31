@@ -14,10 +14,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.krmzov.gric",
-      "config": {
-        "infoPlist": {
-          "CADisableMinimumFrameDurationOnPhone": true
-        }
+      "runtimeVersion": {
+        "policy": "appVersion"
       }
     },
     "android": {
@@ -25,7 +23,13 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.krmzov.gric"
+      "package": "com.krmzov.gric",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ],
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -44,8 +48,12 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e21f3327-d319-4545-9987-4fbcdcc32420"
+        "projectId": "eada67a1-700f-4717-9062-9c377e9b19e8"
       }
+    },
+    "owner": "krmzov",
+    "updates": {
+      "url": "https://u.expo.dev/eada67a1-700f-4717-9062-9c377e9b19e8"
     }
   }
 }

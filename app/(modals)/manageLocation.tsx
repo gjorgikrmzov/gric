@@ -7,14 +7,10 @@ import { TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import Geocoding from 'react-native-geocoding';
 
-const googleApiKey: string | undefined = process.env.GOOGLE_API;
 
-// Check if the key is defined before passing it to Geocoding.init
-if (googleApiKey !== undefined) {
-  Geocoding.init(googleApiKey);
-} else {
-  console.error("Google API key is not defined");
-}
+Geocoding.init("AIzaSyCx8TbmRb49VZX2zKEk1hmp3GuYtepbNEM");
+
+
 const Page = () => {
 
   const [location, setLocation] = useState<expoLocation.LocationObject | null>(null);
@@ -75,19 +71,19 @@ const Page = () => {
   };
 
   return (
-    <View className='bg-[#0b0b0b] flex-1 '>
+    <View className='bg-[#fafafa] flex-1 '>
       <View className='flex px-6 py-4 flex-row items-center justify-between'>
-        <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#e0e0e0]/10 rounded-xl' >
-          <ArrowDown2 variant='Linear' size={22} color={Colors.white} />
+        <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/5 rounded-xl' >
+          <ArrowDown2 variant='Linear' size={22} color={Colors.dark} />
         </TouchableOpacity>
-        <Text className='text-lg text-[#e0e0e0]' style={{ fontFamily: 'medium' }}>Адреси</Text>
-        <Text className='text-4xl text-[#ff4b19]' style={{ fontFamily: "heavy" }}>G</Text>
+        <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Адреси</Text>
+        <Text className='text-4xl text-[#6BA368]' style={{ fontFamily: "heavy" }}>G</Text>
       </View>
 
       <View className='mt-4 px-6'>
-        <View className='w-full justify-start items-center flex-row px-4 rounded-2xl bg-[#e0e0e0]/5'>
-          <SearchNormal1 variant='Broken' size={20} color={Colors.white} />
-          <TextInput onBlur={handleInputBlur} onFocus={handleInputFocus} className='py-5 w-full ml-3 text-white' placeholder='Пребарај Адреса' placeholderTextColor={Colors.white} style={{ fontFamily: "medium" }} />
+        <View className='w-full justify-start items-center flex-row px-4 rounded-2xl bg-[#F0F1F3]'>
+          <SearchNormal1 variant='Broken' size={20} color={Colors.dark} />
+          <TextInput onBlur={handleInputBlur} onFocus={handleInputFocus} className='py-5 w-full ml-3 text-dark' placeholder='Пребарај Адреса' placeholderTextColor={Colors.dark} style={{ fontFamily: "medium" }} />
         </View>
       </View>
 
@@ -96,37 +92,37 @@ const Page = () => {
 
         (<View>
           <View className='px-6 mt-8'>
-            <Text className='text-lg text-[#e0e0e0] flex items-center' style={{ fontFamily: 'medium' }}>Моментална локација</Text>
+            <Text className='text-lg text-[#0b0b0b] flex items-center' style={{ fontFamily: 'medium' }}>Моментална локација</Text>
             <View className='flex flex-row items-center mt-2 justify-between'>
               {address ?
-                (<Text className='text-[#e0e0e0]/60 ' style={{ fontFamily: "medium",  fontSize: 14,  }}>Пристапот до вашата {'\n'}адреса е вклучен</Text>) :
-                (<Text style={{ fontSize: 14, fontFamily: 'medium' }} className='text-[#e0e0e0]/60 '>Пристапот до вашата {'\n'}адреса е исклучен</Text>)
+                (<Text className='text-[#0b0b0b]/60 ' style={{ fontFamily: "medium",  fontSize: 14,  }}>Пристапот до вашата {'\n'}адреса е вклучен</Text>) :
+                (<Text style={{ fontSize: 14, fontFamily: 'medium' }} className='text-[#0b0b0b]/60 '>Пристапот до вашата {'\n'}адреса е исклучен</Text>)
               }
-              {address ? null : (<TouchableOpacity onPress={handleGetLocation} className='bg-[#e0e0e0]/10 justify-center items-center flex px-2.5 py-2.5 rounded-lg'>
-                <Text className='text-[#e0e0e0] text-xs' style={{ fontFamily: "medium" }}>Вклучи</Text>
+              {address ? null : (<TouchableOpacity onPress={handleGetLocation} className='bg-[#6BA368] justify-center items-center flex px-2.5 py-2.5 rounded-lg'>
+                <Text className='text-[#fafafa] text-xs' style={{ fontFamily: "medium" }}>Вклучи</Text>
               </TouchableOpacity>)}
             </View>
           </View>
 
-          <View className='mt-10 w-full h-[1px] bg-[#e0e0e0]/10'></View>
+          <View className='mt-10 w-full h-[1px] bg-[#0b0b0b]/10'></View>
 
           <View className='px-6 mt-8'>
-            <Text className='text-lg text-[#e0e0e0] flex items-center' style={{ fontFamily: 'medium' }}>Ваши адреси</Text>
+            <Text className='text-lg text-[#0b0b0b] flex items-center' style={{ fontFamily: 'medium' }}>Ваши адреси</Text>
           </View>
 
           <View className='mt-4 w-full'>
 
             {
-              locationLoading ? (<TouchableOpacity className='border-b border-[#e0e0e0]/10 px-6 w-full py-7 bg-[#e0e0e0]/5 flex flex-row items-center justify-between' >
+              locationLoading ? (<TouchableOpacity className='border-b border-[#0b0b0b]/10 px-6 w-full py-7 bg-[#F0F1F3] flex flex-row items-center justify-between' >
                 <View className='flex-row items-center'>
-                  <Location size={22} variant='Bulk' color={Colors.primary} />
+                  <Location size={22} variant='Bulk' color={Colors.dark} />
 
                   {address ?
                     (
-                      <Text style={{ color: 'white', fontSize: 16, fontFamily: 'medium' }} className='ml-2 text-[#0e0e0e]'>{address}</Text>
+                      <Text style={{ color: 'black', fontSize: 16, fontFamily: 'medium' }} className='ml-2 text-[#0e0e0e]'>{address}</Text>
                     ) :
                     (
-                      <Text style={{ color: 'white', fontSize: 16, fontFamily: 'medium' }} className='ml-2 text-[#0e0e0e]'>Гриц ја бара вашата адреса...</Text>
+                      <Text style={{ color: 'black', fontSize: 16, fontFamily: 'medium' }} className='ml-2 text-[#0e0e0e]'>Гриц ја бара вашата адреса...</Text>
                     )
                   }
 
@@ -134,14 +130,14 @@ const Page = () => {
                 <TouchableOpacity>
 
 
-                  <ExportSquare color={Colors.white} variant='Broken' size={18} />
+                  <ExportSquare color={Colors.dark} variant='Broken' size={18} />
                 </TouchableOpacity>
 
               </TouchableOpacity>) :
 
                 (
                   <View className='px-6'>
-                    <Text className='text-[#e0e0e0]/60' style={{ fontFamily:"medium" }}>Моментално немате {'\n'}внесено адреса</Text>
+                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily:"medium" }}>Моментално немате {'\n'}внесено адреса</Text>
                   </View>
                 )
             }
