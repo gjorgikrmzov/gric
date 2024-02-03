@@ -4,7 +4,7 @@ import { useAuth, useUser } from '@clerk/clerk-expo'
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Page = () => {

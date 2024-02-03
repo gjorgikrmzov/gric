@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, ScrollView, Keyboard } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, ScrollView, Keyboard, Platform, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -95,7 +95,7 @@ const Page = () => {
         <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
           onRefresh={onRefresh} className='z-10' />}>
           <View className={isFocused ? 'px-6  flex flex-row items-center top-0  pb-9 ' : ' px-6 flex flex-row items-center mt-8'}>
-            <View className=' bg-[#F0F1F3] flex-1 items-center flex-row px-5 rounded-3xl'>
+            <View className=' bg-[#F0F1F3] flex-1 items-center flex-row px-5 rounded-2xl'>
               {
                 isFocused ?
                   (
@@ -109,7 +109,7 @@ const Page = () => {
                     <SearchNormal1 size={22} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
               }
 
-              <TextInput onChange={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] py-5 px-3 flex-1 ' style={{ fontFamily: 'medium' }} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
+              <TextInput  onChange={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
               <TouchableOpacity onPress={() => { setsearch(''); inputRef.current?.clear(); }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
                 <CloseSquare size={24} color={Colors.dark} variant='Bold' />
               </TouchableOpacity>
@@ -317,3 +317,10 @@ const Page = () => {
 }
 
 export default Page
+
+const styles = StyleSheet.create({
+  input: {
+      paddingVertical: (Platform.OS === 'android') ? 14 : 20,
+      fontFamily: 'medium',
+  }
+});

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
@@ -7,6 +7,8 @@ import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated'
 import { LinearGradient } from 'expo-linear-gradient'
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const Page = () => {
 
@@ -58,12 +60,12 @@ const Page = () => {
     return (
         <>
 
-            <View className='w-screen  h-screen absolute border z-0 left-0 top-0 bg-[#FAFAFA]'>
+            <View className='w-screen  h-screen absolute z-0 left-0 top-0 bg-[#FAFAFA]'>
             </View>
 
             <Animated.View className='flex-1' entering={FadeIn.springify().duration(400)}>
+                <SafeAreaView style={styles.header} className='bg-[#FAFAFA] h-screen'>
 
-                <SafeAreaView className='bg-[#FAFAFA]  flex-1 relative'>
                     <View className='bg-[#FAFAFA] border-b  border-[#0b0b0b]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
                         <StatusBar style='dark' />
                         <TouchableOpacity onPress={() => router.push('/(modals)/manageLocation')}>
@@ -77,19 +79,19 @@ const Page = () => {
                         </TouchableOpacity>
 
                         <View className='flex flex-row items-center gap-x-2'>
-                            <TouchableOpacity onPress={() => router.push('/notifications')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
+                            <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
                                 <View className='w-4 h-4 bg-[#0b0b0b] border-2 border-[#FAFAFA] rounded-full absolute right-2.5 z-10 top-2.5 flex justify-center items-center'>
                                     <Text className='text-[8px] text-[#FAFAFA] left-[0.5px]' style={{ fontFamily: 'extrabold' }}>2</Text>
                                 </View>
                                 <Notification1 color={Colors.dark} size={22} variant='Broken' />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => router.push('/profile')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
+                            <TouchableOpacity onPress={() => router.push('/(user)/profile')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
                                 <User color={Colors.dark} size={22} variant='Broken' />
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <ScrollView removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.primary} refreshing={refreshing}
+                    <ScrollView removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
                         onRefresh={onRefresh} className='z-10 ' />}>
 
                         {/* SEARCH BAR */}
@@ -104,7 +106,7 @@ const Page = () => {
                             </View>
 
                             <TouchableOpacity onPress={() => router.push('/restaurants')} className='flex flex-row items-center mt-4'>
-                                <View className='rounded-3xl py-5 px-5 flex-row items-center flex-1 bg-[#F0F1F3]  '>
+                                <View className='rounded-2xl py-5 px-5 flex-row items-center flex-1 bg-[#F0F1F3]  '>
                                     <SearchNormal1 variant='Broken' color='#0b0b0b97' size={22} />
                                     <Text className='text-[#0b0b0b]/60 ml-3' style={{ fontFamily: 'medium' }}>Пребарај Ресторани</Text>
                                 </View>
@@ -226,3 +228,9 @@ const Page = () => {
 }
 
 export default Page
+
+const styles = StyleSheet.create({
+    header: {
+        paddingTop: (Platform.OS === 'android') ? 10 : 0,
+    }
+});

@@ -102,9 +102,15 @@ function RootLayoutNav() {
       <Stack.Screen name="search" options={{ headerShown: false }} />
       <Stack.Screen name="categories" options={{ headerShown: false }} />
       <Stack.Screen name="restaurantDetails" options={{ headerShown: false }} />
-      <Stack.Screen name="orders" options={{ headerShown: false }} />
-      <Stack.Screen name="notifications" options={{ headerShown: false }} />
-      <Stack.Screen name="profile" options={{ headerShown: false }} />
+      <Stack.Screen name="foodDetails" options={{ headerShown: false, presentation: "modal" }} />
+
+      <Stack.Screen name="(order)/orders" options={{ headerShown: false }} />
+      <Stack.Screen name="(order)/orderPlaced" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="(order)/trackOrder" options={{ headerShown: false }} />
+
+      <Stack.Screen name="(user)/notifications" options={{ headerShown: false }} />
+      <Stack.Screen name="(user)/profile" options={{ headerShown: false }} />
+
       <Stack.Screen name="(modals)/manageLocation" options={{ headerShown: false, presentation: "modal" }} />
       <Stack.Screen name="(modals)/filter" options={{ headerShown: false, presentation: "modal" }} />
     </Stack>

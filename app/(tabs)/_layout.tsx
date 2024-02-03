@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs, usePathname } from 'expo-router'
 import Colors from '../../constants/Colors'
 import { Bag, DirectboxNotif, Home2, Map, Map1, SearchNormal1, Shop, User } from 'iconsax-react-native';
+import { Platform } from 'react-native';
 
 const Layout = () => {
 
@@ -12,7 +13,7 @@ const Layout = () => {
 
         <Tabs screenOptions={{
             tabBarActiveTintColor: Colors.primary,
-            tabBarStyle: { backgroundColor: Colors.white, borderTopColor: Colors.gray50, height: 110, paddingTop: 10, },
+            tabBarStyle: { backgroundColor: Colors.white, borderTopColor: Colors.gray50, height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
             tabBarItemStyle: { alignItems: 'center', justifyContent: 'center', display: 'flex', height: 60 },
             tabBarLabelStyle: { flex: 1, fontSize: 12 },
             tabBarIconStyle: { position: 'relative', backgroundColor: Colors.gray50, }
@@ -27,7 +28,8 @@ const Layout = () => {
                 )
             }} />
 
-            <Tabs.Screen name='restaurants' options={{
+            <Tabs.Screen  name='restaurants' options={{
+                tabBarHideOnKeyboard: true,
                 tabBarLabel: 'Храна',
                 tabBarLabelStyle: { fontFamily: 'medium', fontSize: 12 },
                 headerShown: false,

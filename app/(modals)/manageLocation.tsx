@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import * as expoLocation from 'expo-location';
 import { ArrowDown, ArrowDown2, ArrowLeft2, CloseSquare, Edit, Edit2, Export, ExportSquare, Location, SearchNormal, SearchNormal1 } from 'iconsax-react-native'
@@ -6,6 +6,7 @@ import Colors from '../../constants/Colors'
 import { TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import Geocoding from 'react-native-geocoding';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 Geocoding.init("AIzaSyCx8TbmRb49VZX2zKEk1hmp3GuYtepbNEM");
@@ -71,8 +72,8 @@ const Page = () => {
   };
 
   return (
-    <View className='bg-[#fafafa] flex-1 '>
-      <View className='flex px-6 py-4 flex-row items-center justify-between'>
+    <View style={styles.header} className='bg-[#fafafa]  flex-1 '>
+      <View className='flex px-6 flex-row items-center justify-between'>
         <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/5 rounded-xl' >
           <ArrowDown2 variant='Linear' size={22} color={Colors.dark} />
         </TouchableOpacity>
@@ -83,7 +84,7 @@ const Page = () => {
       <View className='mt-4 px-6'>
         <View className='w-full justify-start items-center flex-row px-4 rounded-2xl bg-[#F0F1F3]'>
           <SearchNormal1 variant='Broken' size={20} color={Colors.dark} />
-          <TextInput onBlur={handleInputBlur} onFocus={handleInputFocus} className='py-5 w-full ml-3 text-dark' placeholder='Пребарај Адреса' placeholderTextColor={Colors.dark} style={{ fontFamily: "medium" }} />
+          <TextInput onBlur={handleInputBlur} onFocus={handleInputFocus} className=' w-full ml-3 text-dark' placeholder='Пребарај Адреса' placeholderTextColor={Colors.dark} style={styles.input} />
         </View>
       </View>
 
@@ -95,7 +96,7 @@ const Page = () => {
             <Text className='text-lg text-[#0b0b0b] flex items-center' style={{ fontFamily: 'medium' }}>Моментална локација</Text>
             <View className='flex flex-row items-center mt-2 justify-between'>
               {address ?
-                (<Text className='text-[#0b0b0b]/60 ' style={{ fontFamily: "medium",  fontSize: 14,  }}>Пристапот до вашата {'\n'}адреса е вклучен</Text>) :
+                (<Text className='text-[#0b0b0b]/60 ' style={{ fontFamily: "medium", fontSize: 14, }}>Пристапот до вашата {'\n'}адреса е вклучен</Text>) :
                 (<Text style={{ fontSize: 14, fontFamily: 'medium' }} className='text-[#0b0b0b]/60 '>Пристапот до вашата {'\n'}адреса е исклучен</Text>)
               }
               {address ? null : (<TouchableOpacity onPress={handleGetLocation} className='bg-[#6BA368] justify-center items-center flex px-2.5 py-2.5 rounded-lg'>
@@ -137,7 +138,7 @@ const Page = () => {
 
                 (
                   <View className='px-6'>
-                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily:"medium" }}>Моментално немате {'\n'}внесено адреса</Text>
+                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Моментално немате {'\n'}внесено адреса</Text>
                   </View>
                 )
             }
@@ -155,3 +156,13 @@ const Page = () => {
 }
 
 export default Page
+
+const styles = StyleSheet.create({
+  header: {
+    paddingTop: (Platform.OS === 'android') ? 40 : 30,
+  },
+    input: {
+    paddingVertical: (Platform.OS === 'android') ? 14 : 20,
+    fontFamily: 'medium',
+  }
+});

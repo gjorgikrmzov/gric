@@ -1,15 +1,15 @@
-import { View, Text, SafeAreaView, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import Colors from '../constants/Colors'
+import Colors from '../../constants/Colors'
 import { router } from 'expo-router'
 import { ArrowLeft2, Notification, Notification1 } from 'iconsax-react-native'
 import { StatusBar } from 'expo-status-bar'
-
+import { SafeAreaView } from 'react-native-safe-area-context'
 const Page = () => {
   return (
 
-    <SafeAreaView className='bg-[#FAFAFA]'>
+    <SafeAreaView className=' bg-[#FAFAFA]'>
       
       <View className='h-full bg-[#FAFAFA]'>
         <View className='px-6 py-4 flex flex-row gap-x-3 items-center justify-between'>
@@ -21,7 +21,7 @@ const Page = () => {
           <Text className='text-4xl text-[#6BA368]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
-        <ScrollView refreshControl={<RefreshControl tintColor={Colors.white} refreshing={false} />} className='h-full' contentContainerStyle={{
+        <ScrollView refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={false} />} className='h-full' contentContainerStyle={{
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,

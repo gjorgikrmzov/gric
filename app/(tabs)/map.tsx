@@ -64,17 +64,17 @@ const Page = () => {
 
     <View className='bg-[#FAFAFA] flex-1'>
 
-      <View className='flex px-6 absolute top-16  left-0 z-20  w-full flex-row items-center justify-between'>
+      <View className='flex px-6 absolute top-16  left-0 z-20  w-full flex-row items-center justify-start'>
         <TouchableOpacity className='bg-[#FAFAFA] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
           <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
           <Text style={{ fontFamily: 'medium' }} className='text-[#0b0b0b] ml-1'>Назад</Text>
         </TouchableOpacity>
 
-        <Text className='text-4xl text-[#6BA368]' style={{ fontFamily: "heavy" }}>G</Text>
       </View>
 
       <View className='border-black/10  overflow-hidden'>
-        <MapView className='w-full h-full' showsCompass={false} showsUserLocation showsMyLocationButton focusable initialRegion={INITIAL_REGION} provider={PROVIDER_GOOGLE} customMapStyle={customMapStyle} >
+        <MapView showsUserLocation={true} // Show the user location pin
+        showsMyLocationButton={false} className='w-full h-full' showsCompass={false}  focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
 
         </MapView>
       </View>
@@ -176,8 +176,9 @@ const Page = () => {
             </View>
           </View>
 
-          <TouchableOpacity onPress={() => snapeToIndex(0)} className='mt-6 py-6 flex bottom-0 relative justify-center items-center rounded-3xl bg-[#0b0b0b]'>
-            <Text className='text-[#FAFAFA]' style={{ fontFamily: 'medium' }}>Прикажи филтри</Text>
+          <TouchableOpacity onPress={() => snapeToIndex(0)} className='mt-6 py-6 flex-row flex bottom-0 relative justify-center items-center rounded-2xl bg-[#0b0b0b]'>
+            <Setting4 color={Colors.primary} size={24} />
+            <Text className='text-[#FAFAFA] ml-2' style={{ fontFamily: 'medium' }}>Прикажи филтри</Text>
           </TouchableOpacity>
         </Animated.View>
 

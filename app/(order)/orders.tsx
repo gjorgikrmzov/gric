@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ArrowLeft } from 'iconsax-react-native'
-import Colors from '../constants/Colors'
+import Colors from '../../constants/Colors'
 import { router } from 'expo-router'
 
 const Page = () => {
