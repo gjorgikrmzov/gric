@@ -15,13 +15,12 @@ const Layout = () => {
             tabBarActiveTintColor: Colors.primary,
             tabBarStyle: { backgroundColor: Colors.white, borderTopColor: Colors.gray50, height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
             tabBarItemStyle: { alignItems: 'center', justifyContent: 'center', display: 'flex', height: 60 },
-            tabBarLabelStyle: { flex: 1, fontSize: 12 },
+            tabBarLabelStyle: { fontFamily: "medium", fontSize: 12 },
             tabBarIconStyle: { position: 'relative', backgroundColor: Colors.gray50, }
         }}>
 
             <Tabs.Screen name='index' options={{
                 tabBarLabel: 'Дома',
-                tabBarLabelStyle: { fontFamily: 'medium', fontSize: 12 },
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <Home2 color={color} variant={currentPath === '/' ? 'Bold' : 'Broken'} size={size} />
@@ -31,7 +30,6 @@ const Layout = () => {
             <Tabs.Screen  name='restaurants' options={{
                 tabBarHideOnKeyboard: true,
                 tabBarLabel: 'Храна',
-                tabBarLabelStyle: { fontFamily: 'medium', fontSize: 12 },
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <Shop variant={currentPath === '/restaurants' ? 'Bold' : 'Broken'} size={size} color={color} />
@@ -40,7 +38,6 @@ const Layout = () => {
 
             <Tabs.Screen name='map' options={{
                 tabBarLabel: 'Мапа',
-                tabBarLabelStyle: { fontFamily: 'medium', fontSize: 12 },
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <Map1 variant={currentPath === '/map' ? 'Bold' : 'Broken'} size={size} color={color} />
@@ -49,7 +46,6 @@ const Layout = () => {
 
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
-                tabBarLabelStyle: { fontFamily: 'medium', fontSize: 12 },
                 headerShown: false,
                 tabBarBadge: 1,
                 tabBarBadgeStyle: {

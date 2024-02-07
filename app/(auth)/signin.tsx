@@ -1,61 +1,91 @@
-import React from 'react';
-import * as WebBrowser from "expo-web-browser";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { useOAuth } from "@clerk/clerk-expo";
-import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Google } from "iconsax-react-native";
-import Colors from "../../constants/Colors";
+import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform, Alert } from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { ArrowLeft, ArrowLeft2, ArrowRight, Eye, EyeSlash } from 'iconsax-react-native'
+import Colors from '../../constants/Colors'
+import { router, useLocalSearchParams } from 'expo-router'
+import Animated, { FadeIn } from 'react-native-reanimated'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-WebBrowser.maybeCompleteAuthSession();
+const Page = () => {
 
-const Signin = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSecure, setIsSecure] = useState(true);
 
-  // Warm up the android browser to improve UX
-  useWarmUpBrowser();
+  const toggleSecureEntry = () => {
+      setIsSecure(!isSecure);
+  };
 
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  const validateUser = async () => {
+      try {
+          const storedUserData = await AsyncStorage.getItem('@userData');
+          const userData = storedUserData ? JSON.parse(storedUserData) : null;
 
-  const signInWithGoogle = React.useCallback(async () => {
-    try {
-      const { createdSessionId, setActive } = await startOAuthFlow();
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
+          if (userData && userData.email === email && userData.password === password) {
+              Alert.alert("Success", "You are successfully logged in!");
+              // Adjust based on your navigation setup
+              router.replace('/(tabs)/');
+          } else {
+              Alert.alert("Error", "Invalid email or password!");
+          }
+      } catch (error) {
+          console.error('Failed to fetch user data.', error);
       }
-    } catch (err) {
-      console.error("OAuth error", err);
-    }
-    router.replace('/(tabs)/');
-  }, [startOAuthFlow]);
-
+  };
   return (
+    <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
+      <SafeAreaView className='flex-1 bg-[#fafafa]'>
+        <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
-      <View className='bg-[#0b0b0b] flex flex-col justify-between  py-16 pt-28 h-full px-8 z-20'>
-      <Image source={require('../../assets/images/bg-0.jpg')} className="w-screen h-screen bottom-0 right-0 top-0 absolute" />
-        <StatusBar style='light' />
+          <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
+            <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+              <ArrowLeft variant='Linear' size={20} color={Colors.white} />
+              <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
+            </TouchableOpacity>
 
-        <View className=''>
-          <Text className='text-xl text-center mt-8 text-white' style={{ fontFamily: 'bold' }}>Добредојде на</Text>
-          <Text className='text-7xl text-[#ff4b19] text-center' style={{ fontFamily: 'heavy' }}>GRIC</Text>
-        </View>
-
-
-        <View>
-          <View className='mb-3'>
-            <Text className='text-white/80 text-lg mt-2 text-center' style={{ fontFamily: 'medium' }}>Добредојдовте на нашата апликација за достава на храна!</Text>
+            <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
           </View>
 
-          <TouchableOpacity onPress={signInWithGoogle} className='w-full mt-3 flex flex-row justify-center items-center py-5 bg-[#ff4b19] rounded-2xl'>
-            <Google size={24} color={Colors.white} variant="Broken" />
-            <Text className='text-lg ml-3 text-white' style={{ fontFamily: 'medium' }}>Најави се со Google</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-  );
-};
+          <View className='py-6 px-6 pt-10'>
 
-export default Signin;
+            <Text className='text-lg text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Добредојде назад</Text>
+            <Text className='text-3xl text-[#0b0b0b]/90 mt-1' style={{ fontFamily: "bold" }}>Најавете се на вашиот профил.</Text>
+          </View>
+
+          <View className='flex px-6 h-min flex-col gap-y-3'>
+            <TextInput value={email} onChangeText={setEmail} className='px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#32BB78]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+
+            <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#32BB78]'>
+              <TextInput value={password} onChangeText={setPassword} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
+
+              {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
+            </View>
+          </View>
+
+          <TouchableOpacity className='mt-4 px-6 ml-1'>
+            <Text className='text-sm text-[#32BB78]' style={{ fontFamily: 'medium' }}>Заборавена лозинка</Text>
+          </TouchableOpacity>
+
+          <View className='px-6 pb-4 flex-1 justify-end'>
+            <TouchableOpacity onPress={validateUser} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
+              <Text className='text-lg text-[#fafafa] ' style={{ fontFamily: "medium" }}>Најави се</Text>
+              <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
+            </TouchableOpacity>
+          </View>
+
+
+        </TouchableOpacity>
+      </SafeAreaView>
+    </Animated.View>
+  )
+}
+
+export default Page
+
+const styles = StyleSheet.create({
+  input: {
+    paddingVertical: (Platform.OS === 'android') ? 20 : 24,
+    fontFamily: 'medium',
+  }
+});

@@ -70,7 +70,7 @@ const Page = () => {
             <View className='bg-[#0b0b0b] pt-20 pb-6 px-6 overflow-hidden'>
                 <View>
 
-                    <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/10 rounded-xl' >
+                    <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/10 rounded-xl' >
                         <ArrowLeft2 variant='Linear' size={22} color={Colors.white} />
                     </TouchableOpacity>
 
@@ -132,11 +132,10 @@ const Page = () => {
                                 <View>
                                     <Text className='text-lg' style={{ fontFamily: "semibold" }}>{food.foodName}</Text>
                                     <Text className='text-[#0b0b0b]/80 mt-1' style={{ fontFamily: "medium" }}>{food.foodDesc}</Text>
-                                    <Text className='text-xl mt-3 text-[#6BA368]' style={{ fontFamily: 'bold' }}>{food.price} ден</Text>
+                                    <Text className='text-xl mt-3 text-[#32BB78]' style={{ fontFamily: 'bold' }}>{food.price} ден</Text>
                                 </View>
 
                                 <View className='flex justify-center items-center bg-[#0b0b0b]/10 rounded-2xl overflow-hidden w-20 h-20'>
-                                    <Image source={food.image} contentFit='contain' className='w-1/2 h-1/2' style={{ tintColor: '#6BA368' }} />
                                 </View>
                             </TouchableOpacity>
                         ))}
@@ -153,8 +152,8 @@ const Page = () => {
                 end={{ x: 0, y: 1 }}
                 className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
                 <TouchableOpacity onPress={() => router.replace('/(tabs)/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-                    <Bag variant='Bulk' size={24} color={Colors.primary} />
-                    <Text style={{ fontFamily: "medium" }} className=' text-[#fafafa] ml-2 text-[16px]'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> 1</Text>
+                    <Bag variant='Bulk' size={22} color={Colors.primary} />
+                    <Text style={{ fontFamily: "medium" }} className=' text-[#fafafa] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> 1</Text>
                 </TouchableOpacity>
             </LinearGradient>
 

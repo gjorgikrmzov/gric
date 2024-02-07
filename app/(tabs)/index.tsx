@@ -8,6 +8,7 @@ import { Image } from 'expo-image'
 import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const Page = () => {
@@ -56,6 +57,28 @@ const Page = () => {
     };
 
 
+    const [savedAddress, setSavedAddress] = useState<string>('');
+
+    useEffect(() => {
+        const loadAddress = async () => {
+            try {
+                const storedAddress = await AsyncStorage.getItem('savedAddress');
+                if (storedAddress) {
+                    setSavedAddress(storedAddress);
+                    console.log('Address loaded from AsyncStorage');
+                }
+            } catch (error) {
+                console.error('Failed to fetch the address from AsyncStorage', error);
+            }
+        };
+
+        loadAddress();
+    }, []);
+
+
+
+    const maxLength = 20;
+    const trimmedAdress = savedAddress.length > maxLength ? `${savedAddress.substring(0, maxLength)}...` : savedAddress;
 
     return (
         <>
@@ -68,20 +91,28 @@ const Page = () => {
 
                     <View className='bg-[#FAFAFA] border-b  border-[#0b0b0b]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
                         <StatusBar style='dark' />
-                        <TouchableOpacity onPress={() => router.push('/(modals)/manageLocation')}>
+                        <TouchableOpacity onPress={() => router.push('/(modals)/manageAdresses')}>
                             <View className='flex items-center flex-row'>
                                 <Location size={16} color={Colors.primary} variant='Bulk' />
                                 <Text className='text-[#0b0b0b]/60 ml-1' style={{ fontFamily: "medium" }}>Достави на</Text>
                                 <ArrowDown2 className='ml-0.5' size={14} color={Colors.dark} variant='Linear' />
                             </View>
+                            {savedAddress ?
+                                (
+                                    <Text className='text-[#0b0b0b] mt-1 ' style={{ fontFamily: 'medium' }}>{trimmedAdress}</Text>
 
-                            <Text className='text-[#0b0b0b] mt-1 ' style={{ fontFamily: 'medium' }}>Внесете ja вашата адреса</Text>
+                                ) :
+
+                                (
+                                    <Text className='text-[#0b0b0b] mt-1 ' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
+                                )
+                            }
                         </TouchableOpacity>
 
                         <View className='flex flex-row items-center gap-x-2'>
                             <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
-                                <View className='w-4 h-4 bg-[#0b0b0b] border-2 border-[#FAFAFA] rounded-full absolute right-2.5 z-10 top-2.5 flex justify-center items-center'>
-                                    <Text className='text-[8px] text-[#FAFAFA] left-[0.5px]' style={{ fontFamily: 'extrabold' }}>2</Text>
+                                <View className='w-5 h-5 bg-[#32BB78] border-2 border-[#FAFAFA] rounded-full absolute z-10 right-1 top-1 flex justify-center items-center'>
+                                    <Text className='text-[8px] text-[#FAFAFA]' style={{ fontFamily: 'extrabold', bottom: (Platform.OS === 'android') ? 1 : 0, }}>3</Text>
                                 </View>
                                 <Notification1 color={Colors.dark} size={22} variant='Broken' />
                             </TouchableOpacity>
@@ -97,16 +128,15 @@ const Page = () => {
                         {/* SEARCH BAR */}
                         <View className='mt-4  px-6'>
 
-                            <View className='w-full  items-center flex-row flex justify-between'>
-
-                                <View className='flex flex-col'>
-                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#6BA368]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
-                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(300)} className='text-xs text-[#0b0b0b] mt-[-5px] ml-0.5' style={{ fontFamily: 'extraboldI' }} >DELIVERY</Animated.Text>
+                            <View className='w-full items-start flex-col flex justify-between'>
+                                <View className='flex flex-col mt-2'>
+                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#32BB78]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b] ' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                                 </View>
                             </View>
 
                             <TouchableOpacity onPress={() => router.push('/restaurants')} className='flex flex-row items-center mt-4'>
-                                <View className='rounded-2xl py-5 px-5 flex-row items-center flex-1 bg-[#F0F1F3]  '>
+                                <View className='rounded-2xl py-5 px-5 flex-row items-center flex-1 bg-[#F0F1F3]/80  '>
                                     <SearchNormal1 variant='Broken' color='#0b0b0b97' size={22} />
                                     <Text className='text-[#0b0b0b]/60 ml-3' style={{ fontFamily: 'medium' }}>Пребарај Ресторани</Text>
                                 </View>
@@ -132,7 +162,7 @@ const Page = () => {
                                     {categories.map((category, index) => (
                                         <TouchableOpacity key={index} className='flex justify-center'>
                                             <Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' contentFit='contain' source={category.categoryImage} />
-                                            <View className='bg-[#F0F1F3]  w-20 py-3 rounded-2xl flex justify-center items-center'>
+                                            <View className='bg-[#F0F1F3]/80  w-20 py-3 rounded-2xl flex justify-center items-center'>
                                                 <Text className='text-[#0b0b0b]/80 mt-4 text-xs' style={{ fontFamily: 'semibold' }}>{category.categoryTitle}</Text>
                                             </View>
                                         </TouchableOpacity>

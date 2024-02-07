@@ -1,17 +1,45 @@
 import { View, Text, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
-import { router } from 'expo-router';
+import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Page = () => {
 
+  const [email, setEmail] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const savedEmail = await AsyncStorage.getItem('@userEmail');
+        const savedFirstName = await AsyncStorage.getItem('@userFirstName');
+        const savedLastName = await AsyncStorage.getItem('@userLastName');
+
+        if (savedEmail !== null) {
+          setEmail(savedEmail);
+        }
+        if (savedFirstName !== null) {
+          setFirstName(savedFirstName);
+        }
+        if (savedLastName !== null) {
+          setLastName(savedLastName);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data.', error);
+      }
+    };
+
+    getUserData();
+  }, []);
+
   const { signOut, isSignedIn } = useAuth();
 
-  const { user } = useUser()
 
   const handleSignOut = () => {
     Alert.alert(
@@ -26,7 +54,7 @@ const Page = () => {
           text: 'Да',
           onPress: () => {
             signOut()
-            router.replace('/(auth)/signin')
+            router.replace('/(auth)/welcome')
           },
         },
       ],
@@ -37,12 +65,12 @@ const Page = () => {
     <SafeAreaView className='bg-[#fafafa]'>
       <View className=' py-4 bg-[#fafafa]'>
         <View className='px-6 flex flex-row gap-x-3 items-center justify-between'>
-          <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/5 rounded-xl' >
+          <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl' >
             <ArrowLeft2 variant='Linear' size={22} color={Colors.dark} />
           </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Профил</Text>
 
-          <Text className='text-4xl text-[#6BA368]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
 
@@ -50,8 +78,8 @@ const Page = () => {
         <View className='flex flex-col mt-10 pb-3'>
           <View className='flex flex-row px-6 items-center justify-between'>
             <View>
-              <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>{user?.fullName}</Text>
-              <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>{user?.primaryEmailAddress?.emailAddress}</Text>
+              <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>{firstName} {lastName}</Text>
+              <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>{email}</Text>
             </View>
 
             <TouchableOpacity className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/5 rounded-xl'>
@@ -66,7 +94,7 @@ const Page = () => {
 
         <View className='flex flex-col'>
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6  flex-row items-center border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <DirectboxNotif variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>
@@ -75,8 +103,8 @@ const Page = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/manageLocation')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+          <TouchableOpacity onPress={() => router.push('/manageAdresses')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <Location variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>
@@ -86,7 +114,7 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <Heart variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>
@@ -96,7 +124,7 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6 flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <Lifebuoy variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>
@@ -106,7 +134,7 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <Information variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>
@@ -116,7 +144,7 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleSignOut} className='py-6 px-6  flex-row items-center  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/10 rounded-xl'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
               <LogoutCurve variant="Bulk" size={24} color={Colors.primary} />
             </View>
             <View className='flex-col ml-3'>

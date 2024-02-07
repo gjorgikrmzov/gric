@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -64,7 +64,7 @@ const Page = () => {
 
     <View className='bg-[#FAFAFA] flex-1'>
 
-      <View className='flex px-6 absolute top-16  left-0 z-20  w-full flex-row items-center justify-start'>
+      <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
         <TouchableOpacity className='bg-[#FAFAFA] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
           <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
           <Text style={{ fontFamily: 'medium' }} className='text-[#0b0b0b] ml-1'>Назад</Text>
@@ -74,7 +74,7 @@ const Page = () => {
 
       <View className='border-black/10  overflow-hidden'>
         <MapView showsUserLocation={true} // Show the user location pin
-        showsMyLocationButton={false} className='w-full h-full' showsCompass={false}  focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
+          showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
 
         </MapView>
       </View>
@@ -97,11 +97,11 @@ const Page = () => {
             <TouchableOpacity onPress={() => {
               handleToggle();
               isAnimating ? resetAnimation() : startAnimation();
-            }} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]'>
+            }} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]/80'>
               <Setting4 color={Colors.dark} size={22} variant='Broken' />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.push('/search')} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]'>
+            <TouchableOpacity onPress={() => router.push('/search')} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]/80'>
               <SearchNormal1 color={Colors.dark} size={22} variant='Broken' />
             </TouchableOpacity>
           </View>
@@ -125,7 +125,7 @@ const Page = () => {
                   unfillColor={Colors.white}
                   text="Пица"
                   textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
@@ -135,7 +135,7 @@ const Page = () => {
                   unfillColor={Colors.white}
                   text="Тако"
                   textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
@@ -145,7 +145,7 @@ const Page = () => {
                   unfillColor={Colors.white}
                   text="Бургер"
                   textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
@@ -155,7 +155,7 @@ const Page = () => {
                   unfillColor={Colors.white}
                   text="Пастрмајлија"
                   textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
@@ -165,7 +165,7 @@ const Page = () => {
                   unfillColor={Colors.white}
                   text="Скара"
                   textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
@@ -194,3 +194,9 @@ const Page = () => {
 export default Page;
 
 
+
+const styles = StyleSheet.create({
+  header: {
+    paddingTop: (Platform.OS === 'android') ? 40 : 64,
+  }
+});

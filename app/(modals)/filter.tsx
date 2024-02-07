@@ -11,11 +11,11 @@ const Page = () => {
     <View style={styles.header} className='bg-[#fafafa]  flex-1 '>
 
       <View className='flex px-6 flex-row items-center justify-between'>
-        <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#0b0b0b]/5 rounded-xl' >
+        <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl' >
           <ArrowDown2 variant='Linear' size={22} color={Colors.dark} />
         </TouchableOpacity>
         <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Филтер</Text>
-        <Text className='text-4xl text-[#0b0b0b]' style={{ fontFamily: "heavy" }}>G</Text>
+        <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
       </View>
     </View>
   )

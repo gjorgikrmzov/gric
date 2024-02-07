@@ -89,7 +89,7 @@ function RootLayoutNav() {
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push('/(auth)/signin')
+      router.push('/(auth)/welcome')
     } else {
       router.push('/(tabs)/')
     }
@@ -97,21 +97,28 @@ function RootLayoutNav() {
 
   return (
     <Stack>
-      <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)/welcome" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/setUsername" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/setEmail" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/setPassword" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/signIn" options={{ headerShown: false }} />
+
       <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false, }} />
+
       <Stack.Screen name="search" options={{ headerShown: false }} />
       <Stack.Screen name="categories" options={{ headerShown: false }} />
       <Stack.Screen name="restaurantDetails" options={{ headerShown: false }} />
       <Stack.Screen name="foodDetails" options={{ headerShown: false, presentation: "modal" }} />
 
       <Stack.Screen name="(order)/orders" options={{ headerShown: false }} />
-      <Stack.Screen name="(order)/orderPlaced" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="(order)/checkout" options={{ headerShown: false }} />
+      <Stack.Screen name="(order)/orderPlaced" options={{ headerShown: false }} />
       <Stack.Screen name="(order)/trackOrder" options={{ headerShown: false }} />
 
       <Stack.Screen name="(user)/notifications" options={{ headerShown: false }} />
       <Stack.Screen name="(user)/profile" options={{ headerShown: false }} />
 
-      <Stack.Screen name="(modals)/manageLocation" options={{ headerShown: false, presentation: "modal" }} />
+      <Stack.Screen name="(modals)/manageAdresses" options={{ headerShown: false, presentation: "modal" }} />
       <Stack.Screen name="(modals)/filter" options={{ headerShown: false, presentation: "modal" }} />
     </Stack>
   );

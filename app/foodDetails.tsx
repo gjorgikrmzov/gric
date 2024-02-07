@@ -40,7 +40,7 @@ const Page = () => {
             <View className='bg-[#0b0b0b] px-6 h-44 '>
                 <View className='flex flex-row justify-between items-center w-full'>
 
-                    <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/10 rounded-xl' >
+                    <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/10 rounded-xl' >
                         <ArrowDown2 variant='Linear' size={22} color={Colors.white} />
                     </TouchableOpacity>
 
@@ -57,7 +57,7 @@ const Page = () => {
 
                 <View className='mt-6 px-6'>
                     <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Бонапарта</Text>
-                    <Text className='text-[#6BA368] text-2xl' style={{ fontFamily: "extrabold" }}>180 ден</Text>
+                    <Text className='text-[#32BB78] text-2xl' style={{ fontFamily: "extrabold" }}>180 ден</Text>
                     <Text className='text-[#0b0b0b]/80 mt-3 leading-5' style={{ fontFamily: "medium" }}>Француско лебче · Кашкавал · Печеница · Домати · Павлака</Text>
                 </View>
 
@@ -69,7 +69,7 @@ const Page = () => {
                         <Minus
                             size={26}
                             color={Colors.white}
-                            variant='Broken'
+                            variant='Linear'
                         />
                     </TouchableOpacity>
 
@@ -79,7 +79,7 @@ const Page = () => {
                         <Add
                             size={26}
                             color={Colors.white}
-                            variant='Broken'
+                            variant='Linear'
                         />
                     </TouchableOpacity>
                 </View>
@@ -91,8 +91,8 @@ const Page = () => {
                     end={{ x: 0, y: 1 }}
                     className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
                     <TouchableOpacity onPress={handleRouteBack} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-                        <Bag variant='Bulk' size={24} color={Colors.primary} />
-                        <Text style={{ fontFamily: "medium" }} className='text-[#fafafa] text-[16px] ml-2'>Додади {itemQuantity} во Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {totalItemPrice} ден</Text>
+                        <Bag variant='Bulk' size={22} color={Colors.primary} />
+                        <Text style={{ fontFamily: "medium" }} className='text-[#fafafa] ml-2'>Додади {itemQuantity} во Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {totalItemPrice} ден</Text>
                     </TouchableOpacity>
                 </LinearGradient>
             </View>
