@@ -89,7 +89,7 @@ const checkout = () => {
                         </View>
 
                         <View className='w-full mt-3'>
-                            <TouchableOpacity className='border-b border-[#0b0b0b]/10 px-6 w-full py-7 bg-[#F0F1F3] flex flex-row items-center justify-between' >
+                            <TouchableOpacity className='border-b border-[#0b0b0b]/10 px-6 w-full py-4 bg-[#F0F1F3] flex flex-row items-center justify-between' >
                                 <View className='flex-row items-center'>
                                     <Location size={22} variant='Bulk' color={Colors.primary} />
                                     {savedAddress ? (
@@ -134,7 +134,7 @@ const checkout = () => {
                             numberOfLines={8}
                             placeholder="Остави порака"
                             placeholderTextColor='#0b0b0b84'
-                            className='w-full p-4 rounded-xl mt-3 h-40 bg-[#F0F1F3]'
+                            className='w-full p-4 rounded-xl flex justify-start items-start mt-3 h-40 bg-[#F0F1F3]'
                             style={{ fontFamily: 'medium' }}
                         />
                     </View>
@@ -142,46 +142,45 @@ const checkout = () => {
                 </ScrollView>
             </View>
 
-            <BottomSheet ref={bottomSheetRef}
-                index={1}
-                backgroundStyle={{ backgroundColor: '#F0F1F3' }}
-                handleIndicatorStyle={{ backgroundColor: Colors.dark }}
-                snapPoints={snapPoints}>
 
-                <View className='w-full h-full py-6 justify-between flex flex-col'>
-                    <View className='px-6'>
-                        <View className='w-full flex-row items-center  justify-between flex'>
-                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Износ без достава</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>180 ден</Text>
+                <BottomSheet ref={bottomSheetRef}
+                    index={1}
+                    backgroundStyle={{ backgroundColor: '#F0F1F3' }}
+                    handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+                    snapPoints={snapPoints}>
+
+                    <View className='w-full h-full py-6 justify-between flex flex-col'>
+                        <View className='px-6'>
+                            <View className='w-full flex-row items-center  justify-between flex'>
+                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Износ без достава</Text>
+                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>180 ден</Text>
+                            </View>
+
+                            <View className='w-full flex-row items-center  mt-5 justify-between flex'>
+                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Достава</Text>
+                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>80 ден</Text>
+                            </View>
+
+                            <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
+
+
+                            <View className='w-full flex-row items-center  mt-5 justify-between flex'>
+                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Вкупно</Text>
+                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{totalItemPrice} ден</Text>
+                            </View>
+
                         </View>
 
-                        <View className='w-full flex-row items-center  mt-5 justify-between flex'>
-                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Достава</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>80 ден</Text>
+                        <View className='px-6 mb-4'>
+                            <TouchableOpacity onPress={() => router.push('/(order)/orderPlaced')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                                <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Нарачај</Text>
+                                <Receipt1 variant='Bulk' className='ml-2' size={24} color={Colors.primary} />
+                            </TouchableOpacity>
                         </View>
-
-                        <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
-
-
-                        <View className='w-full flex-row items-center  mt-5 justify-between flex'>
-                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Вкупно</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{totalItemPrice} ден</Text>
-                        </View>
-
                     </View>
 
-                    <View className='px-6 mb-4'>
-                        <TouchableOpacity onPress={() => router.push('/(order)/orderPlaced')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-                            <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Нарачај</Text>
-                            <Receipt1 variant='Bulk' className='ml-2' size={24} color={Colors.primary} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-            </BottomSheet>
+                </BottomSheet>
         </SafeAreaView>
-
-
     )
 }
 

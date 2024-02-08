@@ -35,7 +35,7 @@ const Signin = () => {
 
   return (
 
-      <Animated.View entering={FadeIn.springify().delay(150).duration(200)} className='bg-[#fafafa] flex flex-col justify-between pb-14 pt-28 h-full px-8 z-20'>
+      <Animated.View entering={FadeIn.springify().delay(150).duration(200)} className='bg-[#fafafa] flex flex-col justify-between items-stretch pb-4 pt-28 h-full px-8 z-20'>
         <StatusBar style='dark' />
 
         <View className=''>

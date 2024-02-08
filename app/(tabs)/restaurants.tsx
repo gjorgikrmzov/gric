@@ -54,7 +54,7 @@ const Page = () => {
       }),
       Animated.timing(headerOpacity, {
         toValue: 0,
-        duration: 200, // Making the fade out faster
+        duration: 100, // Making the fade out faster
         useNativeDriver: true,
       }),
     ]).start();
@@ -72,7 +72,7 @@ const Page = () => {
       }),
       Animated.timing(headerOpacity, {
         toValue: 1,
-        duration: 200, // Making the fade in faster
+        duration: 100, // Making the fade in faster
         useNativeDriver: true,
       }),
     ]).start();
@@ -103,7 +103,7 @@ const Page = () => {
 
   return (
     <SafeAreaView className='bg-[#fafafa] flex-1'>
-      <View className='pt-4 flex-1 bg-[#fafafa]'>
+      <View style={styles.header} className=' flex-1 bg-[#fafafa]'>
 
 
 
@@ -117,7 +117,7 @@ const Page = () => {
         </Animated.View>
 
 
-        <Animated.View style={{ transform: [{ translateY: searchBarY }] }} className='px-6 flex flex-row items-center mt-6 mb-4 '>
+        <Animated.View style={{  transform: [{ translateY: searchBarY }] }} className='px-6 flex flex-row items-center mt-6 mb-4 '>
           <View className=' bg-[#F0F1F3]/80 flex-1 items-center flex-row px-5 rounded-2xl'>
             {
               isFocused ?
@@ -401,6 +401,9 @@ const Page = () => {
 export default Page
 
 const styles = StyleSheet.create({
+  header:{
+    paddingTop: (Platform.OS === 'android') ? 30 : 16,
+  },
   input: {
     paddingVertical: (Platform.OS === 'android') ? 15 : 20,
     fontFamily: 'medium',

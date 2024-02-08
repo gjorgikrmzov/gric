@@ -63,7 +63,8 @@ const Page = () => {
   return (
 
     <View className='bg-[#FAFAFA] flex-1'>
-
+      <StatusBar style='auto' />
+      
       <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
         <TouchableOpacity className='bg-[#FAFAFA] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
           <ArrowLeft variant='Linear' size={20} color={Colors.dark} />

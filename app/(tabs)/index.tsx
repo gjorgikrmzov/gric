@@ -90,7 +90,7 @@ const Page = () => {
                 <SafeAreaView style={styles.header} className='bg-[#FAFAFA] h-screen'>
 
                     <View className='bg-[#FAFAFA] border-b  border-[#0b0b0b]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
-                        <StatusBar style='dark' />
+                        <StatusBar style='dark'/>
                         <TouchableOpacity onPress={() => router.push('/(modals)/manageAdresses')}>
                             <View className='flex items-center flex-row'>
                                 <Location size={16} color={Colors.primary} variant='Bulk' />

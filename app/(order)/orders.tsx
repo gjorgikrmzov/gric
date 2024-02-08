@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, FadeInDown, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { ArrowLeft, ArrowLeft2, Clock, DirectboxDefault, DirectboxNotif, Notification, Receipt, Receipt1 } from 'iconsax-react-native';
@@ -8,19 +8,23 @@ import Colors from '../../constants/Colors';
 import { router } from 'expo-router';
 // Note: Ensure you're importing router from a valid source, as 'expo-router' might be a placeholder.
 // import { router } from 'expo-router';
-
+import { Dimensions } from 'react-native';
 
 
 const Page = () => {
+
+    const screenWidth = Dimensions.get('window').width;
+    const halfScreenWidth = screenWidth * 0.5;
+
+
     const [selectedTab, setSelectedTab] = useState<'currentOrder' | 'allOrders'>('currentOrder');
     const animation = useSharedValue(0);
 
     const onTabPress = (tab: 'currentOrder' | 'allOrders') => {
         setSelectedTab(tab);
-        animation.value = withSpring(tab === 'currentOrder' ? 0 : 1, {
-            damping: 18, // Less damping for more "bounciness"
-            stiffness: 170, // Adjust for the "speed" of the spring
-            mass: 1, // Can be adjusted for the "heaviness" of the animation
+        animation.value = withTiming(tab === 'currentOrder' ? 0 : 1, {
+            duration: 250, // Adjust the duration as needed for speed
+            easing: Easing.inOut(Easing.circle), // This applies a custom cubic easing function
         });
     };
 
@@ -28,11 +32,14 @@ const Page = () => {
         return {
             transform: [
                 {
-                    translateX: animation.value * 176,
+                    translateX: animation.value * halfScreenWidth,
                 },
             ],
         };
     }, []);
+
+
+    
 
 
     return (
@@ -49,26 +56,26 @@ const Page = () => {
             <View className='w-full mt-3 pt-3'>
 
                 <View className='justify-center w-full items-center flex'>
-                    <View className='flex flex-col'>
+                    <View className='flex flex-col justify-center items-center w-full '>
                         <View className='flex flex-row'>
-                            <TouchableOpacity className={selectedTab === 'currentOrder' ? 'w-44 h-16 flex justify-center items-center py-4': ' bg-[#0b0b0b]/5 rounded-2xl w-44 h-16 flex justify-center items-center py-4'} onPress={() => onTabPress('currentOrder')} >
-                                <Text style={{ fontFamily: 'medium' }} className={selectedTab === 'currentOrder' ? 'text-[#fafafa]' : "text-black"}>Нарачки во тек</Text>
+                            <TouchableOpacity className=' w-44 h-16 flex justify-center items-center py-4' onPress={() => onTabPress('currentOrder')} >
+                                <Text style={{ fontFamily: 'semibold' }} className={selectedTab === 'currentOrder' ? 'text-[#0b0b0b]' : "text-[#0b0b0b]/50"}>Нарачки во тек</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity className={selectedTab === 'currentOrder' ? ' bg-[#0b0b0b]/5 rounded-2xl w-44 h-16 flex justify-center items-center py-4': 'w-44 h-16 flex justify-center items-center py-4'} onPress={() => onTabPress('allOrders')} >
-                                <Text style={{ fontFamily: 'medium' }} className={selectedTab === 'currentOrder' ? 'text-black' : "text-[#fafafa]"}>Сите нарачки</Text>
+                            <TouchableOpacity className=' w-44 h-16 flex justify-center items-center py-4' onPress={() => onTabPress('allOrders')} >
+                                <Text style={{ fontFamily: 'semibold' }} className={selectedTab === 'currentOrder' ? 'text-[#0b0b0b]/50' : "text-[#0b0b0b]"}>Готови нарачки</Text>
                             </TouchableOpacity>
                         </View>
-                        <Animated.View className='h-16 absolute top-0 rounded-2xl bg-[#0b0b0b] z-[-1]' style={[styles.highlight, animatedStyle]} />
+                        <View className='w-full flex absolute left-0 bottom-0 h-1.5 bg-[#F0F1F3] '>
+                            <Animated.View className='h-1.5 bg-[#0b0b0b]' style={[styles.highlight, animatedStyle]} />
+                        </View>
                     </View>
 
                 </View>
             </View>
 
 
-            <View className=' py-4 mt-6  flex-1'>
-                <View className='w-full h-2 bg-[#F0F1F3] '>
+            <View className=' flex-1'>
 
-                </View>
                 {selectedTab === 'currentOrder' ? (
                     <Animated.View entering={FadeInDown.delay(200).duration(200).springify()} className='px-6 flex-1 justify-center items-start mt-6 flex-row'>
                         {/* <View className='flex justify-center items-center flex-col'>
@@ -78,11 +85,11 @@ const Page = () => {
                             <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: "medium" }}>Немате нарачки {'\n'}во моментов</Text>
                         </View> */}
 
-                        <ScrollView className='flex flex-col w-full'>
+                        <ScrollView className='flex h-full flex-col w-full'>
                             <View className='jusify-start flex-1 flex flex-col items-center border-b border-[#0b0b0b]/10 py-5'>
                                 <View className='flex flex-row items-start'>
 
-                                    <View className='w-20 h-20  bg-[#0b0b0b] rounded-2xl'></View>
+                                    <View className='w-20 h-20  bg-[#0B0B0B]/10 rounded-2xl'></View>
                                     <View className='ml-3 flex-1'>
                                         <View className='flex flex-col'>
                                             <Text className='text-[16px]' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
@@ -97,12 +104,12 @@ const Page = () => {
                                 </View>
 
                                 <View className='flex-1 items-center flex gap-x-2 flex-row justify-center mt-3'>
-                                    <TouchableOpacity className='flex items-center bg-[#F0F1F3] px-3 flex-1 py-4 rounded-2xl'>
-                                        <Text style={{ fontFamily: "medium" }}>Види нарачка</Text>
+                                    <TouchableOpacity onPress={() => router.push('/(order)/trackOrder')} className='flex items-center bg-[#0b0b0b] px-3 flex-1 py-4 rounded-2xl'>
+                                        <Text style={{ fontFamily: "medium" }} className='text-white'>Види нарачка</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity className='flex items-center bg-[#F0F1F3] px-3 flex-1 py-4 rounded-2xl'>
-                                        <Text style={{ fontFamily: "medium" }}>Откажи</Text>
+                                    <TouchableOpacity className='flex items-center bg-[#0b0b0b] px-3 flex-1 py-4 rounded-2xl'>
+                                        <Text style={{ fontFamily: "medium" }} className='text-white'>Откажи</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -124,9 +131,9 @@ const Page = () => {
                             <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: "medium" }}>Немате предходни {'\n'}нарачки</Text>
                         </View> */}
 
-                        <ScrollView className='flex flex-col  w-full'>
+                        <ScrollView className='h-full flex flex-col  w-full'>
                             <TouchableOpacity className='rotunded-3xl jusify-start flex flex-row items-center border-b border-[#0b0b0b]/10 py-5'>
-                                <View className='w-20 h-20  bg-[#0b0b0b] rounded-2xl'></View>
+                                <View className='w-20 h-20  bg-[#0B0B0B]/10 rounded-2xl'></View>
                                 <View className='ml-3 flex-1'>
                                     <View className='flex flex-col'>
                                         <Text className='text-[16px]' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
@@ -142,7 +149,7 @@ const Page = () => {
 
 
                             <TouchableOpacity className='rotunded-3xl jusify-start flex flex-row items-center border-b border-[#0b0b0b]/10 py-5'>
-                                <View className='w-20 h-20  bg-[#0b0b0b] rounded-2xl'></View>
+                                <View className='w-20 h-20  bg-[#0B0B0B]/10 rounded-2xl'></View>
                                 <View className='ml-3 flex-1'>
                                     <View className='flex flex-col'>
                                         <Text className='text-[16px]' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
@@ -157,7 +164,7 @@ const Page = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity className='rotunded-3xl jusify-start flex flex-row items-center border-b border-[#0b0b0b]/10 py-5'>
-                                <View className='w-20 h-20  bg-[#0b0b0b] rounded-2xl'></View>
+                                <View className='w-20 h-20  bg-[#0B0B0B]/10 rounded-2xl'></View>
                                 <View className='ml-3 flex-1'>
                                     <View className='flex flex-col'>
                                         <Text className='text-[16px]' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
@@ -193,7 +200,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     highlight: {
-        width: 176, // Set this to your tab width
+        width: '50%', // Set this to your tab width
     },
     content: {
         fontSize: 20,
