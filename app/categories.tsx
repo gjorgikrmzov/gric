@@ -19,7 +19,7 @@ const Page = () => {
             <Text style={{ fontFamily: 'medium' }} className='text-black ml-1'>Назад</Text>
           </TouchableOpacity>
 
-          <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
       </View>
     </SafeAreaView>

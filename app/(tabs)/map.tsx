@@ -63,7 +63,6 @@ const Page = () => {
   return (
 
     <View className='bg-[#FAFAFA] flex-1'>
-      <StatusBar style='auto' />
       
       <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
         <TouchableOpacity className='bg-[#FAFAFA] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
@@ -98,11 +97,11 @@ const Page = () => {
             <TouchableOpacity onPress={() => {
               handleToggle();
               isAnimating ? resetAnimation() : startAnimation();
-            }} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]/80'>
+            }} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
               <Setting4 color={Colors.dark} size={22} variant='Broken' />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.push('/search')} className='w-12 h-12 flex justify-center items-center rounded-xl border border-[#F0F1F3] bg-[#F0F1F3]/80'>
+            <TouchableOpacity onPress={() => router.push('/restaurants')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
               <SearchNormal1 color={Colors.dark} size={22} variant='Broken' />
             </TouchableOpacity>
           </View>
@@ -122,6 +121,7 @@ const Page = () => {
 
                 <Text className='text-[#0b0b0b]/60 text-xs' style={{ fontFamily: "extrabold" }}>ХРАНА</Text>
                 <BouncyCheckbox
+                size={22}
                   fillColor={Colors.dark}
                   unfillColor={Colors.white}
                   text="Пица"
@@ -132,6 +132,7 @@ const Page = () => {
                 />
 
                 <BouncyCheckbox
+                size={22}
                   fillColor={Colors.dark}
                   unfillColor={Colors.white}
                   text="Тако"
@@ -142,6 +143,7 @@ const Page = () => {
                 />
 
                 <BouncyCheckbox
+                size={22}
                   fillColor={Colors.dark}
                   unfillColor={Colors.white}
                   text="Бургер"
@@ -152,6 +154,7 @@ const Page = () => {
                 />
 
                 <BouncyCheckbox
+                size={22}
                   fillColor={Colors.dark}
                   unfillColor={Colors.white}
                   text="Пастрмајлија"
@@ -162,6 +165,7 @@ const Page = () => {
                 />
 
                 <BouncyCheckbox
+                size={22}
                   fillColor={Colors.dark}
                   unfillColor={Colors.white}
                   text="Скара"

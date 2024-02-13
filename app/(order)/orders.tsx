@@ -50,7 +50,7 @@ const Page = () => {
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Нарачки</Text>
 
-                <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
             <View className='w-full mt-3 pt-3'>

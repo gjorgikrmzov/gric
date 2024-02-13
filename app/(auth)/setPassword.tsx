@@ -48,7 +48,7 @@ const Page = () => {
                             <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
                         </TouchableOpacity>
 
-                        <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+                        <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
                     </View>
 
                     <View className='py-6 px-6 pt-10'>
@@ -59,13 +59,13 @@ const Page = () => {
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
 
-                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#32BB78]'>
+                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#85B4FF]'>
                             <TextInput onChangeText={setPassword} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
 
                             {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
                         </View>
 
-                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#32BB78]'>
+                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#85B4FF]'>
                             <TextInput className='px-5 w-[90%]' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
                         </View>
                     </View>

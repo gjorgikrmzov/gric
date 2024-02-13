@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, ScrollView, Keyboard, Animated, Platform, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, ScrollView, Keyboard, Animated, Platform, StyleSheet, Dimensions } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -8,6 +8,10 @@ import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { RefreshControl } from 'react-native-gesture-handler'
+import { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+
+
+
 
 const Page = () => {
 
@@ -48,7 +52,7 @@ const Page = () => {
     Animated.parallel([
       Animated.spring(searchBarY, {
         toValue: -80, // Adjust this value as needed for your design
-        speed: 12, // Control speed of the animation
+        speed: 16, // Control speed of the animation
         bounciness: 8, // Control the bounciness of the spring animation
         useNativeDriver: true,
       }),
@@ -66,7 +70,7 @@ const Page = () => {
     Animated.parallel([
       Animated.spring(searchBarY, {
         toValue: 0, // Return to original position
-        speed: 12, // Consistent speed for the reverse animation
+        speed: 16, // Consistent speed for the reverse animation
         bounciness: 8, // Consistent bounciness for the reverse animation
         useNativeDriver: true,
       }),
@@ -102,8 +106,8 @@ const Page = () => {
 
 
   return (
-    <SafeAreaView className='bg-[#fafafa] flex-1'>
-      <View style={styles.header} className=' flex-1 bg-[#fafafa]'>
+    <SafeAreaView className='bg-[#fafafa] '>
+      <View style={styles.header} className='h-full  bg-[#fafafa]'>
 
 
 
@@ -113,40 +117,42 @@ const Page = () => {
             <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
           </TouchableOpacity>
 
-          <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
         </Animated.View>
 
 
-        <Animated.View style={{  transform: [{ translateY: searchBarY }] }} className='px-6 flex flex-row items-center mt-6 mb-4 '>
-          <View className=' bg-[#F0F1F3]/80 flex-1 items-center flex-row px-5 rounded-2xl'>
-            {
-              isFocused ?
-                (
-                  <TouchableOpacity onPress={handleBlur} className=' flex justify-center items-center'>
-                    <ArrowLeft size={22} color={Colors.dark} variant='Broken' />
-                  </TouchableOpacity>
 
-                ) :
+          <Animated.View style={{ transform: [{ translateY: searchBarY }] }} className='px-6 flex flex-row items-center mt-6 mb-4 '>
+            <View className=' bg-[#F0F1F3]/60 flex-1 items-center flex-row px-5 rounded-2xl'>
+              {
+                isFocused ?
+                  (
+                    <TouchableOpacity onPress={handleBlur} className=' flex justify-center items-center'>
+                      <ArrowLeft size={22} color={Colors.dark} variant='Broken' />
+                    </TouchableOpacity>
 
-                (
-                  <SearchNormal1 size={22} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
-            }
+                  ) :
 
-            <TextInput onChangeText={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
-            <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
-              <CloseSquare size={24} color={Colors.dark} variant='Bold' />
+                  (
+                    <SearchNormal1 size={22} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
+              }
+
+              <TextInput onChangeText={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
+              <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear();  setClose(false)}} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
+                <CloseSquare size={24} color={Colors.dark} variant='Bold' />
+              </TouchableOpacity>
+
+            </View>
+
+            <TouchableOpacity onPress={() => router.push('/(modals)/filter')} className='p-4 ml-2 flex justify-center items-center rounded-2xl bg-[#0b0b0b]'>
+              <Setting4 color={Colors.primary} size={24} variant='Broken' />
             </TouchableOpacity>
+          </Animated.View>
 
-          </View>
-
-          <TouchableOpacity onPress={() => router.push('/(modals)/filter')} className='p-4 ml-2 flex justify-center items-center rounded-2xl bg-[#0b0b0b]'>
-            <Setting4 color={Colors.primary} size={24} variant='Broken' />
-          </TouchableOpacity>
-        </Animated.View>
 
         <ScrollView keyboardShouldPersistTaps="always" // This is the key change
           showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
-            onRefresh={onRefresh} className='z-10' />}>
+            onRefresh={onRefresh} className='z-10 flex-1' />}>
           <View className={isFocused ? 'hidden' : 'flex flex-1 mt-6'}>
 
             <View className='w-full px-6  justify-between items-end flex flex-row'>
@@ -401,11 +407,12 @@ const Page = () => {
 export default Page
 
 const styles = StyleSheet.create({
-  header:{
+  header: {
     paddingTop: (Platform.OS === 'android') ? 30 : 16,
   },
   input: {
-    paddingVertical: (Platform.OS === 'android') ? 15 : 20,
+    paddingVertical: (Platform.OS === 'android') ? 16 : 22,
     fontFamily: 'medium',
   }
+
 });

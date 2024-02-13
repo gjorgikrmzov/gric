@@ -12,8 +12,8 @@ const Layout = () => {
     return (
 
         <Tabs screenOptions={{
-            tabBarActiveTintColor: Colors.primary,
-            tabBarStyle: { backgroundColor: Colors.white, borderTopColor: Colors.gray50, height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
+            tabBarActiveTintColor: Colors.dark,
+            tabBarStyle: { backgroundColor: Colors.white, borderTopColor:'#0b0b0b2c', height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
             tabBarItemStyle: { alignItems: 'center', justifyContent: 'center', display: 'flex', height: 60 },
             tabBarLabelStyle: { fontFamily: "medium", fontSize: 12 },
             tabBarIconStyle: { position: 'relative', backgroundColor: Colors.gray50, }

@@ -1,12 +1,13 @@
 import { View, Text, Platform, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { Add, ArrowDown2, Bag, DirectInbox, DirectboxSend, Minus, Send, Share, } from 'iconsax-react-native'
+import React, { useMemo, useRef, useState } from 'react'
+import { Add, ArrowDown2, Bag, DirectInbox, DirectboxSend, Menu, Minus, More, Send, Share, } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import Colors from '../constants/Colors'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import BottomSheet from '@gorhom/bottom-sheet/'
 
 
 
@@ -33,6 +34,13 @@ const Page = () => {
         const stringItemQuantity = itemQuantity.toString();
         router.push({ pathname: `/restaurantDetails`, params: { quantity: stringItemQuantity } });
     };
+
+    const snapPoints = useMemo(() => ['30%'], []);
+    const bottomSheetRef = useRef<BottomSheet>(null);
+
+    const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
+
+
     return (
 
         <View style={styles.header} className='h-full bg-[#0b0b0b]'>
@@ -44,8 +52,8 @@ const Page = () => {
                         <ArrowDown2 variant='Linear' size={22} color={Colors.white} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/10 rounded-xl' >
-                        <DirectboxSend variant='Linear' size={22} color={Colors.white} />
+                    <TouchableOpacity onPress={() => snapeToIndex(0)} className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/10 rounded-xl' >
+                        <More variant='Linear' size={22} color={Colors.white} />
                     </TouchableOpacity>
                 </View>
 
@@ -57,28 +65,28 @@ const Page = () => {
 
                 <View className='mt-6 px-6'>
                     <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Бонапарта</Text>
-                    <Text className='text-[#32BB78] text-2xl' style={{ fontFamily: "extrabold" }}>180 ден</Text>
+                    <Text className='text-[#85B4FF] text-2xl' style={{ fontFamily: "extrabold" }}>180 ден</Text>
                     <Text className='text-[#0b0b0b]/80 mt-3 leading-5' style={{ fontFamily: "medium" }}>Француско лебче · Кашкавал · Печеница · Домати · Павлака</Text>
                 </View>
 
                 <View className='w-full h-1 bg-[#0b0b0b]/10 mt-6'></View>
 
                 <Text className='text-[#0b0b0b]  px-6 mt-6' style={{ fontFamily: "semibold" }}>Избери количина</Text>
-                <View className=' bg-[#0b0b0b] p-1.5 flex-row items-center rounded-xl justify-between w-28 mt-3 mx-6'>
+                <View className=' bg-[#F0F1F3] p-1.5 flex-row items-center rounded-xl justify-between w-28 mt-3 mx-6'>
                     <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-8 h-8  rounded-lg '>
                         <Minus
                             size={26}
-                            color={Colors.white}
+                            color={Colors.dark}
                             variant='Linear'
                         />
                     </TouchableOpacity>
 
-                    <Text className='text-xl text-[#fafafa]'>{itemQuantity}</Text>
+                    <Text className='text-xl text-[#0b0b0b]'>{itemQuantity}</Text>
 
                     <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-8 h-8  rounded-lg ' >
                         <Add
                             size={26}
-                            color={Colors.white}
+                            color={Colors.dark}
                             variant='Linear'
                         />
                     </TouchableOpacity>
@@ -95,9 +103,23 @@ const Page = () => {
                         <Text style={{ fontFamily: "medium" }} className='text-[#fafafa] ml-2'>Додади {itemQuantity} во Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {totalItemPrice} ден</Text>
                     </TouchableOpacity>
                 </LinearGradient>
+
+
             </View>
 
-
+            <BottomSheet
+                ref={bottomSheetRef}
+                enablePanDownToClose={true}
+                index={-1}
+                backgroundStyle={{ backgroundColor: '#fafafa' }}
+                handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+                snapPoints={snapPoints}>
+                <View className='px-6'>
+                    <TouchableOpacity className='py-4'>
+                        <Text></Text>
+                    </TouchableOpacity>
+                </View>
+            </BottomSheet>
         </View>
 
     )
@@ -109,4 +131,4 @@ const styles = StyleSheet.create({
     header: {
         paddingTop: (Platform.OS === 'android') ? 40 : 30,
     }
-  });
+});

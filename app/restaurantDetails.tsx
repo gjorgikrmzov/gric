@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useRef, useState } from 'react'
-import { ArrowLeft2, ArrowUp, Bag, Bookmark, Clock, Element, Element2, Heart, Location } from 'iconsax-react-native'
+import { Add, ArrowLeft2, ArrowUp, Bag, Bookmark, Clock, Element, Element2, Heart, Location } from 'iconsax-react-native'
 import { router } from 'expo-router'
 import Colors from '../constants/Colors'
 import { StatusBar } from 'expo-status-bar'
@@ -53,7 +53,7 @@ const Page = () => {
                     backgroundColor: isActive ? '#0b0b0b' : '#fafafa',
                     borderColor: '#0b0b0b',
                 }}
-                className='h-10 w-max start items-center flex-row flex border border-[#0b0b0b]/50 rounded-xl px-4'
+                className='h-10 w-max start items-center flex-row flex border border-[#0b0b0b]/20 rounded-xl px-4'
             >
                 <Text style={{ color: isActive ? '#fafafa' : '#0b0b0b', fontFamily: 'semibold' }}>
                     {itemName}
@@ -62,6 +62,7 @@ const Page = () => {
         );
     };
 
+    
 
     return (
         <View className='flex-1 pb-6 bg-[#fafafa]'>
@@ -74,12 +75,8 @@ const Page = () => {
                         <ArrowLeft2 variant='Linear' size={22} color={Colors.white} />
                     </TouchableOpacity>
 
-                    <View className='flex w-full flex-row justify-between mt-6 items-center'>
-                        <Text className=' text-[#fafafa]/60 uppercase' style={{ fontFamily: "bold" }}>Пица ресторан</Text>
-                        <Heart size={22} color={Colors.white} />
-                    </View>
-
-                    <Text className='text-3xl text-[#fafafa]' style={{ fontFamily: "bold" }}>Бу Хаус</Text>
+                    <Text className=' text-[#fafafa]/60 uppercase mt-10' style={{ fontFamily: "bold" }}>Пица ресторан</Text>
+                    <Text className='text-3xl text-[#fafafa] mt-1' style={{ fontFamily: "bold" }}>Бу Хаус</Text>
 
                     <View className='flex flex-col gap-y-2 mt-3'>
 
@@ -132,10 +129,11 @@ const Page = () => {
                                 <View>
                                     <Text className='text-lg' style={{ fontFamily: "semibold" }}>{food.foodName}</Text>
                                     <Text className='text-[#0b0b0b]/80 mt-1' style={{ fontFamily: "medium" }}>{food.foodDesc}</Text>
-                                    <Text className='text-xl mt-3 text-[#32BB78]' style={{ fontFamily: 'bold' }}>{food.price} ден</Text>
+                                    <Text className='text-xl mt-3 text-[#85B4FF]' style={{ fontFamily: 'bold' }}>{food.price} ден</Text>
                                 </View>
 
                                 <View className='flex justify-center items-center bg-[#0b0b0b]/10 rounded-2xl overflow-hidden w-20 h-20'>
+                                  
                                 </View>
                             </TouchableOpacity>
                         ))}

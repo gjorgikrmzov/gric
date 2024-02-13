@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Receipt1, TickSquare } from 'iconsax-react-native'
+import { ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
 import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../constants/Colors'
@@ -76,10 +76,10 @@ const checkout = () => {
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Наплата</Text>
 
-                <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
-            <View className='h-1/2 mb-4'>
+            <View className='flex-1 mb-4'>
                 <ScrollView className='flex-1 mb-4'>
 
                     <View className='w-full mt-3'>
@@ -89,7 +89,7 @@ const checkout = () => {
                         </View>
 
                         <View className='w-full mt-3'>
-                            <TouchableOpacity className='border-b border-[#0b0b0b]/10 px-6 w-full py-4 bg-[#F0F1F3] flex flex-row items-center justify-between' >
+                            <TouchableOpacity className='border-b border-[#0b0b0b]/5 px-6 w-full py-4  flex flex-row items-center justify-between' >
                                 <View className='flex-row items-center'>
                                     <Location size={22} variant='Bulk' color={Colors.primary} />
                                     {savedAddress ? (
@@ -108,6 +108,8 @@ const checkout = () => {
 
                     </View>
 
+
+
                     <View className='w-full px-6 mt-6'>
                         <View>
                             <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Избери</Text>
@@ -115,71 +117,63 @@ const checkout = () => {
                         </View>
                         <View className='flex flex-row gap-x-2 mt-3'>
 
-                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? 'bg-[#F0F1F3] flex flex-col justify-between border-2 border-[#32BB78] flex-1 p-4 rounded-2xl' : 'bg-[#F0F1F3] flex flex-col justify-between flex-1 p-4 rounded-2xl'}>
-                                <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
+                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#85B4FF] flex-1 p-3 rounded-2xl' : ' border border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3 rounded-2xl'}>
+                                <View className='flex-1 justify-between items-center flex-row'>
+                                    <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
+                                    <StopCircle size={18} color={cardPayment ? Colors.primary : Colors.gray50} variant={cardPayment ? 'Bold' : 'Linear'} />
+                                </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? 'bg-[#F0F1F3] flex flex-col justify-between border-2 border-[#32BB78] flex-1 p-4 rounded-2xl' : 'bg-[#F0F1F3] flex flex-col justify-between flex-1 p-4 rounded-2xl'}>
-                                <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
+                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#85B4FF] flex-1 p-3 rounded-2xl' : 'border border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3 rounded-2xl'}>
+                                <View className='flex-1 justify-between items-center flex-row'>
+                                    <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
+                                    <StopCircle size={18} color={ondeliveryPayment ? Colors.primary : Colors.gray50} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
+                                </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>При достава</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-
-                    <View className='px-6 w-full flex flex-col justify-start items-start mt-6'>
-                        <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Додатни информации</Text>
-                        <TextInput
-                            multiline
-                            numberOfLines={8}
-                            placeholder="Остави порака"
-                            placeholderTextColor='#0b0b0b84'
-                            className='w-full p-4 rounded-xl flex justify-start items-start mt-3 h-40 bg-[#F0F1F3]'
-                            style={{ fontFamily: 'medium' }}
-                        />
-                    </View>
-
                 </ScrollView>
             </View>
 
+            <BottomSheet ref={bottomSheetRef}
+                index={1}
+                backgroundStyle={{ backgroundColor: '#fafafa' }}
+                handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+                snapPoints={snapPoints}>
 
-                <BottomSheet ref={bottomSheetRef}
-                    index={1}
-                    backgroundStyle={{ backgroundColor: '#F0F1F3' }}
-                    handleIndicatorStyle={{ backgroundColor: Colors.dark }}
-                    snapPoints={snapPoints}>
-
-                    <View className='w-full h-full py-6 justify-between flex flex-col'>
-                        <View className='px-6'>
-                            <View className='w-full flex-row items-center  justify-between flex'>
-                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Износ без достава</Text>
-                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>180 ден</Text>
-                            </View>
-
-                            <View className='w-full flex-row items-center  mt-5 justify-between flex'>
-                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Достава</Text>
-                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>80 ден</Text>
-                            </View>
-
-                            <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
-
-
-                            <View className='w-full flex-row items-center  mt-5 justify-between flex'>
-                                <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Вкупно</Text>
-                                <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{totalItemPrice} ден</Text>
-                            </View>
-
+                <View className='w-full h-full py-6  justify-between flex flex-col'>
+                    <View className='px-6'>
+                        <View className='w-full flex-row items-center  justify-between flex'>
+                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Износ без достава</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>180 ден</Text>
                         </View>
 
-                        <View className='px-6 mb-4'>
-                            <TouchableOpacity onPress={() => router.push('/(order)/orderPlaced')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-                                <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Нарачај</Text>
-                                <Receipt1 variant='Bulk' className='ml-2' size={24} color={Colors.primary} />
-                            </TouchableOpacity>
+                        <View className='w-full flex-row items-center  mt-5 justify-between flex'>
+                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Достава</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>80 ден</Text>
                         </View>
+
+                        <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
+
+
+                        <View className='w-full flex-row items-center  mt-5 justify-between flex'>
+                            <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Вкупно</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{totalItemPrice} ден</Text>
+                        </View>
+
                     </View>
 
-                </BottomSheet>
+                    <View className='px-6 mb-4'>
+                        <TouchableOpacity onPress={() => router.push('/(order)/orderPlaced')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                            <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Нарачај</Text>
+                            <Receipt1 variant='Bulk' className='ml-2' size={24} color={Colors.primary} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+            </BottomSheet>
         </SafeAreaView>
     )
 }

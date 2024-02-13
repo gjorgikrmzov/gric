@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
-import { Notification1, SearchNormal1, User, Location, Shop, DocumentText, ArrowDown, ArrowDown2, DiscountShape, InfoCircle, Information, Clock, HambergerMenu, SidebarTop, Heart, Category, Bookmark, Element } from 'iconsax-react-native'
+import { Notification1, SearchNormal1, User, Location, Shop, DocumentText, ArrowDown, ArrowDown2, DiscountShape, InfoCircle, Information, Clock, HambergerMenu, SidebarTop, Heart, Category, Bookmark, Element, ArrowRight2, ArrowRight, ArrowLeft, CloseSquare } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut } from 'react-native-reanimated'
+import Animated, { Easing, FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -80,6 +80,78 @@ const Page = () => {
     const maxLength = 20;
     const trimmedAdress = savedAddress.length > maxLength ? `${savedAddress.substring(0, maxLength)}...` : savedAddress;
 
+    const [search, setSearch] = useState<string>('');
+    const [close, setClose] = useState<boolean>(false);
+    const inputRef = useRef<TextInput>(null);
+
+    // Assuming handleFocus and handleBlur functions are defined elsewhere in your component
+
+    const onChangeInput = (text: string) => {
+        setSearch(text);
+        setClose(text !== '');
+    };
+
+
+
+    const [isFocused, setIsFocused] = useState(false);
+    const overlayOpacity = useSharedValue(1); // Start with full opacity
+    const searchResult = useSharedValue(0);
+    const inputY = useSharedValue(10); // Adjust starting position if necessary
+
+    // Animated styles
+    const animatedInputStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateY: inputY.value }],
+        };
+    });
+
+    const animatedOverlayStyle = useAnimatedStyle(() => {
+        return {
+            opacity: overlayOpacity.value,
+        };
+    });
+
+    const animatedResultStyle = useAnimatedStyle(() => {
+        return {
+            opacity: searchResult.value,
+        };
+    });
+
+    // Handle input focus
+    const onFocus = () => {
+        setIsFocused(true);
+
+        inputY.value = withSpring(-70, {
+            duration: 1600,
+            // Use a callback on completion of the animation to set visibility
+        }); // Animate to top
+        overlayOpacity.value = withSpring(0, {
+            duration: 300,
+            // Use a callback on completion of the animation to set visibility
+        });
+        searchResult.value = withSpring(1, {
+            duration: 300,
+            // Use a callback on completion of the animation to set visibility
+        });
+    };
+
+    const onBlur = () => {
+        Keyboard.dismiss()
+        setIsFocused(false);
+        inputY.value = withSpring(0, {
+            duration: 1600,
+            // Use a callback on completion of the animation to set visibility
+        }); // Animate to top
+        overlayOpacity.value = withSpring(1, {
+            duration: 300,
+            // Use a callback on completion of the animation to set visibility
+        });
+        searchResult.value = withSpring(0, {
+            duration: 300,
+            // Use a callback on completion of the animation to set visibility
+        });
+    };
+
     return (
         <>
 
@@ -87,10 +159,10 @@ const Page = () => {
             </View>
 
             <Animated.View className='flex-1' entering={FadeIn.springify().duration(400)}>
+                <StatusBar style='dark' />
                 <SafeAreaView style={styles.header} className='bg-[#FAFAFA] h-screen'>
 
-                    <View className='bg-[#FAFAFA] border-b  border-[#0b0b0b]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
-                        <StatusBar style='dark'/>
+                    <View className='bg-[#FAFAFA] z-0 border-b  border-[#0b0b0b]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
                         <TouchableOpacity onPress={() => router.push('/(modals)/manageAdresses')}>
                             <View className='flex items-center flex-row'>
                                 <Location size={16} color={Colors.primary} variant='Bulk' />
@@ -111,7 +183,7 @@ const Page = () => {
 
                         <View className='flex flex-row items-center gap-x-2'>
                             <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-12 h-12 flex justify-center items-center rounded-2xl border border-[#0b0b0b]/10'>
-                                <View className='w-5 h-5 bg-[#32BB78] border-2 border-[#FAFAFA] rounded-full absolute z-10 right-1 top-1 flex justify-center items-center'>
+                                <View className='w-4 h-4 bg-[#0b0b0b] rounded-full absolute z-10 right-2 top-2 flex justify-center items-center'>
                                     <Text className='text-[8px] text-[#FAFAFA]' style={{ fontFamily: 'extrabold', bottom: (Platform.OS === 'android') ? 1 : 0, }}>3</Text>
                                 </View>
                                 <Notification1 color={Colors.dark} size={22} variant='Broken' />
@@ -122,47 +194,111 @@ const Page = () => {
                         </View>
                     </View>
 
-                    <ScrollView removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
-                        onRefresh={onRefresh} className='z-10 ' />}>
+                    <ScrollView keyboardShouldPersistTaps="always" removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
+                        onRefresh={onRefresh} className='z-10 border' />}>
 
                         {/* SEARCH BAR */}
-                        <View className='mt-4  px-6'>
+                        <Animated.View style={animatedOverlayStyle} className='mt-4  px-6'>
 
-                            <View className='w-full items-start flex-col flex justify-between'>
+                            <View className='z-0 w-full items-start flex-col flex justify-between'>
                                 <View className='flex flex-col mt-2'>
-                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#32BB78]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
-                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b] ' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
+                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#85B4FF]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                                 </View>
                             </View>
 
-                            <TouchableOpacity onPress={() => router.push('/restaurants')} className='flex flex-row items-center mt-4'>
-                                <View className='rounded-2xl py-5 px-5 flex-row items-center flex-1 bg-[#F0F1F3]/80  '>
-                                    <SearchNormal1 variant='Broken' color='#0b0b0b97' size={22} />
-                                    <Text className='text-[#0b0b0b]/60 ml-3' style={{ fontFamily: 'medium' }}>Пребарај Ресторани</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
 
-                        <View className='w-full mt-6 px-6 justify-between items-end flex flex-row'>
+                        </Animated.View>
+
+                        <Animated.View style={animatedInputStyle}>
+                            <View className='mx-6 bg-[#F0F1F3]/60 mt-2 z-[999] items-center flex-row px-5 rounded-2xl'>
+                                {
+                                    isFocused ?
+                                        (
+                                            <TouchableOpacity onPress={onBlur} className=' flex justify-center items-center'>
+                                                <ArrowLeft size={22} color={Colors.dark} variant='Broken' />
+                                            </TouchableOpacity>
+
+                                        ) :
+
+                                        (
+                                            <SearchNormal1 size={22} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
+                                }
+
+                                <TextInput style={styles.input} ref={inputRef} onChangeText={onChangeInput} onFocus={onFocus}
+                                    onBlur={onBlur} className='text-[#0b0b0b] px-3 flex-1 ' placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
+                                <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); setClose(false) }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
+                                    <CloseSquare size={24} color={Colors.dark} variant='Bold' />
+                                </TouchableOpacity>
+
+                            </View>
+
+                            <KeyboardAvoidingView>
+                                <Animated.View style={animatedResultStyle} className={isFocused ? 'flex h-full mt-8 px-6' : 'hidden h-full mt-8 px-6'}>
+                                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
+                                    <ScrollView keyboardShouldPersistTaps="always" // This is the key change
+                                        showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
+                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                            <View className='flex items-center flex-row gap-x-4'>
+                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                            <View className='flex items-center flex-row gap-x-4'>
+                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Елизабет</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                            <View className='flex items-center flex-row gap-x-4'>
+                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бонита</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                            <View className='flex items-center flex-row gap-x-4'>
+                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Хаштаг</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </ScrollView>
+                                </Animated.View>
+                            </KeyboardAvoidingView>
+                        </Animated.View>
+
+
+                        <Animated.View style={animatedOverlayStyle} className='w-full mt-6 px-6 justify-between items-end flex flex-row'>
                             <View className='flex flex-col ml-1'>
                                 <View className='flex items-center flex-row gap-x-2'>
                                     <Element size={19} color={Colors.primary} variant='Bulk' />
                                     <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Категории</Text>
                                 </View>
-                                <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Популарни Категории</Text>
+                                <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'semibold' }}>Популарни Категории</Text>
                             </View>
 
-                        </View>
+                        </Animated.View>
 
-                        <View className='w-full'>
+                        <Animated.View style={animatedOverlayStyle} className='w-full'>
                             <ScrollView removeClippedSubviews horizontal contentContainerStyle={{ justifyContent: "center", alignItems: "center" }} className='flex-row flex-1' snapToInterval={324} decelerationRate={'fast'}
                                 snapToAlignment='end'
                                 showsHorizontalScrollIndicator={false} >
                                 <Animated.View entering={FadeIn.springify().duration(300).delay(100)} className='flex flex-row items-center px-6 gap-x-2'>
                                     {categories.map((category, index) => (
                                         <TouchableOpacity key={index} className='flex justify-center'>
-                                            <Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' contentFit='contain' source={category.categoryImage} />
-                                            <View className='bg-[#F0F1F3]/80  w-20 py-3 rounded-2xl flex justify-center items-center'>
+                                            <Image style={{ tintColor: '#0b0b0b' }} className='w-9 h-9 z-10 top-4 self-center' contentFit='contain' source={category.categoryImage} />
+                                            <View className='bg-[#F0F1F3]/60  w-20 py-3 rounded-2xl flex justify-center items-center'>
                                                 <Text className='text-[#0b0b0b]/80 mt-4 text-xs' style={{ fontFamily: 'semibold' }}>{category.categoryTitle}</Text>
                                             </View>
                                         </TouchableOpacity>
@@ -170,20 +306,23 @@ const Page = () => {
                                 </Animated.View>
                             </ScrollView>
 
-                        </View>
+                        </Animated.View>
 
 
                         {/* RESTAURANTS SECTION */}
-                        <View className='mt-6'>
-                            <View className='w-full px-6 justify-between items-end flex flex-row'>
+                        <Animated.View style={animatedOverlayStyle} className='mt-6'>
+                            <View className='w-full px-6 justify-between items-center flex flex-row'>
                                 <View className='flex flex-col ml-1'>
                                     <View className='flex items-center flex-row gap-x-2'>
                                         <Shop size={19} color={Colors.primary} variant='Bulk' />
                                         <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Ресторани</Text>
                                     </View>
-                                    <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Популарни Ресторани</Text>
+                                    <Text className='text-xs text-[#0b0b0b]/80 ' style={{ fontFamily: 'semibold' }}>Популарни Ресторани</Text>
                                 </View>
 
+                                <TouchableOpacity onPress={() => router.push('/(tabs)/restaurants')} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl'>
+                                    <ArrowRight size={20} color={Colors.dark} variant='Broken' />
+                                </TouchableOpacity>
                             </View>
 
                             <View className='w-full mt-3 '>
@@ -238,21 +377,15 @@ const Page = () => {
                                 </ScrollView>
 
                             </View>
-                        </View>
+                        </Animated.View>
 
-
-
-
-
-                        <View className='px-6 mt-3 hidden'>
-                            <TouchableOpacity className=' py-6 rounded-3xl justify-center items-center flex bg-[#0b0b0b]'>
-                                <Text className='text-[#FAFAFA]' style={{ fontFamily: 'medium' }}>Види ги сите</Text>
-                            </TouchableOpacity>
-                        </View>
 
                     </ScrollView>
                 </SafeAreaView>
-            </Animated.View>
+
+
+            </Animated.View >
+
         </>
     )
 }
@@ -262,5 +395,9 @@ export default Page
 const styles = StyleSheet.create({
     header: {
         paddingTop: (Platform.OS === 'android') ? 10 : 0,
+    },
+    input: {
+        paddingVertical: (Platform.OS === 'android') ? 16 : 22,
+        fontFamily: 'medium',
     }
 });

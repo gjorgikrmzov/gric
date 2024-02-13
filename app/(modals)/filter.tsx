@@ -15,7 +15,7 @@ const Page = () => {
           <ArrowDown2 variant='Linear' size={22} color={Colors.dark} />
         </TouchableOpacity>
         <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Филтер</Text>
-        <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+        <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
       </View>
     </View>
   )

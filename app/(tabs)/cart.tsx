@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, FlatList, StyleSheet, Platform } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Add, ArrowLeft, ArrowRight, Bag, Bag2, DirectboxNotif, Minus, Shop, Trash } from 'iconsax-react-native'
+import { Add, ArrowLeft, ArrowRight, ArrowRight2, Bag, Bag2, DirectboxNotif, DocumentText, FingerCricle, Minus, Note, RecordCircle, Shop, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
@@ -10,6 +10,7 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import BouncyCheckbox from 'react-native-bouncy-checkbox'
 
 const Page = () => {
   const snapPoints = useMemo(() => ['40%'], []);
@@ -62,100 +63,133 @@ const Page = () => {
 
 
       <View className={cartEmpty ? 'flex-1 mt-4 border-t border-[#0b0b0b]/5' : 'hidden'}>
-        <ScrollView className='flex-1 mb-4 '>
+        <ScrollView className='flex-1'>
           <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
             <View className='flex flex-row items-center'>
               <View className=' flex justify-center items-center w-20 h-20 bg-[#0b0b0b]/10 rounded-xl overflow-hidden'>
 
               </View>
-              <View className='flex flex-col ml-2 flex-1'>
-                <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Бонапарта</Text>
-                <Text className=' text-[#0b0b0b]/60 mt-0.5' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
 
-                <View className='w-full justify-between items-end flex-row'>
+              <View className='flex flex-row items-center justify-between flex-1'>
+                <View className='flex flex-col ml-3 flex-1'>
+                  <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>Бонапарта</Text>
+                  <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
+                </View>
 
-                  <View className=' bg-[#0b0b0b] px-1 py-1 flex-row items-center rounded-xl justify-between w-24 mt-2'>
-                    <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
-                      {deleteButton ?
-                        (<Minus
-                          size={20}
-                          color={Colors.white}
-                          variant='Linear'
-                        />) :
-                        (<Trash
-                          size={20}
-                          color={Colors.white}
-                          variant='Linear'
-                        />)}
-                    </TouchableOpacity>
-
-                    <Text className='text-lg text-[#fafafa]'>{itemQuantity}</Text>
-
-                    <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
-                      <Add
+                <View className=' bg-[#F0F1F3] px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                    {deleteButton ?
+                      (<Minus
                         size={20}
-                        color={Colors.white}
+                        color={Colors.dark}
                         variant='Linear'
-                      />
-                    </TouchableOpacity>
-                  </View>
+                      />) :
+                      (<Trash
+                        size={20}
+                        color={Colors.dark}
+                        variant='Linear'
+                      />)}
+                  </TouchableOpacity>
 
-                  <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: "extrabold" }}>{itemPrice} ден</Text>
+                  <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
+
+                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                    <Add
+                      size={20}
+                      color={Colors.dark}
+                      variant='Linear'
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
 
           </TouchableOpacity>
 
-          <TouchableOpacity  onPress={() => router.push("/foodDetails")} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
+
+          <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5  px-6'>
             <View className='flex flex-row items-center'>
               <View className=' flex justify-center items-center w-20 h-20 bg-[#0b0b0b]/10 rounded-xl overflow-hidden'>
 
               </View>
-              <View className='flex flex-col ml-2 flex-1'>
-                <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Бонапарта</Text>
-                <Text className=' text-[#0b0b0b]/60 mt-0.5' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
 
-                <View className='w-full justify-between items-end flex-row'>
+              <View className='flex flex-row items-center justify-between flex-1'>
+                <View className='flex flex-col ml-3 flex-1'>
+                  <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>Бонапарта</Text>
+                  <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
+                </View>
 
-                  <View className=' bg-[#0b0b0b] px-1 py-1 flex-row items-center rounded-xl justify-between w-24 mt-2'>
-                    <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
-                      {deleteButton ?
-                        (<Minus
-                          size={20}
-                          color={Colors.white}
-                          variant='Linear'
-                        />) :
-                        (<Trash
-                          size={20}
-                          color={Colors.white}
-                          variant='Linear'
-                        />)}
-                    </TouchableOpacity>
-
-                    <Text className='text-lg text-[#fafafa]'>{itemQuantity}</Text>
-
-                    <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
-                      <Add
+                <View className=' bg-[#F0F1F3] px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                    {deleteButton ?
+                      (<Minus
                         size={20}
-                        color={Colors.white}
+                        color={Colors.dark}
                         variant='Linear'
-                      />
-                    </TouchableOpacity>
-                  </View>
+                      />) :
+                      (<Trash
+                        size={20}
+                        color={Colors.dark}
+                        variant='Linear'
+                      />)}
+                  </TouchableOpacity>
 
-                  <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: "extrabold" }}>{itemPrice} ден</Text>
+                  <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
+
+                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                    <Add
+                      size={20}
+                      color={Colors.dark}
+                      variant='Linear'
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
 
           </TouchableOpacity>
-
-
         </ScrollView>
 
+
+        <View className='w-full h-1 bg-[#F0F1F3]'></View>
         <View className='px-6'>
-          <TouchableOpacity onPress={() => router.push('/(order)/checkout')} className='mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+          <View className='w-full flex-row flex items-center justify-between'>
+            <View className='py-6  border-b flex flex-row items-center  justify-between border-[#0b0b0b]/5  w-full'>
+              <View className=' flex flex-row'>
+                <RecordCircle color={Colors.dark} size={20} variant='Broken' />
+                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Побарај прибор</Text>
+              </View>
+              <BouncyCheckbox
+              size={20}
+                disableText
+                fillColor={Colors.dark}
+                unfillColor={Colors.white}
+                iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
+                innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
+                onPress={(isChecked: boolean) => { }}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity className='w-full flex-row flex items-center justify-between'>
+            <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
+              <View className=' flex flex-row'>
+                <DocumentText color={Colors.dark} size={20} variant='Broken' />
+                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Остави порака</Text>
+              </View>
+              <ArrowRight2 color={Colors.dark} size={20} />
+            </View>
+          </TouchableOpacity>
+
+          <View className='flex flex-row my-6 justify-between items-center'>
+            <Text style={{ fontFamily: "semibold" }} className='text-[16px]'>Без достава</Text>
+            <Text style={{ fontFamily: "semibold" }} className='text-[16px]'>{itemPrice} ден</Text>
+          </View>
+
+        </View>
+
+        <View className='px-6 mb-4 flex'>
+          <TouchableOpacity onPress={() => router.push('/(order)/checkout')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
             <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Кон наплата</Text>
             <ArrowRight variant='Linear' size={24} className='ml-2' color={Colors.primary} />
           </TouchableOpacity>

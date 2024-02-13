@@ -105,7 +105,6 @@ function RootLayoutNav() {
 
       <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false, }} />
 
-      <Stack.Screen name="search" options={{ headerShown: false }} />
       <Stack.Screen name="categories" options={{ headerShown: false }} />
       <Stack.Screen name="restaurantDetails" options={{ headerShown: false }} />
       <Stack.Screen name="foodDetails" options={{ headerShown: false, presentation: "modal" }} />

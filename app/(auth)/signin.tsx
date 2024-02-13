@@ -44,7 +44,7 @@ const Page = () => {
               <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
             </TouchableOpacity>
 
-            <Text className='text-4xl text-[#32BB78]' style={{ fontFamily: "heavy" }}>G</Text>
+            <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
           </View>
 
           <View className='py-6 px-6 pt-10'>
@@ -54,9 +54,9 @@ const Page = () => {
           </View>
 
           <View className='flex px-6 h-min flex-col gap-y-3'>
-            <TextInput value={email} onChangeText={setEmail} className='px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#32BB78]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+            <TextInput value={email} onChangeText={setEmail} className='px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#85B4FF]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
 
-            <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#32BB78]'>
+            <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#85B4FF]'>
               <TextInput value={password} onChangeText={setPassword} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
 
               {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
@@ -64,7 +64,7 @@ const Page = () => {
           </View>
 
           <TouchableOpacity className='mt-4 px-6 ml-1'>
-            <Text className='text-sm text-[#32BB78]' style={{ fontFamily: 'medium' }}>Заборавена лозинка</Text>
+            <Text className='text-sm text-[#85B4FF]' style={{ fontFamily: 'medium' }}>Заборавена лозинка</Text>
           </TouchableOpacity>
 
           <View className='px-6 pb-4 flex-1 justify-end'>
