@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
+import { ArrowLeft, ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -62,15 +62,15 @@ const Page = () => {
   };
 
   return (
-    <SafeAreaView className='bg-[#fafafa]'>
-      <View className=' py-4 bg-[#fafafa]'>
+    <SafeAreaView className='bg-[#FFFFFC]'>
+      <View className=' py-4 bg-[#FFFFFC]'>
         <View className='px-6 flex flex-row gap-x-3 items-center justify-between'>
-          <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl' >
-            <ArrowLeft2 variant='Linear' size={22} color={Colors.dark} />
+          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+            <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
           </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Профил</Text>
 
-          <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
 
@@ -82,7 +82,7 @@ const Page = () => {
               <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>{email}</Text>
             </View>
 
-            <TouchableOpacity className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
+            <TouchableOpacity className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
               <Edit color={Colors.dark} size={20} variant='Broken' />
             </TouchableOpacity>
           </View>
@@ -94,8 +94,8 @@ const Page = () => {
 
         <View className='flex flex-col'>
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6  flex-row items-center border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <DirectboxNotif variant="Bulk" size={24} color={Colors.primary} />
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <DirectboxNotif variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Вашите нарачки</Text>
@@ -103,9 +103,9 @@ const Page = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push('/manageAdresses')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <Location variant="Bulk" size={24} color={Colors.primary} />
+          <TouchableOpacity onPress={() => router.push('/manageAddresses')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <Location variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Адреса на достава</Text>
@@ -114,8 +114,8 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <Heart variant="Bulk" size={24} color={Colors.primary} />
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <Heart variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Омилени Ресторани</Text>
@@ -124,8 +124,8 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6 flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <Lifebuoy variant="Bulk" size={24} color={Colors.primary} />
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <Lifebuoy variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Испрати порака</Text>
@@ -134,8 +134,8 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <Information variant="Bulk" size={24} color={Colors.primary} />
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <Information variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Информации</Text>
@@ -144,8 +144,8 @@ const Page = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleSignOut} className='py-6 px-6  flex-row items-center  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/60 rounded-xl'>
-              <LogoutCurve variant="Bulk" size={24} color={Colors.primary} />
+            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
+              <LogoutCurve variant="Linear" size={24} color={Colors.dark} />
             </View>
             <View className='flex-col ml-3'>
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Излези од профилот</Text>

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, ScrollView, Keyboard, Animated, Platform, StyleSheet, Dimensions } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { ArrowLeft, ArrowLeft2, ArrowRight, Bookmark, Clock, CloseSquare, DiscountShape, Filter, Heart, Location, SearchNormal1, Setting4, Shop } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
@@ -9,19 +9,11 @@ import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-
-
+import restaurants from '../../data/resataurants'
 
 
 const Page = () => {
 
-  const restaurants = [
-    { restaurantTitle: 'Бу Хаус', restaurantType: 'ПИЦА РЕСТОРАН', restaurantCategories: 'Пица Пастрмајлија Месо', },
-    { restaurantTitle: 'Бонита', restaurantType: 'ПИЦА РЕСТОРАН', restaurantCategories: 'Пица Пастрмајлија Месо', },
-    // { restaurantTitle: 'Хепинес', restaurantType: 'ПИЦА РЕСТОРАН', restaurantCategories: 'Пица Пастрмајлија Месо', restaurantImage: require('../../assets/images/bongjorno.png') },
-    { restaurantTitle: 'Елизабет', restaurantType: 'ПИЦА РЕСТОРАН', restaurantCategories: 'Пица Пастрмајлија Месо', },
-    { restaurantTitle: 'Бонџорно', restaurantType: 'ПИЦА РЕСТОРАН', restaurantCategories: 'Пица Пастрмајлија Месо', },
-  ];
 
   const tobbacoShops = [
     { shopTitle: 'Ламар', tobbacoType: 'ТОБАКО', tobbacoCategory: 'Алкохол Пијалоци Цигари', },
@@ -106,24 +98,26 @@ const Page = () => {
 
 
   return (
-    <SafeAreaView className='bg-[#fafafa] '>
-      <View style={styles.header} className='h-full  bg-[#fafafa]'>
+    <View className='bg-[#FFFFFC] h-full '>
+
+      <SafeAreaView className='bg-[#FFFFFC] flex-1 '>
+        <View style={styles.header} className='  bg-[#FFFFFC]'>
 
 
 
-        <Animated.View style={{ opacity: headerOpacity }} className='z-0 px-6 flex-row gap-x-3 items-center justify-between'>
-          <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
-            <ArrowLeft variant='Linear' size={20} color={Colors.white} />
-            <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
-          </TouchableOpacity>
+          <Animated.View style={{ opacity: headerOpacity }} className='z-0 px-6 flex-row gap-x-3 items-center justify-between'>
+            <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+              <ArrowLeft variant='Linear' size={20} color={Colors.white} />
+              <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
+            </TouchableOpacity>
 
-          <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
-        </Animated.View>
+            <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+          </Animated.View>
 
 
 
           <Animated.View style={{ transform: [{ translateY: searchBarY }] }} className='px-6 flex flex-row items-center mt-6 mb-4 '>
-            <View className=' bg-[#F0F1F3]/60 flex-1 items-center flex-row px-5 rounded-2xl'>
+            <View className=' bg-[#fafafa]/90 flex-1 items-center flex-row px-5 rounded-2xl'>
               {
                 isFocused ?
                   (
@@ -138,7 +132,7 @@ const Page = () => {
               }
 
               <TextInput onChangeText={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
-              <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear();  setClose(false)}} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
+              <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); setClose(false) }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
                 <CloseSquare size={24} color={Colors.dark} variant='Bold' />
               </TouchableOpacity>
 
@@ -149,258 +143,252 @@ const Page = () => {
             </TouchableOpacity>
           </Animated.View>
 
+          <View className={isFocused ? 'flex h-full bottom-16 px-6' : 'hidden'}>
+            <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
+            <ScrollView keyboardShouldPersistTaps="always" // This is the key change
+              showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
+              <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                <View className='flex items-center flex-row gap-x-4'>
+                  <Shop color={Colors.primary} size={25} variant='Bulk' />
+                  <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                <View className='flex items-center flex-row gap-x-4'>
+                  <Shop color={Colors.primary} size={25} variant='Bulk' />
+                  <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Елизабет</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                <View className='flex items-center flex-row gap-x-4'>
+                  <Shop color={Colors.primary} size={25} variant='Bulk' />
+                  <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бонита</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                <View className='flex items-center flex-row gap-x-4'>
+                  <Shop color={Colors.primary} size={25} variant='Bulk' />
+                  <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Хаштаг</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+
+
+        </View>
+
 
         <ScrollView keyboardShouldPersistTaps="always" // This is the key change
           showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
-            onRefresh={onRefresh} className='z-10 flex-1' />}>
-          <View className={isFocused ? 'hidden' : 'flex flex-1 mt-6'}>
+            onRefresh={onRefresh} />} className='h-full'>
 
-            <View className='w-full px-6  justify-between items-end flex flex-row'>
-              <View className='flex flex-col ml-1'>
-                <View className='flex items-center flex-row gap-x-2'>
-                  <Shop size={19} color={Colors.primary} variant='Bulk' />
-                  <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Ресторани</Text>
-                </View>
-                <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Сите Ресторани</Text>
+
+
+          <View className='w-full px-6  justify-between items-end flex flex-row'>
+            <View className='flex flex-col ml-1'>
+              <View className='flex items-center flex-row gap-x-2'>
+                <Shop size={19} color={Colors.primary} variant='Bulk' />
+                <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Ресторани</Text>
               </View>
-
-            </View>
-
-
-            {/* RESTORANI SECTION */}
-            <View className='w-full mt-3  '>
-
-              <ScrollView
-                horizontal
-                contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-                className='flex-row flex-1'
-                snapToAlignment='start'
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={'fast'}
-                snapToInterval={290 + 12}
-              >
-                <View className='flex px-6 flex-row items-center gap-x-3'>
-                  {restaurants.map((restaurant, index) => (
-                    <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
-
-                      {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
-                      <TouchableOpacity
-                        onPress={() => router.push('/restaurantDetails')}
-                        className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
-                        style={{ overflow: 'hidden' }} // Add this style to hide the overflow
-                      >
-                        <View className='flex flex-row items-center justify-between w-full'>
-                          <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{restaurant.restaurantType}</Text>
-                          <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
-                            <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
-                          </TouchableOpacity>
-
-                        </View>
-                        <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{restaurant.restaurantTitle}</Text>
-
-                        <View className='flex flex-col gap-y-2 mt-6'>
-                          {/* <View className='flex flex-row mt-1 items-center'>
-                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
-                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
-                                                        </View> */}
-                          <View className='flex flex-row items-center'>
-                            <Clock variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
-                          </View>
-                          <View className='flex flex-row items-center'>
-                            <Bookmark variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{`${restaurant.restaurantCategories.split(' ').join(' · ')}`}</Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              </ScrollView>
-            </View>
-
-
-            <View className='w-full  px-6 mt-6 justify-between items-end flex flex-row'>
-              <View className='flex flex-col ml-1'>
-                <View className='flex items-center flex-row gap-x-2'>
-                  <Shop size={19} color={Colors.primary} variant='Bulk' />
-                  <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Тобако</Text>
-                </View>
-                <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Сите Тобака</Text>
-              </View>
-
-            </View>
-
-            <View className='w-full mt-3 '>
-
-              <ScrollView
-                horizontal
-                contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-                className='flex-row flex-1 '
-                snapToAlignment='start'
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={'fast'}
-                snapToInterval={290 + 12}
-              >
-                <View className='flex px-6 flex-row items-center gap-x-3'>
-                  {tobbacoShops.map((tobbaco, index) => (
-                    <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
-
-                      {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
-                      <TouchableOpacity
-                        onPress={() => router.push('/restaurantDetails')}
-                        className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
-                        style={{ overflow: 'hidden' }} // Add this style to hide the overflow
-                      >
-                        <View className='flex flex-row items-center justify-between w-full'>
-                          <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{tobbaco.tobbacoType}</Text>
-                          <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
-                            <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
-                          </TouchableOpacity>
-
-                        </View>
-                        <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{tobbaco.shopTitle}</Text>
-
-                        <View className='flex flex-col gap-y-2 mt-6'>
-                          {/* <View className='flex flex-row mt-1 items-center'>
-                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
-                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
-                                                        </View> */}
-                          <View className='flex flex-row items-center'>
-                            <Clock variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
-                          </View>
-                          <View className='flex flex-row items-center'>
-                            <Bookmark variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{`${tobbaco.tobbacoCategory.split(' ').join(' · ')}`}</Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              </ScrollView>
-            </View>
-
-
-            <View className='w-full  px-6 mt-6 justify-between items-end flex flex-row'>
-              <View className='flex flex-col ml-1'>
-                <View className='flex items-center flex-row gap-x-2'>
-                  <Shop size={19} color={Colors.primary} variant='Bulk' />
-                  <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Отворено 24/7</Text>
-                </View>
-                <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Ресторани - Тобако</Text>
-              </View>
-
-            </View>
-
-            <View className='w-full mt-3 '>
-
-              <ScrollView
-                horizontal
-                contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-                className='flex-row flex-1 '
-                snapToAlignment='start'
-                showsHorizontalScrollIndicator={false}
-                decelerationRate={'fast'}
-                snapToInterval={290 + 12}
-              >
-                <View className='flex px-6 flex-row items-center gap-x-3'>
-                  {tobbacoShops.map((tobbaco, index) => (
-                    <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
-
-                      {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
-                      <TouchableOpacity
-                        onPress={() => router.push('/restaurantDetails')}
-                        className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
-                        style={{ overflow: 'hidden' }} // Add this style to hide the overflow
-                      >
-                        <View className='flex flex-row items-center justify-between w-full'>
-                          <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{tobbaco.tobbacoType}</Text>
-                          <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
-                            <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
-                          </TouchableOpacity>
-
-                        </View>
-                        <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{tobbaco.shopTitle}</Text>
-
-                        <View className='flex flex-col gap-y-2 mt-6'>
-                          {/* <View className='flex flex-row mt-1 items-center'>
-                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
-                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
-                                                        </View> */}
-                          <View className='flex flex-row items-center'>
-                            <Clock variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
-                          </View>
-                          <View className='flex flex-row items-center'>
-                            <Bookmark variant='Bulk' color={Colors.primary} size={16} />
-                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{`${tobbaco.tobbacoCategory.split(' ').join(' · ')}`}</Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              </ScrollView>
+              <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Сите Ресторани</Text>
             </View>
 
           </View>
 
 
+          {/* RESTORANI SECTION */}
+          <View className='w-full mt-3  '>
+
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+              className='flex-row flex-1'
+              snapToAlignment='start'
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={'fast'}
+              snapToInterval={290 + 12}
+            >
+              <View className='flex px-6 flex-row items-center gap-x-3'>
+                {restaurants.map((restaurant, index) => (
+                  <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
+
+                    {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
+                    <Link href={`/restaurant/${restaurant.id}`} asChild>
+                      <TouchableOpacity
+
+                        className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
+                        style={{ overflow: 'hidden' }} // Add this style to hide the overflow
+                      >
+                        <View className='flex flex-row items-center justify-between w-full'>
+                          <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{restaurant.type}</Text>
+                          <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
+                            <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
+                          </TouchableOpacity>
+
+                        </View>
+                        <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{restaurant.name}</Text>
+
+                        <View className='flex flex-col gap-y-2 mt-6'>
+                          {/* <View className='flex flex-row mt-1 items-center'>
+                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
+                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
+                                                          </View> */}
+                          <View className='flex flex-row items-center'>
+                            <Clock variant='Bulk' color={Colors.primary} size={16} />
+                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
+                          </View>
+                          <View className='flex flex-row items-center'>
+                            <Bookmark variant='Bulk' color={Colors.primary} size={16} />
+                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{restaurant.desc}</Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </Link>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+
+
+          <View className='w-full  px-6 mt-6 justify-between items-end flex flex-row'>
+            <View className='flex flex-col ml-1'>
+              <View className='flex items-center flex-row gap-x-2'>
+                <Shop size={19} color={Colors.primary} variant='Bulk' />
+                <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Тобако</Text>
+              </View>
+              <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Сите Тобака</Text>
+            </View>
+
+          </View>
+
+          <View className='w-full mt-3 '>
+
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+              className='flex-row flex-1 '
+              snapToAlignment='start'
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={'fast'}
+              snapToInterval={290 + 12}
+            >
+              <View className='flex px-6 flex-row items-center gap-x-3'>
+                {tobbacoShops.map((tobbaco, index) => (
+                  <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
+
+                    {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
+                    <TouchableOpacity
+                      onPress={() => router.push('/restaurant/restaurantDetails')}
+                      className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
+                      style={{ overflow: 'hidden' }} // Add this style to hide the overflow
+                    >
+                      <View className='flex flex-row items-center justify-between w-full'>
+                        <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{tobbaco.tobbacoType}</Text>
+                        <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
+                          <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
+                        </TouchableOpacity>
+
+                      </View>
+                      <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{tobbaco.shopTitle}</Text>
+
+                      <View className='flex flex-col gap-y-2 mt-6'>
+                        {/* <View className='flex flex-row mt-1 items-center'>
+                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
+                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
+                                                          </View> */}
+                        <View className='flex flex-row items-center'>
+                          <Clock variant='Bulk' color={Colors.primary} size={16} />
+                          <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
+                        </View>
+                        <View className='flex flex-row items-center'>
+                          <Bookmark variant='Bulk' color={Colors.primary} size={16} />
+                          <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{`${tobbaco.tobbacoCategory.split(' ').join(' · ')}`}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+
+
+          <View className='w-full  px-6 mt-6 justify-between items-end flex flex-row'>
+            <View className='flex flex-col ml-1'>
+              <View className='flex items-center flex-row gap-x-2'>
+                <Shop size={19} color={Colors.primary} variant='Bulk' />
+                <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'extrabold' }}>Отворено 24/7</Text>
+              </View>
+              <Text className='text-xs text-[#0b0b0b]/60 ml-0.5' style={{ fontFamily: 'semibold' }}>Ресторани - Тобако</Text>
+            </View>
+
+          </View>
+
+          <View className='w-full mt-3 '>
+
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+              className='flex-row flex-1'
+              snapToAlignment='start'
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={'fast'}
+              snapToInterval={290 + 12}
+            >
+              <View className='flex px-6 flex-row items-center gap-x-3'>
+                {tobbacoShops.map((tobbaco, index) => (
+                  <View key={index} className='flex overflow-hidden  flex-row items-center relative'>
+
+                    {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
+                    <TouchableOpacity
+                      onPress={() => router.push('/restaurant/restaurantDetails')}
+                      className='w-[290px] border border-[#0b0b0b]/40 p-5 bg-[#0b0b0b]  rounded-3xl'
+                      style={{ overflow: 'hidden' }} // Add this style to hide the overflow
+                    >
+                      <View className='flex flex-row items-center justify-between w-full'>
+                        <Text className='text-[#FAFAFA]/60 text-xs' style={{ fontFamily: "extrabold" }}>{tobbaco.tobbacoType}</Text>
+                        <TouchableOpacity onPress={() => handleLikeRestaurant(index)} className='flex flex-row items-center'>
+                          <Heart variant={likeStatus[index] ? 'Linear' : 'Bold'} color={Colors.white} size={20} />
+                        </TouchableOpacity>
+
+                      </View>
+                      <Text className='text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{tobbaco.shopTitle}</Text>
+
+                      <View className='flex flex-col gap-y-2 mt-6'>
+                        {/* <View className='flex flex-row mt-1 items-center'>
+                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
+                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
+                                                        </View> */}
+                        <View className='flex flex-row items-center'>
+                          <Clock variant='Bulk' color={Colors.primary} size={16} />
+                          <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
+                        </View>
+                        <View className='flex flex-row items-center'>
+                          <Bookmark variant='Bulk' color={Colors.primary} size={16} />
+                          <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{`${tobbaco.tobbacoCategory.split(' ').join(' · ')}`}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
         </ScrollView>
-
-
-        <View className={isFocused ? 'flex h-full bottom-16 px-6' : 'hidden'}>
-          <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
-          <ScrollView keyboardShouldPersistTaps="always" // This is the key change
-            showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
-            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-              <View className='flex items-center flex-row gap-x-4'>
-                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                  <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-              <View className='flex items-center flex-row gap-x-4'>
-                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                  <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Елизабет</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-              <View className='flex items-center flex-row gap-x-4'>
-                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                  <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бонита</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-              <View className='flex items-center flex-row gap-x-4'>
-                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                  <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Хаштаг</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-
-        <LinearGradient
-          colors={['transparent', 'rgba(255, 255, 255, 0.4)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          className='flex absolute h-20 bottom-0 w-full justify-center' />
-
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   )
 }
 
@@ -408,7 +396,7 @@ export default Page
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: (Platform.OS === 'android') ? 30 : 16,
+    paddingTop: (Platform.OS === 'android') ? 30 : 24,
   },
   input: {
     paddingVertical: (Platform.OS === 'android') ? 16 : 22,

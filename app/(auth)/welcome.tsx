@@ -1,24 +1,22 @@
 import React from 'react';
 import * as WebBrowser from "expo-web-browser";
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Google, LoginCurve, ProfileAdd } from "iconsax-react-native";
-import Colors from "../../constants/Colors";
-import Animated, { FadeIn } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const Signin = () => {
 
-  // Warm up the android browser to improve UX
   useWarmUpBrowser();
 
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const signInWithGoogle = React.useCallback(async () => {
+    
     try {
       const { createdSessionId, setActive } = await startOAuthFlow();
 
@@ -34,30 +32,32 @@ const Signin = () => {
   }, [startOAuthFlow]);
 
   return (
+    <SafeAreaView className='bg-[#FFFFFC] h-full'>
 
-      <Animated.View entering={FadeIn.springify().delay(150).duration(200)} className='bg-[#fafafa] flex flex-col justify-between items-stretch pb-8 pt-28 h-full px-6 z-20'>
+      <View className='bg-[#FFFFFC] pb-4 flex flex-col justify-between items-stretch pt-28 flex-1 px-6 z-20'>
         <StatusBar style='dark' />
 
         <View className=''>
           <Text className='text-xl text-center mt-8 text-[#0b0b0b]/80' style={{ fontFamily: 'bold' }}>Добредојде на</Text>
-          <Text className='text-7xl text-[#85B4FF] text-center' style={{ fontFamily: 'heavy' }}>GRIC</Text>
+          <Text className='text-7xl text-[#98CE00] text-center' style={{ fontFamily: 'heavy' }}>GRIC</Text>
         </View>
 
 
-        <View>
+        <View >
           <View className='mb-3'>
             <Text className='text-[#0b0b0b]/70 text-lg mt-2 text-center' style={{ fontFamily: 'medium' }}>Добредојдовте на нашата апликација за достава на храна!</Text>
-          </View> 
+          </View>
 
           <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/setUsername')} className='w-full  py-6 mt-3 flex flex-row justify-center items-center bg-[#0b0b0b] rounded-2xl'>
-            <Text className='text-lg text-[#fafafa]' style={{ fontFamily: 'medium' }}>Креирај Профил</Text>
+            <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Креирај Профил</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/signIn')} className='w-full mt-3  py-6 flex flex-row justify-center items-center bg-[#0b0b0b] rounded-2xl'>
-            <Text className='text-lg text-[#fafafa]' style={{ fontFamily: 'medium' }}>Најави се</Text>
+            <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Најави се</Text>
           </TouchableOpacity>
         </View>
-      </Animated.View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -66,7 +66,7 @@ export default Signin;
 
 const styles = StyleSheet.create({
   input: {
-      paddingVertical: (Platform.OS === 'android') ? 20 : 24,
-      fontFamily: 'medium',
+    paddingVertical: (Platform.OS === 'android') ? 20 : 24,
+    fontFamily: 'medium',
   }
 });

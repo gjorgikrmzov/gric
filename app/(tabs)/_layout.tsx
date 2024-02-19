@@ -13,7 +13,7 @@ const Layout = () => {
 
         <Tabs screenOptions={{
             tabBarActiveTintColor: Colors.dark,
-            tabBarStyle: { backgroundColor: Colors.white, borderTopColor:'#0b0b0b2c', height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
+            tabBarStyle: { backgroundColor: Colors.white, borderTopColor: '#0b0b0b2c', height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
             tabBarItemStyle: { alignItems: 'center', justifyContent: 'center', display: 'flex', height: 60 },
             tabBarLabelStyle: { fontFamily: "medium", fontSize: 12 },
             tabBarIconStyle: { position: 'relative', backgroundColor: Colors.gray50, }
@@ -27,7 +27,7 @@ const Layout = () => {
                 )
             }} />
 
-            <Tabs.Screen  name='restaurants' options={{
+            <Tabs.Screen name='restaurants' options={{
                 tabBarHideOnKeyboard: true,
                 tabBarLabel: 'Храна',
                 headerShown: false,

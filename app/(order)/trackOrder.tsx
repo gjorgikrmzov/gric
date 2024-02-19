@@ -6,7 +6,7 @@ import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ArrowLeft, Call, Clock, ExportSquare, Location, SearchNormal1, Setting4, SidebarBottom, SidebarTop, StopCircle, Trash } from 'iconsax-react-native';
 import { router } from 'expo-router';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'
 import { BlurView } from 'expo-blur';
 import { Animated } from 'react-native';
@@ -71,7 +71,7 @@ const Page = () => {
     }
   };
 
-  const snapPoints = useMemo(() => ['25%', '50%', '75%', '85%'], []);
+  const snapPoints = useMemo(() => ['25%', '50%', '85%'], []);
 
   const INITIAL_REGION = {
     latitude: 41.43917545031447,
@@ -142,12 +142,11 @@ const Page = () => {
   return (
 
     <>
-      <View className='bg-[#FAFAFA] flex-1 h-screen'>
+      <View className='bg-[#FFFFFC] flex-1 h-screen'>
         <StatusBar style='auto' />
         <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
-          <TouchableOpacity className='bg-[#FAFAFA] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
             <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
-            <Text style={{ fontFamily: 'medium' }} className='text-[#0b0b0b] ml-1'>Назад</Text>
           </TouchableOpacity>
 
         </View>
@@ -170,12 +169,12 @@ const Page = () => {
             <View className='px-6 flex flex-row items-center justify-between'>
               <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/80 text-lg'>Детали на нарачка</Text>
               <TouchableOpacity onPress={() => {
-                const newIndex = currentSheetIndex === 3 ? 0 : 3; // Toggle between 0 (25%) and 2 (75%)
+                const newIndex = currentSheetIndex === 2 ? 0 : 2; // Toggle between 0 (25%) and 2 (75%)
                 snapeToIndex(newIndex);
                 setcurrentSheetIndex(newIndex); // Update state to reflect new index
-              }} className='w-12 h-12 flex justify-center items-center rounded-2xl bg-[#F0F1F3]/80'>
+              }} className='w-12 h-12 flex justify-center items-center rounded-2xl bg-[#fafafa]/90'>
                 {/* Conditionally render icons based on the currentSheetIndex */}
-                {currentSheetIndex === 3 ? (
+                {currentSheetIndex === 2 ? (
                   <SidebarBottom size={24} color={Colors.dark} variant='Broken' />
                 ) : (
                   <SidebarTop size={24} color={Colors.dark} variant='Broken' />
@@ -183,12 +182,12 @@ const Page = () => {
               </TouchableOpacity>
             </View>
 
-            <View className='w-full h-1 mt-3 bg-[#F0F1F3]'>
+            <View className='w-full h-1 mt-3 bg-[#757780]/10'>
 
             </View>
 
 
-            <ScrollView keyboardShouldPersistTaps="always" // This is the key change
+            <BottomSheetScrollView keyboardShouldPersistTaps="always" // This is the key change
               showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
                 onRefresh={onRefresh} className='z-10 ' />}>
 
@@ -196,14 +195,14 @@ const Page = () => {
                 <Text style={{ fontFamily: "semibold" }} className='text-[#0b0b0b]'>Доставувач</Text>
                 <View className='flex flex-row items-center justify-between mt-3'>
                   <View className='flex flex-row space-x-3 items-center'>
-                    <View className='w-16 h-16 bg-[#F0F1F3] rounded-2xl'></View>
+                    <View className='w-16 h-16 bg-[#7577804C]/10 rounded-2xl'></View>
                     <View className='space-y-1'>
                       <Text style={{ fontFamily: "medium" }}>Ѓорги Крмзов</Text>
                       <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Porsche Panamera</Text>
                     </View>
                   </View>
 
-                  <TouchableOpacity onPress={() => makeCall('+389 78 239 880')} className='w-12 h-12 flex justify-center items-center rounded-2xl bg-[#F0F1F3]/80'>
+                  <TouchableOpacity onPress={() => makeCall('+389 78 239 880')} className='w-12 h-12 flex justify-center items-center rounded-2xl bg-[#fafafa]/90'>
                     <Call size={24} color={Colors.dark} variant='Broken' />
                   </TouchableOpacity>
 
@@ -236,7 +235,7 @@ const Page = () => {
                     <StopCircle size={14} color={Colors.primary} className='' variant='Bulk' />
                     <View>
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:42</Text>
-                      <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60'>Вашата нарачка се подготвува</Text>
+                      <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]'>Вашата нарачка се подготвува</Text>
                     </View>
                   </View>
 
@@ -256,13 +255,13 @@ const Page = () => {
                     <StopCircle size={14} color={Colors.gray50} className='' variant='Bulk' />
                     <View>
                       {/* <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:58</Text> */}
-                      <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]'>Курирот стигна на вашата адреса</Text>
+                      <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60'>Курирот стигна на вашата адреса</Text>
                     </View>
                   </View>
                 </View>
               </View>
 
-              <View className='w-full h-1 mt-8 bg-[#F0F1F3]'>
+              <View className='w-full h-1 mt-8 bg-[#757780]/10'>
 
               </View>
 
@@ -275,15 +274,15 @@ const Page = () => {
                   </View>
 
                   <View className='flex flex-row mt-2 items-center space-x-1'>
-                    <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                    <View className='p-1 px-2 bg-[#FAFAFA]/90 rounded-lg flex justify-center items-center'>
                       <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Кат 1</Text>
                     </View>
 
-                    <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                    <View className='p-1 px-2 bg-[#FAFAFA]/90 rounded-lg flex justify-center items-center'>
                       <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Стан 4</Text>
                     </View>
 
-                    <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                    <View className='p-1 px-2 bg-[#FAFAFA]/90 rounded-lg flex justify-center items-center'>
                       <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Достави на врата</Text>
                     </View>
                   </View>
@@ -291,75 +290,10 @@ const Page = () => {
                 </View>
               </View>
 
-              <View className='w-full h-1 mt-8 bg-[#F0F1F3]'>
-
-              </View>
-
-              <View className='mt-8 px-6'>
-                <Text style={{ fontFamily: "semibold" }} className='text-[#0b0b0b]'>Нарачка</Text>
-
-                <View className='mt-6 flex flex-row items-center justify-between'>
-                  <View>
-                    <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/80'>Bу Хаус</Text>
-                    <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b] mt-1'>1x Бонапарта</Text>
-                  </View>
-                  <Text style={{ fontFamily: "semibold" }} className='text-[#85B4FF]'>180 ден</Text>
-                </View>
-
-                <View className='w-full mt-6 border-dashed border border-[#0b0b0b]/20'></View>
-
-                <View className='flex flex-col'>
-      
-                  <View className='mt-6 flex flex-row items-center justify-between'>
-                    <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b] text-[16px]'>Достава</Text>
-                    <Text style={{ fontFamily: "semibold" }} className='text-[#85B4FF] text-[16px]'>80 ден</Text>
-                  </View>
-
-                  <View className='mt-6 flex flex-row items-center justify-between'>
-                    <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b] text-[16px]'>Вкупно</Text>
-                    <Text style={{ fontFamily: "semibold" }} className='text-[#85B4FF] text-[16px]'>260 ден</Text>
-                  </View>
-                </View>
-              </View>
-
-            </ScrollView>
+            </BottomSheetScrollView>
 
           </View>
         </BottomSheet>
-
-
-        <BlurView intensity={5} className='flex-1 items-center justify-center'>
-          <Modal
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={toggleModal}
-            className='flex-1'
-          >
-            <Animated.View
-              className="flex-1 bg-[#0b0b0b]/60 border w-full items-center justify-center"
-              style={{
-                transform: [{ translateY: translateYAnim }],
-                opacity: springAnim,
-              }}
-            >
-
-              <View className=" w-4/5  bg-white rounded-2xl justify-center p-4 ">
-                <Text className="text-center text-lg" style={{ fontFamily: "medium" }}>Откажи нарачка</Text>
-                <Text className="text-center mt-2" style={{ fontFamily: "medium" }}>Дали сакаш да ја {'\n'} откажеш нарачката?</Text>
-
-                <View className='flex mt-4 space-y-2 justify-center'>
-                  <TouchableOpacity onPress={toggleModal} className=' w-full py-5 flex justify-center items-center bg-[#0b0b0b] rounded-2xl'>
-                    <Text style={{ fontFamily: "medium" }} className='text-[16px] text-[#fafafa]'>Да</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity onPress={toggleModal} className=' w-full py-5 flex justify-center items-center bg-[#0b0b0b] rounded-2xl'>
-                    <Text style={{ fontFamily: "medium" }} className='text-[16px] text-[#fafafa]'>Не</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Animated.View>
-          </Modal>
-        </BlurView>
 
 
       </View>

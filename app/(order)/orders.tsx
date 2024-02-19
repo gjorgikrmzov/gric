@@ -39,21 +39,21 @@ const Page = () => {
     }, []);
 
 
-    
+
 
 
     return (
-        <SafeAreaView className='flex-1 bg-[#fafafa]'>
+        <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
             <View className='px-6 py-4 flex flex-row gap-x-3 items-center justify-between'>
-                <TouchableOpacity onPress={() => router.back()} className='w-10 h-10 flex justify-center items-center bg-[#F0F1F3]/80 rounded-xl' >
-                    <ArrowLeft2 variant='Linear' size={22} color={Colors.dark} />
+                <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+                    <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Нарачки</Text>
 
-                <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
-            <View className='w-full mt-3 pt-3'>
+            <View className='w-full pt-3 '>
 
                 <View className='justify-center w-full items-center flex'>
                     <View className='flex flex-col justify-center items-center w-full '>
@@ -65,8 +65,8 @@ const Page = () => {
                                 <Text style={{ fontFamily: 'semibold' }} className={selectedTab === 'currentOrder' ? 'text-[#0b0b0b]/50' : "text-[#0b0b0b]"}>Готови нарачки</Text>
                             </TouchableOpacity>
                         </View>
-                        <View className='w-full flex absolute left-0 bottom-0 h-1.5 bg-[#F0F1F3] '>
-                            <Animated.View className='h-1.5 bg-[#0b0b0b]' style={[styles.highlight, animatedStyle]} />
+                        <View className='w-full flex absolute left-0 bottom-0 h-1 bg-[#757780]/10 '>
+                            <Animated.View className='h-1 bg-[#0b0b0b]' style={[styles.highlight, animatedStyle]} />
                         </View>
                     </View>
 
@@ -77,7 +77,7 @@ const Page = () => {
             <View className=' flex-1'>
 
                 {selectedTab === 'currentOrder' ? (
-                    <Animated.View entering={FadeInDown.delay(200).duration(200).springify()} className='px-6 flex-1 justify-center items-start mt-6 flex-row'>
+                    <View className='px-6 flex-1 justify-center items-start mt-6 flex-row'>
                         {/* <View className='flex justify-center items-center flex-col'>
                             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#F0F1F3]/80'>
                                 <DirectboxNotif size={56} variant='Bulk' color={Colors.primary} />
@@ -121,9 +121,9 @@ const Page = () => {
 
 
                         </ScrollView>
-                    </Animated.View>
+                    </View>
                 ) : (
-                    <Animated.View entering={FadeInDown.delay(200).duration(200).springify()} className='px-6 flex-1 justify-center items-start mt-6 flex-row'>
+                    <View className='px-6 flex-1 justify-center items-start mt-6 flex-row'>
                         {/* <View className='flex justify-center items-center flex-col'>
                             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#F0F1F3]/80'>
                                 <DirectboxNotif size={56} variant='Bulk' color={Colors.primary} />
@@ -178,7 +178,7 @@ const Page = () => {
                                 </View>
                             </TouchableOpacity>
                         </ScrollView>
-                    </Animated.View>
+                    </View>
                 )}
             </View>
         </SafeAreaView>

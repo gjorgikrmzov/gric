@@ -39,7 +39,7 @@ const Page = () => {
 
     return (
         <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
-            <SafeAreaView className='flex-1 bg-[#fafafa]'>
+            <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
                 <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
                     <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
@@ -48,7 +48,7 @@ const Page = () => {
                             <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
                         </TouchableOpacity>
 
-                        <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
+                        <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
                     </View>
 
                     <View className='py-6 px-6 pt-10'>
@@ -59,7 +59,7 @@ const Page = () => {
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
                         <TextInput value={email}
-                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#85B4FF]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
                     </View>
 
                     <View className='px-6 pb-4 flex-1 justify-end'>
@@ -67,8 +67,8 @@ const Page = () => {
                             await saveEmail(email);
                             router.push('/(auth)/setPassword')
                             // navigate to profile screen
-                        }} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
-                            <Text className='text-lg text-[#fafafa] ' style={{ fontFamily: "medium" }}>Следно</Text>
+                        }} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
+                            <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Следно</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>
                     </View>

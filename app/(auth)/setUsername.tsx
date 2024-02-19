@@ -22,16 +22,16 @@ const Page = () => {
 
   const saveUserName = async (firstName: string, lastName: string) => {
     try {
-        await AsyncStorage.setItem('@userFirstName', firstName);
-        await AsyncStorage.setItem('@userLastName', lastName);
+      await AsyncStorage.setItem('@userFirstName', firstName);
+      await AsyncStorage.setItem('@userLastName', lastName);
     } catch (error) {
-        console.error('Failed to save user name.', error);
+      console.error('Failed to save user name.', error);
     }
-};
+  };
 
   return (
     <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
-      <SafeAreaView className='flex-1 bg-[#fafafa]'>
+      <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
         <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
           <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
@@ -40,7 +40,7 @@ const Page = () => {
               <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
             </TouchableOpacity>
 
-            <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
+            <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
           </View>
 
           <View className='py-6 px-6 pt-10'>
@@ -50,28 +50,26 @@ const Page = () => {
 
           <View className='flex px-6 h-min flex-col gap-y-3'>
             <TextInput value={firstName}
-              onChangeText={(text) => setfirstName(text)} className=' px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#85B4FF]' style={styles.input} placeholder='Име' placeholderTextColor='#0b0b0b97' />
+              onChangeText={(text) => setfirstName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0  focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Име' placeholderTextColor='#0b0b0b97' />
             <TextInput value={lastName}
-              onChangeText={(text) => setlastName(text)} className=' px-5 bg-[#F0F1F3]/80 rounded-2xl border-2 text-[#0b0b0b] border-[#0b0b0b]/0 focus:border-2 focus:border-[#85B4FF]' style={styles.input} placeholder='Презиме' placeholderTextColor='#0b0b0b97' />
+              onChangeText={(text) => setlastName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Презиме' placeholderTextColor='#0b0b0b97' />
+            
+            <TouchableOpacity className='mt-4 ml-0.5'>
+              <Text className='text-[#98CE00] text-sm' style={{ fontFamily: 'semibold' }}>Веќе имам профил</Text>
+            </TouchableOpacity>
           </View>
 
 
+
           <View className='flex-1 flex justify-end '>
-            <View className='px-6 pb-2'>
+            <View className='px-6 pb-4'>
 
               <TouchableOpacity onPress={async () => {
                 await saveUserName(firstName, lastName);
                 router.push('/(auth)/setEmail')
-                // navigate to profile screen
-              }} className='bg-[#0b0b0b] flex flex-row items-center justify-center rounded-2xl w-full py-6'>
-                <Text className='text-lg text-[#fafafa]' style={{ fontFamily: "medium" }}>Следно</Text>
+              }} className='bg-[#0b0b0b] flex flex-row items-center self-end justify-center rounded-2xl w-1/2 py-5'>
+                <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: "medium" }}>Следно</Text>
                 <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
-              </TouchableOpacity>
-            </View>
-
-            <View className='px-6 pb-4'>
-              <TouchableOpacity onPress={() => router.push('/(auth)/signIn')} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
-                <Text className='text-lg text-[#fafafa] ' style={{ fontFamily: "medium" }}>Веќе имам профил</Text>
               </TouchableOpacity>
             </View>
           </View>

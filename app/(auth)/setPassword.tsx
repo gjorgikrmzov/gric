@@ -39,7 +39,7 @@ const Page = () => {
 
     return (
         <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
-            <SafeAreaView className='flex-1 bg-[#fafafa]'>
+            <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
                 <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
                     <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
@@ -48,7 +48,7 @@ const Page = () => {
                             <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
                         </TouchableOpacity>
 
-                        <Text className='text-4xl text-[#85B4FF]' style={{ fontFamily: "heavy" }}>G</Text>
+                        <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
                     </View>
 
                     <View className='py-6 px-6 pt-10'>
@@ -59,20 +59,20 @@ const Page = () => {
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
 
-                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#85B4FF]'>
+                        <View className='w-full flex items-center flex-row bg-[#fafafa]/90 border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#98CE00]'>
                             <TextInput onChangeText={setPassword} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
 
                             {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
                         </View>
 
-                        <View className='w-full flex items-center flex-row bg-[#F0F1F3]/80 rounded-2xl border-2 border-[#F0F1F3]/80 focus:border-[#85B4FF]'>
+                        <View className='w-full flex items-center flex-row bg-[#fafafa]/90 border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#98CE00]'>
                             <TextInput className='px-5 w-[90%]' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
                         </View>
                     </View>
 
                     <View className='px-6 pb-4 flex-1 justify-end'>
                         <TouchableOpacity onPress={storeUserData} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
-                            <Text className='text-lg text-[#fafafa] ' style={{ fontFamily: "medium" }}>Креирај профил</Text>
+                            <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Креирај профил</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>
                     </View>

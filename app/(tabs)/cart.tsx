@@ -48,7 +48,7 @@ const Page = () => {
   }, [itemQuantity]);
 
   return (
-    <View className='flex-1 flex flex-col  bg-[#fafafa]'>
+    <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
 
 
       <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
@@ -56,7 +56,7 @@ const Page = () => {
           <Bag variant='Bulk' size={22} color={Colors.primary} />
           <Text className='text-xl ml-1' style={{ fontFamily: "semibold" }}>Корпа</Text>
         </View>
-        <TouchableOpacity onPress={() => router.push('/(order)/orders')} className='px-4 bg-[#F0F1F3] rounded-2xl py-3'>
+        <TouchableOpacity onPress={() => router.push('/(order)/orders')} className='px-4 bg-[#fafafa]/90 rounded-2xl py-3'>
           <Text style={{ fontFamily: "semibold" }}>Нарачки</Text>
         </TouchableOpacity>
       </View>
@@ -66,7 +66,7 @@ const Page = () => {
         <ScrollView className='flex-1'>
           <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
             <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#0b0b0b]/10 rounded-xl overflow-hidden'>
+              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-xl overflow-hidden'>
 
               </View>
 
@@ -76,8 +76,8 @@ const Page = () => {
                   <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
                 </View>
 
-                <View className=' bg-[#F0F1F3] px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
                     {deleteButton ?
                       (<Minus
                         size={20}
@@ -93,7 +93,7 @@ const Page = () => {
 
                   <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
 
-                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
                     <Add
                       size={20}
                       color={Colors.dark}
@@ -109,7 +109,7 @@ const Page = () => {
 
           <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5  px-6'>
             <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#0b0b0b]/10 rounded-xl overflow-hidden'>
+              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-xl overflow-hidden'>
 
               </View>
 
@@ -119,8 +119,8 @@ const Page = () => {
                   <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
                 </View>
 
-                <View className=' bg-[#F0F1F3] px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
                     {deleteButton ?
                       (<Minus
                         size={20}
@@ -136,7 +136,7 @@ const Page = () => {
 
                   <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
 
-                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#fafafa]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
                     <Add
                       size={20}
                       color={Colors.dark}
@@ -151,7 +151,7 @@ const Page = () => {
         </ScrollView>
 
 
-        <View className='w-full h-1 bg-[#F0F1F3]'></View>
+        <View className='w-full h-1 bg-[#757780]/10'></View>
         <View className='px-6'>
           <View className='w-full flex-row flex items-center justify-between'>
             <View className='py-6  border-b flex flex-row items-center  justify-between border-[#0b0b0b]/5  w-full'>
@@ -190,7 +190,7 @@ const Page = () => {
 
         <View className='px-6 mb-4 flex'>
           <TouchableOpacity onPress={() => router.push('/(order)/checkout')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-            <Text style={{ fontFamily: "medium" }} className='text-[#fafafa]'>Кон наплата</Text>
+            <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC]'>Кон наплата</Text>
             <ArrowRight variant='Linear' size={24} className='ml-2' color={Colors.primary} />
           </TouchableOpacity>
         </View>
@@ -210,7 +210,7 @@ const Page = () => {
       <View className='px-6'>
         <TouchableOpacity onPress={() => router.push('/restaurants')} className={cartEmpty ? 'hidden' : 'mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'}>
           <Shop variant='Bulk' size={24} color={Colors.primary} />
-          <Text style={{ fontFamily: "medium" }} className='text-[#fafafa] ml-2'>Пребарај Ресторани</Text>
+          <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Пребарај Ресторани</Text>
         </TouchableOpacity>
       </View>
 
