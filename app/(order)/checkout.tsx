@@ -97,15 +97,15 @@ const checkout = () => {
                                     </View>
 
                                     <View className='flex flex-row mt-2 items-center space-x-1'>
-                                        <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                                        <View className='p-1 px-2 bg-[#fafafa] rounded-lg flex justify-center items-center'>
                                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Кат 1</Text>
                                         </View>
 
-                                        <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                                        <View className='p-1 px-2 bg-[#fafafa] rounded-lg flex justify-center items-center'>
                                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Стан 4</Text>
                                         </View>
 
-                                        <View className='p-1 px-2 bg-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                                        <View className='p-1 px-2 bg-[#fafafa] rounded-lg flex justify-center items-center'>
                                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Достави на врата</Text>
                                         </View>
                                     </View>
@@ -130,14 +130,14 @@ const checkout = () => {
                         </View>
                         <View className='flex flex-row gap-x-2 mt-3'>
 
-                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : ' border border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
                                 </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : 'border border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
                                 </View>

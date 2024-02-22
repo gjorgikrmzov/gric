@@ -13,7 +13,7 @@ import Animated, { Easing, FadeInDown, useAnimatedStyle, useSharedValue, withSpr
 import { processFontFamily } from 'expo-font';
 
 const Page = () => {
-  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
+  const snapPoints = useMemo(() => ['25%', '75%'], []);
 
   const INITIAL_REGION = {
     latitude: 41.43917545031447,

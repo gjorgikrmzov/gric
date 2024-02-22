@@ -66,7 +66,7 @@ const Page = () => {
         <ScrollView className='flex-1'>
           <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
             <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-xl overflow-hidden'>
+              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
 
               </View>
 
@@ -109,7 +109,7 @@ const Page = () => {
 
           <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5  px-6'>
             <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-xl overflow-hidden'>
+              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
 
               </View>
 

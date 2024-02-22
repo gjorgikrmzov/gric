@@ -10,9 +10,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import BottomSheet from '@gorhom/bottom-sheet/'
 import restaurants from '../data/resataurants'
 import { Animated } from 'react-native'
-import { Easing } from 'react-native-reanimated'
-import { Circle } from 'react-native-maps'
-
 
 const Page = () => {
 
@@ -144,19 +141,12 @@ const Page = () => {
                 <Text className='text-[#0b0b0b]  px-6 mt-6' style={{ fontFamily: "semibold" }}>Избери количина</Text>
                 <View className=' bg-[#F0F1F3] p-1 flex-row items-center rounded-xl justify-between w-24 mt-3 mx-6'>
                     <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-8 h-8  rounded-lg '>
-                        {itemQuantity > 1 ? (
-                            <Minus
-                                size={20}
-                                color={Colors.dark}
-                                variant='Linear'
-                            />
-                        ) : (
-                            <Trash
-                                size={20}
-                                color={Colors.dark}
-                                variant='Linear'
-                            />
-                        )}
+                        <Minus
+                            size={20}
+                            color={Colors.dark}
+                            variant='Linear'
+                        />
+
                     </TouchableOpacity>
 
                     <Text className='text-[16px] text-[#0b0b0b]'>{itemQuantity}</Text>
@@ -193,7 +183,7 @@ const Page = () => {
 
             </View>
 
-            <View className={menuToggled ? 'absolute h-screen w-screen ': 'hidden'}>
+            <View className={menuToggled ? 'absolute h-screen w-screen ' : 'hidden'}>
                 <TouchableOpacity onPress={hideMenu} className='flex-1 bg-[#0b0b0b]/50 h-full'></TouchableOpacity>
                 <BottomSheet
                     ref={bottomSheetRef}
@@ -202,10 +192,11 @@ const Page = () => {
                     handleIndicatorStyle={{ backgroundColor: Colors.dark }}
                     index={menuToggled ? 0 : -1}
                     snapPoints={snapPoints}
-                    onClose={() => {2
-                        setmenuToggled(false); 
+                    onClose={() => {
+                        2
+                        setmenuToggled(false);
                     }}
-                    >
+                >
                     <View className='px-6'>
                         <TouchableOpacity className='py-4'>
                             <Text></Text>

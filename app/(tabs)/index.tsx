@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { Animated as RNAnimated, View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
-import { Notification1, SearchNormal1, User, Location, Shop, DocumentText, ArrowDown, ArrowDown2, DiscountShape, InfoCircle, Information, Clock, HambergerMenu, SidebarTop, Heart, Category, Bookmark, Element, ArrowRight2, ArrowRight, ArrowLeft, CloseSquare, ArrowCircleRight } from 'iconsax-react-native'
+import { Notification1, SearchNormal1, User, Location, Shop, DocumentText, ArrowDown, ArrowDown2, DiscountShape, InfoCircle, Information, Clock, HambergerMenu, SidebarTop, Heart, Category, Bookmark, Element, ArrowRight2, ArrowRight, ArrowLeft, CloseSquare, ArrowCircleRight, RecordCircle, Timer } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import Animated, { Easing, FadeIn, FadeInDown, FadeInUp, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
@@ -12,7 +12,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import restaurants from '../../data/resataurants'
 
 const Page = () => {
-    
+
+    const [orderExists, setorderExists] = useState(true)
     
     const categories = [
         { categoryImage: require('../../assets/images/burger.png'), categoryTitle: 'Бургер' },
@@ -20,7 +21,7 @@ const Page = () => {
         { categoryImage: require('../../assets/images/taco.png'), categoryTitle: 'Тако' },
         { categoryImage: require('../../assets/images/pasta.png'), categoryTitle: 'Паста' },
         { categoryImage: require('../../assets/images/salad.png'), categoryTitle: 'Салата' },
-        { categoryImage: require('../../assets/images/donut.png'), categoryTitle: 'Слатко' },
+        { categoryImage: require('../../assets/images/donut.png'), categoryTitle: 'Десерт' },
         { categoryImage: require('../../assets/images/meat.png'), categoryTitle: 'Скара' },
     ]
 
@@ -86,64 +87,75 @@ const Page = () => {
 
 
 
+
+    const [isAnimating, setIsAnimating] = useState(false); // New state to track if an animation is in progress
     const [isFocused, setIsFocused] = useState(false);
     const overlayOpacity = useSharedValue(1); // Start with full opacity
     const searchResult = useSharedValue(0);
     const inputY = useSharedValue(10); // Adjust starting position if necessary
 
     // Animated styles
-    const animatedInputStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ translateY: inputY.value }],
-        };
-    });
-
-    const animatedOverlayStyle = useAnimatedStyle(() => {
-        return {
-            opacity: overlayOpacity.value,
-        };
-    });
-
-    const animatedResultStyle = useAnimatedStyle(() => {
-        return {
-            opacity: searchResult.value,
-        };
-    });
-
-    // Handle input focus
     const onFocus = () => {
         setIsFocused(true);
-
         inputY.value = withSpring(-70, {
-            duration: 1600,
-            // Use a callback on completion of the animation to set visibility
-        }); // Animate to top
+            duration: 1500,
+            stiffness: 20,
+        });
         overlayOpacity.value = withSpring(0, {
-            duration: 300,
-            // Use a callback on completion of the animation to set visibility
+            duration: 200,
         });
-        searchResult.value = withSpring(1, {
-            duration: 300,
-            // Use a callback on completion of the animation to set visibility
-        });
+        searchResult.value = withSpring(1);
     };
 
     const onBlur = () => {
-        Keyboard.dismiss()
+        Keyboard.dismiss();
         setIsFocused(false);
-        inputY.value = withSpring(0, {
-            duration: 1600,
-            // Use a callback on completion of the animation to set visibility
-        }); // Animate to top
-        overlayOpacity.value = withSpring(1, {
-            duration: 300,
-            // Use a callback on completion of the animation to set visibility
+        inputY.value = withSpring(10, {
+            duration: 1500,
+            stiffness: 20,
         });
-        searchResult.value = withSpring(0, {
-            duration: 300,
-            // Use a callback on completion of the animation to set visibility
-        });
+        overlayOpacity.value = withSpring(1);
+        searchResult.value = withSpring(0);
     };
+
+    const animatedInputStyle = useAnimatedStyle(() => ({
+        transform: [{ translateY: inputY.value }],
+    }));
+
+    const animatedOverlayStyle = useAnimatedStyle(() => ({
+        opacity: overlayOpacity.value,
+    }));
+
+    const animatedResultStyle = useAnimatedStyle(() => ({
+        opacity: searchResult.value,
+    }));
+
+
+
+    const spinValue = useRef(new RNAnimated.Value(0)).current;
+
+    useEffect(() => {
+        const animate = () => {
+            // Animate from current value to the next (increased by 1 every time)
+            spinValue.setValue(0); // Reset the value without causing a visual reset
+            RNAnimated.timing(spinValue, {
+                toValue: 1,
+                duration: 1300,
+                easing: Easing.circle,
+                useNativeDriver: true,
+            }).start(() => {
+                spinValue.setValue(1); // Immediately set to end value to avoid visual reset
+                animate(); // Loop the animation by calling it recursively
+            });
+        };
+        animate();
+    }, []);
+
+    const spin = spinValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '180deg'], // Adjust this to '360deg' if you want a full rotation
+    });
+
 
     return (
         <>
@@ -151,9 +163,9 @@ const Page = () => {
             <View className='w-screen  h-screen absolute z-0 left-0 top-0 bg-[#FFFFFC]'>
             </View>
 
-            <Animated.View className='flex-1' entering={FadeIn.springify().duration(400)}>
+            <Animated.View className='h-full' entering={FadeIn.springify().duration(400)}>
                 <StatusBar style='dark' />
-                <SafeAreaView style={styles.header} className='bg-[#FFFFFC] h-screen'>
+                <SafeAreaView style={styles.header} className='bg-[#FFFFFC] h-full'>
 
                     <View className='bg-[#FFFFFC] z-0 border-b  border-[#757780]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
                         <TouchableOpacity onPress={() => router.push('/(modals)/manageAddresses')}>
@@ -175,20 +187,20 @@ const Page = () => {
                         </TouchableOpacity>
 
                         <View className='flex flex-row items-center gap-x-2'>
-                            <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-14 h-14 flex justify-center items-center rounded-full bg-[#fafafa]/80'>
-                                <View className='w-4 h-4 bg-[#0b0b0b] rounded-full absolute z-10 right-3 top-3 flex justify-center items-center'>
-                                    <Text className='text-[8px] text-[#FAFAFA]' style={{ fontFamily: 'extrabold', bottom: (Platform.OS === 'android') ? 1 : 0, }}>3</Text>
+                            <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
+                                <View className='rounded-full absolute z-10 right-3.5 top-3 flex justify-center items-center'>
+                                    <RecordCircle variant='Bulk' size={16} color={Colors.primary} />
                                 </View>
                                 <Notification1 color={Colors.dark} size={20} variant='Broken' />
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => router.push('/(user)/profile')} className='w-14 h-14 flex justify-center items-center rounded-full bg-[#fafafa]/80'>
+                            <TouchableOpacity onPress={() => router.push('/(user)/profile')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
                                 <User color={Colors.dark} size={20} variant='Broken' />
                             </TouchableOpacity>
                         </View>
                     </View>
 
                     <ScrollView keyboardShouldPersistTaps="always" removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
-                        onRefresh={onRefresh} className='z-10 border' />}>
+                        onRefresh={onRefresh} className='z-10 flex-1' />}>
 
                         {/* SEARCH BAR */}
                         <Animated.View style={animatedOverlayStyle} className='mt-4  px-6'>
@@ -227,47 +239,66 @@ const Page = () => {
                             </View>
 
                             <KeyboardAvoidingView>
-                                <Animated.View style={animatedResultStyle} className={isFocused ? 'flex h-full mt-8 px-6' : 'hidden h-full mt-8 px-6'}>
-                                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
-                                    <ScrollView keyboardShouldPersistTaps="always" // This is the key change
-                                        showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
-                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-                                            <View className='flex items-center flex-row gap-x-4'>
-                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
+                                {search === '' ? (
+                                    <Animated.View style={animatedResultStyle} className={isFocused ? 'flex h-full mt-8 px-6' : 'hidden h-full mt-8 px-6'}>
+                                        <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
+                                        <ScrollView keyboardShouldPersistTaps="always" // This is the key change
+                                            showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
+                                            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>
+                                            </TouchableOpacity>
 
-                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-                                            <View className='flex items-center flex-row gap-x-4'>
-                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Елизабет</Text>
+                                            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Елизабет</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>
+                                            </TouchableOpacity>
 
-                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-                                            <View className='flex items-center flex-row gap-x-4'>
-                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бонита</Text>
+                                            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бонита</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>
+                                            </TouchableOpacity>
 
-                                        <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
-                                            <View className='flex items-center flex-row gap-x-4'>
-                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Хаштаг</Text>
+                                            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Хаштаг</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </ScrollView>
-                                </Animated.View>
+                                            </TouchableOpacity>
+                                        </ScrollView>
+                                    </Animated.View>
+                                )
+                                    :
+                                    (<Animated.View style={animatedResultStyle} className='flex h-full mt-8 px-6'>
+                                        <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
+                                        <ScrollView keyboardShouldPersistTaps="always" // This is the key change
+                                            showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
+                                            <TouchableOpacity className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.primary} size={25} variant='Bulk' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>Бу Хаус</Text>
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+
+
+                                        </ScrollView>
+                                    </Animated.View>)}
                             </KeyboardAvoidingView>
                         </Animated.View>
 
@@ -370,11 +401,28 @@ const Page = () => {
                                 </ScrollView>
 
                             </View>
+
                         </Animated.View>
 
 
                     </ScrollView>
                 </SafeAreaView>
+
+                <View className={orderExists ? 'px-6 flex w-full justify-center items-center absolute bottom-4' : 'hidden'}>
+                    <TouchableOpacity onPress={() => router.push('/(order)/trackOrder')} className='w-full p-4 rounded-2xl flex items-center justify-between flex-row bg-[#FFFFFC] shadow-md'>
+                        <View className='flex flex-row items-center  space-x-3'>
+                            <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'></View>
+                            <View className='flex flex-col'>
+                                <Text className=' text-[#0b0b0b]/80 uppercase' style={{ fontFamily: "semibold" }}>Бу Хаус</Text>
+                                <Text className=' mt-1 text-[#0b0b0b]' style={{ fontFamily: "medium" }}>x1 Бонапарата</Text>
+                            </View>
+                        </View>
+
+                        <RNAnimated.View style={{ transform: [{ rotate: spin }] }}>
+                            <Timer variant='Bulk' color={Colors.primary} size={36} />
+                        </RNAnimated.View>
+                    </TouchableOpacity>
+                </View>
 
 
             </Animated.View >

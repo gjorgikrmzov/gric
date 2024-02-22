@@ -37,11 +37,11 @@ const Page = () => {
                         <Location size={18} color={Colors.primary} variant='Bulk' />
                         <Text style={{ fontFamily: "medium" }} className='ml-1 text-[#0b0b0b]/80'>Име на адреса</Text>
                     </View>
-                    <TextInput style={{ fontFamily: "medium" }} className='px-5 py-5 border rounded-2xl border-[#0b0b0b]/10' value="22 Dekemvri 23" editable={false} />
+                    <TextInput style={{ fontFamily: "medium" }} className='px-5 py-5 rounded-2xl bg-[#fafafa]/80 ' value="22 Dekemvri 23" editable={false} />
 
                     <View className='flex flex-row mt-3 space-x-2 items-center'>
-                        <TextInput style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border rounded-2xl border-[#0b0b0b]/10' placeholder='Кат' placeholderTextColor={Colors.gray50} />
-                        <TextInput style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border rounded-2xl border-[#0b0b0b]/10' placeholder='Број на стан' placeholderTextColor={Colors.gray50} />
+                        <TextInput style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2 focus:border-[#98CE00]  rounded-2xl bg-[#fafafa]/80 ' placeholder='Кат' placeholderTextColor='#0b0b0b97' />
+                        <TextInput style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2 focus:border-[#98CE00]  rounded-2xl bg-[#fafafa]/80 ' placeholder='Број на стан' placeholderTextColor='#0b0b0b97' />
                     </View>
 
                     <View className='mt-5 ml-1'>
@@ -63,14 +63,14 @@ const Page = () => {
 
                         <View className='mt-4 flex flex-row gap-x-3'>
 
-                            <TouchableOpacity onPress={handleSelectHome} className={selectHome ? ' p-3.5 flex flex-col justify-between border-2 border-[#98CE00] flex-1  rounded-2xl' : ' border border-[#0b0b0b]/5 p-3.5 flex flex-col justify-between flex-1  rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectHome} className={selectHome ? ' p-3.5 flex flex-col justify-between border-2 border-[#98CE00] flex-1  rounded-2xl' : ' border-2 border-[#0b0b0b]/5 p-3.5 flex flex-col justify-between flex-1  rounded-2xl'}>
                                 <View className='justify-between items-center flex-row'>
                                     <Home2 size={22} color={selectHome ? Colors.primary : Colors.dark} variant={selectHome ? 'Bold' : 'Linear'} />
                                 </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Дома</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectJob} className={selectJob ? ' p-3.5 flex flex-col justify-between border-2 border-[#98CE00] flex-1  rounded-2xl' : ' border border-[#0b0b0b]/5 p-3.5 flex flex-col justify-between flex-1  rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectJob} className={selectJob ? ' p-3.5 flex flex-col justify-between border-2 border-[#98CE00] flex-1  rounded-2xl' : ' border-2 border-[#0b0b0b]/5 p-3.5 flex flex-col justify-between flex-1  rounded-2xl'}>
                                 <View className='justify-between items-center flex-row'>
                                     <Briefcase size={22} color={selectJob ? Colors.primary : Colors.dark} variant={selectJob ? 'Bold' : 'Linear'} />
                                 </View>

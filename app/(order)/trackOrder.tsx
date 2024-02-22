@@ -160,7 +160,7 @@ const Page = () => {
 
         <BottomSheet
           ref={bottomSheetRef}
-          index={0}
+          index={1}
           backgroundStyle={{ backgroundColor: Colors.white }}
           handleIndicatorStyle={{ backgroundColor: Colors.dark }}
           snapPoints={snapPoints}
