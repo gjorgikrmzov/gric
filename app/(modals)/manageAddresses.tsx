@@ -86,7 +86,7 @@ const Page = () => {
           <ArrowDown variant='Linear' size={20} color={Colors.dark} />
         </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Адреси</Text>
-          <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
         <View className='mt-4 px-6'>

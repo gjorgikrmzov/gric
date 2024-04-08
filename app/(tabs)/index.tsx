@@ -13,8 +13,8 @@ import restaurants from '../../data/resataurants'
 
 const Page = () => {
 
-    const [orderExists, setorderExists] = useState(true)
-    
+    const [orderExists, setorderExists] = useState(false)
+
     const categories = [
         { categoryImage: require('../../assets/images/burger.png'), categoryTitle: 'Бургер' },
         { categoryImage: require('../../assets/images/piza.png'), categoryTitle: 'Пица' },
@@ -84,8 +84,6 @@ const Page = () => {
         setSearch(text);
         setClose(text !== '');
     };
-
-
 
 
     const [isAnimating, setIsAnimating] = useState(false); // New state to track if an animation is in progress
@@ -207,7 +205,7 @@ const Page = () => {
 
                             <View className='z-0 w-full items-start flex-col flex justify-between'>
                                 <View className='flex flex-col mt-2'>
-                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#98CE00]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                                    <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#1dd868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
                                     <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                                 </View>
                             </View>
@@ -379,18 +377,15 @@ const Page = () => {
                                                     </View>
                                                     <Text className='text-primary text-3xl text-[#FAFAFA]' style={{ fontFamily: "extrabold" }}>{restaurant.name}</Text>
 
-                                                    <View className='flex flex-col gap-y-2 mt-6'>
-                                                        {/* <View className='flex flex-row mt-1 items-center'>
-                                                            <Location variant='Bulk' color={Colors.primary} size={16} />
-                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>3км</Text>
-                                                        </View> */}
+                                                    <View className='flex flex-row justify-between items-center mt-6'>
                                                         <View className='flex flex-row items-center'>
                                                             <Clock variant='Bulk' color={Colors.primary} size={16} />
                                                             <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>Отворено</Text>
                                                         </View>
-                                                        <View className='flex flex-row items-center'>
-                                                            <Bookmark variant='Bulk' color={Colors.primary} size={16} />
-                                                            <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "bold" }}>{restaurant.desc}</Text>
+
+
+                                                        <View className='px-2.5 py-1.5 bg-[#fffffc] flex items-center justify-center rounded-full'>
+                                                            <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>

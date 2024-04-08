@@ -40,7 +40,7 @@ const Page = () => {
               <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
             </TouchableOpacity>
 
-            <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+            <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
           </View>
 
           <View className='py-6 px-6 pt-10'>
@@ -50,12 +50,12 @@ const Page = () => {
 
           <View className='flex px-6 h-min flex-col gap-y-3'>
             <TextInput value={firstName}
-              onChangeText={(text) => setfirstName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0  focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Име' placeholderTextColor='#0b0b0b97' />
+              onChangeText={(text) => setfirstName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0  focus:border-2 focus:border-[#1dd868]' style={styles.input} placeholder='Име' placeholderTextColor='#0b0b0b97' />
             <TextInput value={lastName}
-              onChangeText={(text) => setlastName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Презиме' placeholderTextColor='#0b0b0b97' />
+              onChangeText={(text) => setlastName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1dd868]' style={styles.input} placeholder='Презиме' placeholderTextColor='#0b0b0b97' />
             
             <TouchableOpacity className='mt-4 ml-0.5'>
-              <Text className='text-[#98CE00] text-sm' style={{ fontFamily: 'semibold' }}>Веќе имам профил</Text>
+              <Text className='text-[#1dd868] text-sm' style={{ fontFamily: 'semibold' }}>Веќе имам профил</Text>
             </TouchableOpacity>
           </View>
 

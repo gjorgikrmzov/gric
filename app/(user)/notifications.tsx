@@ -18,7 +18,7 @@ const Page = () => {
         </TouchableOpacity>
           <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Известувања</Text>
 
-          <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
         <ScrollView refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={false} />} className='h-full' contentContainerStyle={{

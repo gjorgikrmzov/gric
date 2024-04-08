@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import Animated, { Easing, FadeInDown, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { ArrowLeft, ArrowLeft2, Clock, DirectboxDefault, DirectboxNotif, Notification, Receipt, Receipt1 } from 'iconsax-react-native';
+import { ArrowLeft } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { router } from 'expo-router';
-// Note: Ensure you're importing router from a valid source, as 'expo-router' might be a placeholder.
-// import { router } from 'expo-router';
 import { Dimensions } from 'react-native';
 
 
@@ -50,7 +47,7 @@ const Page = () => {
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Нарачки</Text>
 
-                <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
             <View className='w-full pt-3 '>

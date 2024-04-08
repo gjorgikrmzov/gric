@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
+import { ArrowLeft, ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Money, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
 import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../constants/Colors'
@@ -76,7 +76,7 @@ const checkout = () => {
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Наплата</Text>
 
-                <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
             <View className='flex-1 mb-4'>
@@ -125,25 +125,29 @@ const checkout = () => {
 
                     <View className='w-full px-6 mt-6'>
                         <View>
-                            <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Избери</Text>
-                            <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
-                        </View>
-                        <View className='flex flex-row gap-x-2 mt-3'>
+                            <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
+                            <View className='flex flex-row items-center'>
+                                <Money size={22} variant='Bulk' color={Colors.primary} />
+                                <Text className='ml-1 text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
+                            </View>
 
-                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                        </View>
+                        {/* <View className='flex flex-row gap-x-2 mt-3'>
+
+                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#1dd868] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
                                 </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#98CE00] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#1dd868] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
                                 </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>При достава</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </ScrollView>
             </View>

@@ -1,6 +1,5 @@
 import { View, Text, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useAuth, useUser } from '@clerk/clerk-expo'
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
@@ -38,7 +37,6 @@ const Page = () => {
     getUserData();
   }, []);
 
-  const { signOut, isSignedIn } = useAuth();
 
 
   const handleSignOut = () => {
@@ -53,7 +51,6 @@ const Page = () => {
         {
           text: 'Да',
           onPress: () => {
-            signOut()
             router.replace('/(auth)/welcome')
           },
         },
@@ -70,7 +67,7 @@ const Page = () => {
           </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Профил</Text>
 
-          <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Alert, Linking, Modal, Platform, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ArrowLeft, Call, Clock, ExportSquare, Location, SearchNormal1, Setting4, SidebarBottom, SidebarTop, StopCircle, Trash } from 'iconsax-react-native';
+import { ArrowLeft, Call, Clock, ExportSquare, Location, LocationAdd, SearchNormal1, Setting4, Shop, SidebarBottom, SidebarTop, StopCircle, TickCircle, Trash } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'
@@ -152,9 +152,13 @@ const Page = () => {
         </View>
 
         <View className='border-black/10  overflow-hidden'>
-          <MapView showsUserLocation={true} // Show the user location pin
+          <MapView // Show the user location pin
             showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
-
+              <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
+                <View className='w-6 h-6'>
+                  <Shop size={24} variant='Bulk' color={Colors.white} />
+                </View>
+              </Marker>
           </MapView>
         </View>
 
@@ -209,20 +213,20 @@ const Page = () => {
                 </View>
               </View>
 
-              <View className='mt-8 px-6'>
-                <Text style={{ fontFamily: "semibold" }} className='text-[#0b0b0b]'>Проценка на пристигање</Text>
-                <View className='flex flex-row items-center mt-4'>
-                  <Clock size={22} color={Colors.primary} variant='Bold' />
-                  <Text style={{ fontFamily: "bold" }} className=' ml-2 text-[#0b0b0b]/80 text-lg'>30 - 45 мин</Text>
+              <View className='mt-8 px-6 flex items-start flex-row justify-between'>
+                <View className='flex flex-row items-start'>
+                  <Text className='text-4xl' style={{ fontFamily: 'medium' }}>25-30</Text>
+                  <Text className='border text-[#0b0b0b]/70 text-xs' style={{ fontFamily: "medium" }}>мин</Text>
                 </View>
+                <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-xs text-right'>Проценка на пристигање {'\n'} на нарачката</Text>
               </View>
 
               <View className='mt-8 px-6'>
                 <Text style={{ fontFamily: "semibold" }} className='text-[#0b0b0b]'>Состојба на нарачка</Text>
-                <View className='flex flex-col space-y-0.5 items-start justify-center'>
+                <View className='flex flex-col items-start justify-center'>
 
                   <View className=' flex flex-row items-center mt-6'>
-                    <StopCircle size={14} color={Colors.primary} className='' variant='Bulk' />
+                    <StopCircle size={16} color={Colors.primary} className='' variant='Bulk' />
                     <View>
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:35</Text>
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]'>Вашата нарачка е испратена</Text>
@@ -232,7 +236,7 @@ const Page = () => {
                   <View className='h-6 w-[1px] left-1.5 bg-[#0b0b0b]'></View>
 
                   <View className=' flex flex-row items-center'>
-                    <StopCircle size={14} color={Colors.primary} className='' variant='Bulk' />
+                    <StopCircle size={16} color={Colors.primary} className='' variant='Bulk' />
                     <View>
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:42</Text>
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]'>Вашата нарачка се подготвува</Text>
@@ -242,7 +246,7 @@ const Page = () => {
                   <View className='h-6 w-[1px] left-1.5 bg-[#0b0b0b]'></View>
 
                   <View className=' flex flex-row items-center'>
-                    <StopCircle size={14} color={Colors.gray50} className='' variant='Bulk' />
+                    <StopCircle size={16} color={Colors.gray50} className='' variant='Bulk' />
                     <View>
                       {/* <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:50</Text> */}
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 '>Курирот е на пат кон вас</Text>
@@ -252,7 +256,7 @@ const Page = () => {
                   <View className='h-6 w-[1px] left-1.5 bg-[#0b0b0b]'></View>
 
                   <View className=' flex flex-row items-center'>
-                    <StopCircle size={14} color={Colors.gray50} className='' variant='Bulk' />
+                    <StopCircle size={16} color={Colors.gray50} className='' variant='Bulk' />
                     <View>
                       {/* <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60 text-xs'>16:58</Text> */}
                       <Text style={{ fontFamily: "medium" }} className=' ml-2 text-[#0b0b0b]/60'>Курирот стигна на вашата адреса</Text>

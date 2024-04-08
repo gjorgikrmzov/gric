@@ -3,8 +3,8 @@ import { SplashScreen, Stack, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { NativeWindStyleSheet } from "nativewind";
 import * as SecureStore from 'expo-secure-store'
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import SplashComponent from '../components/splashScreen';
+import { ClerkProvider } from '@clerk/clerk-expo';
 
 const CLERK_PUBLISHABLE_KEY = 'pk_test_cHJvZm91bmQtb3dsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ'
 
@@ -77,7 +77,7 @@ export default function RootLayout() {
 
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
       <RootLayoutNav />
     </ClerkProvider>
   )
@@ -85,15 +85,6 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 
-  const { isLoaded, isSignedIn } = useAuth()
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/(auth)/welcome')
-    } else {
-      router.push('/(tabs)/')
-    }
-  }, [isLoaded])
 
   return (
     <Stack>

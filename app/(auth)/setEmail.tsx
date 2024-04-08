@@ -48,7 +48,7 @@ const Page = () => {
                             <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
                         </TouchableOpacity>
 
-                        <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+                        <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
                     </View>
 
                     <View className='py-6 px-6 pt-10'>
@@ -59,7 +59,7 @@ const Page = () => {
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
                         <TextInput value={email}
-                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#98CE00]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1dd868]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
                     </View>
 
                     <View className='px-6 pb-4 flex-1 justify-end'>

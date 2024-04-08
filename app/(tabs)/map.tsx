@@ -1,16 +1,13 @@
 import React, { useMemo, useRef, useState } from 'react';
-import MapView, { PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ArrowLeft, SearchNormal1, Setting4 } from 'iconsax-react-native';
+import { ArrowLeft, Location, SearchNormal1, Setting4 } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import Animated, { Easing, FadeInDown, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
-import { processFontFamily } from 'expo-font';
 
 const Page = () => {
   const snapPoints = useMemo(() => ['25%', '75%'], []);
@@ -39,7 +36,11 @@ const Page = () => {
       <View className='border-black/10  overflow-hidden'>
         <MapView showsUserLocation={true} // Show the user location pin
           showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
-
+          <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
+            <View className=''>
+              <Location size={26} variant='Bulk' color={Colors.white} />
+            </View>
+          </Marker>
         </MapView>
       </View>
 
@@ -58,7 +59,7 @@ const Page = () => {
 
 
           <View className='flex-row items-center gap-x-2'>
-          
+
             <TouchableOpacity onPress={() => router.push('/restaurants')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
               <SearchNormal1 color={Colors.dark} size={20} variant='Broken' />
             </TouchableOpacity>

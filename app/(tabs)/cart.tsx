@@ -153,7 +153,7 @@ const Page = () => {
 
         <View className='w-full h-1 bg-[#757780]/10'></View>
         <View className='px-6'>
-          <View className='w-full flex-row flex items-center justify-between'>
+          {/* <View className='w-full flex-row flex items-center justify-between'>
             <View className='py-6  border-b flex flex-row items-center  justify-between border-[#0b0b0b]/5  w-full'>
               <View className=' flex flex-row'>
                 <RecordCircle color={Colors.dark} size={20} variant='Broken' />
@@ -169,13 +169,13 @@ const Page = () => {
                 onPress={(isChecked: boolean) => { }}
               />
             </View>
-          </View>
+          </View> */}
 
           <TouchableOpacity className='w-full flex-row flex items-center justify-between'>
             <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
               <View className=' flex flex-row'>
                 <DocumentText color={Colors.dark} size={20} variant='Broken' />
-                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Остави порака</Text>
+                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Остави коментар</Text>
               </View>
               <ArrowRight2 color={Colors.dark} size={20} />
             </View>
