@@ -9,8 +9,8 @@ import Colors from '../constants/Colors'
 
 const Page = () => {
   return (
-    <SafeAreaView className='bg-[#0b0b0b]'>
-      <View className='h-full px-6 py-4 bg-[#0b0b0b]'>
+    <SafeAreaView className='bg-[#fffffc]'>
+      <View className='h-full px-6 py-4 bg-[#fffffc]'>
 
 
         <View className='flex w-full flex-row items-center justify-between'>
@@ -18,7 +18,9 @@ const Page = () => {
             <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
           </TouchableOpacity>
 
-          <Text className='text-4xl text-[#98CE00]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-lg' style={{fontFamily: "medium"}}>Пица</Text>
+
+          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
       </View>
     </SafeAreaView>

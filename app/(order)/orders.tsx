@@ -20,8 +20,8 @@ const Page = () => {
     const onTabPress = (tab: 'currentOrder' | 'allOrders') => {
         setSelectedTab(tab);
         animation.value = withTiming(tab === 'currentOrder' ? 0 : 1, {
-            duration: 250, // Adjust the duration as needed for speed
-            easing: Easing.inOut(Easing.circle), // This applies a custom cubic easing function
+            duration: 250, 
+            easing: Easing.inOut(Easing.circle),
         });
     };
 
@@ -34,9 +34,6 @@ const Page = () => {
             ],
         };
     }, []);
-
-
-
 
 
     return (
@@ -109,13 +106,7 @@ const Page = () => {
                                         <Text style={{ fontFamily: "medium" }} className='text-white'>Откажи</Text>
                                     </TouchableOpacity>
                                 </View>
-
-
                             </View>
-
-
-
-
 
                         </ScrollView>
                     </View>

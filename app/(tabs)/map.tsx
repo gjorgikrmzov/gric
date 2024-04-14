@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import Colors from '../../constants/Colors';
@@ -34,7 +34,7 @@ const Page = () => {
       </View>
 
       <View className='border-black/10  overflow-hidden'>
-        <MapView showsUserLocation={true} // Show the user location pin
+        <MapView showsUserLocation={true} 
           showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
           <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
             <View className=''>
@@ -60,7 +60,7 @@ const Page = () => {
 
           <View className='flex-row items-center gap-x-2'>
 
-            <TouchableOpacity onPress={() => router.push('/restaurants')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
+            <TouchableOpacity onPress={() => router.push('/stores')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
               <SearchNormal1 color={Colors.dark} size={20} variant='Broken' />
             </TouchableOpacity>
           </View>
@@ -133,8 +133,6 @@ const Page = () => {
                   innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
                   onPress={(isChecked: boolean) => { }}
                 />
-
-
 
               </View>
             </View>

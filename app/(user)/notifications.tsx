@@ -3,8 +3,7 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Colors from '../../constants/Colors'
 import { router } from 'expo-router'
-import { ArrowLeft, ArrowLeft2, Notification, Notification1 } from 'iconsax-react-native'
-import { StatusBar } from 'expo-status-bar'
+import { ArrowLeft, Notification } from 'iconsax-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 const Page = () => {
   return (

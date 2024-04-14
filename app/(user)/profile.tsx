@@ -1,42 +1,12 @@
 import { View, Text, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
+import React from 'react'
+import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, ArrowLeft2, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
+import { ArrowLeft, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Page = () => {
-
-  const [email, setEmail] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const savedEmail = await AsyncStorage.getItem('@userEmail');
-        const savedFirstName = await AsyncStorage.getItem('@userFirstName');
-        const savedLastName = await AsyncStorage.getItem('@userLastName');
-
-        if (savedEmail !== null) {
-          setEmail(savedEmail);
-        }
-        if (savedFirstName !== null) {
-          setFirstName(savedFirstName);
-        }
-        if (savedLastName !== null) {
-          setLastName(savedLastName);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user data.', error);
-      }
-    };
-
-    getUserData();
-  }, []);
-
 
 
   const handleSignOut = () => {
@@ -75,8 +45,8 @@ const Page = () => {
         <View className='flex flex-col mt-10 pb-3'>
           <View className='flex flex-row px-6 items-center justify-between'>
             <View>
-              <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>{firstName} {lastName}</Text>
-              <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>{email}</Text>
+              <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>Gorgi Krmzov</Text>
+              <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>krmzovgorgi0@gmail.com</Text>
             </View>
 
             <TouchableOpacity className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>

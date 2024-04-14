@@ -1,19 +1,15 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, Platform } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import { View, Text, ScrollView, FlatList, StyleSheet, Platform, TextInput, Keyboard } from 'react-native'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Add, ArrowLeft, ArrowRight, ArrowRight2, Bag, Bag2, DirectboxNotif, DocumentText, FingerCricle, Minus, Note, RecordCircle, Shop, Trash } from 'iconsax-react-native'
+import { Add, ArrowDown, ArrowRight, ArrowRight2, Bag, Bag2, CloseCircle, CloseSquare, DirectboxNotif, DocumentText, FingerCricle, Minus, Note, RecordCircle, Send, Shop, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
-import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
 import BottomSheet from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image'
-import { LinearGradient } from 'expo-linear-gradient'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
 
 const Page = () => {
-  const snapPoints = useMemo(() => ['40%'], []);
+
+  const snapPoints = useMemo(() => ['1%', '50%'], []);
   const [cartEmpty, setcartEmpty] = useState<boolean>(true)
 
   const [deleteButton, setdeleteButton] = useState<boolean>(false)
@@ -22,6 +18,9 @@ const Page = () => {
 
   const [itemQuantity, setItemQuantity] = useState<number>(1);
   const itemPrice = 180;
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
 
   const handleIncreaseQuantity = () => {
     if (itemQuantity < 99) {
@@ -47,6 +46,11 @@ const Page = () => {
     }
   }, [itemQuantity]);
 
+  const closeCommentModal = () => {
+    snapeToIndex(0)
+    Keyboard.dismiss()
+  }
+
   return (
     <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
 
@@ -64,7 +68,7 @@ const Page = () => {
 
       <View className={cartEmpty ? 'flex-1 mt-4 border-t border-[#0b0b0b]/5' : 'hidden'}>
         <ScrollView className='flex-1'>
-          <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
+          <TouchableOpacity onPress={() => router.push({pathname: "/foodDetails/[id]", params: '' as any})} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
             <View className='flex flex-row items-center'>
               <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
 
@@ -107,7 +111,7 @@ const Page = () => {
           </TouchableOpacity>
 
 
-          <TouchableOpacity onPress={() => router.push("/foodDetails")} className='py-5  px-6'>
+          <TouchableOpacity onPress={() => router.push({pathname: "/foodDetails/[id]", params: '' as any})} className='py-5  px-6'>
             <View className='flex flex-row items-center'>
               <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
 
@@ -171,7 +175,7 @@ const Page = () => {
             </View>
           </View> */}
 
-          <TouchableOpacity className='w-full flex-row flex items-center justify-between'>
+          <TouchableOpacity onPress={() => snapeToIndex(1)} className='w-full flex-row flex items-center justify-between'>
             <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
               <View className=' flex flex-row'>
                 <DocumentText color={Colors.dark} size={20} variant='Broken' />
@@ -197,8 +201,6 @@ const Page = () => {
       </View>
 
 
-
-
       <View className={cartEmpty ? 'hidden' : 'flex-1 justify-center items-center'}>
         <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#0b0b0b]/5'>
           <Bag size={56} variant='Bulk' color={Colors.primary} />
@@ -208,12 +210,38 @@ const Page = () => {
       </View>
 
       <View className='px-6'>
-        <TouchableOpacity onPress={() => router.push('/restaurants')} className={cartEmpty ? 'hidden' : 'mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'}>
+        <TouchableOpacity onPress={() => router.push('/stores')} className={cartEmpty ? 'hidden' : 'mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'}>
           <Shop variant='Bulk' size={24} color={Colors.primary} />
           <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Пребарај Ресторани</Text>
         </TouchableOpacity>
       </View>
 
+
+
+      <BottomSheet index={0} enablePanDownToClose ref={bottomSheetRef}
+        backgroundStyle={{ backgroundColor: Colors.white }}
+        handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+        snapPoints={snapPoints}>
+        <View className='flex-1 px-6 py-4'>
+          <View className='flex justify-between flex-row items-center'>
+            <Text className='text-[16px]' style={{ fontFamily: "medium" }}>Остави коментар</Text>
+
+            <View className='flex flex-row items-center'>
+              <TouchableOpacity onPress={closeCommentModal} className='px-3 flex-row rounded-xl py-2 flex items-center bg-[#0b0b0b]'>
+                <Text className='text-white mr-1' style={{ fontFamily: "medium" }}>Зачувај</Text>
+                <Send size={22} color={Colors.white} variant='Bulk' />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={closeCommentModal} className='ml-1'>
+                <CloseSquare size={24} color={Colors.dark} variant='Linear' />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <TextInput style={{ fontFamily: "medium" }} placeholder='Кометар..' placeholderTextColor='#757780'
+            className='py-5 bg-[#fafafa]/80 mt-6 px-5 rounded-2xl' />
+        </View>
+      </BottomSheet>
 
     </View>
   )

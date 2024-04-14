@@ -8,9 +8,7 @@ const Layout = () => {
 
     const currentPath = usePathname();
 
-
     return (
-
         <Tabs screenOptions={{
             tabBarActiveTintColor: Colors.dark,
             tabBarStyle: { backgroundColor: Colors.white, borderTopColor: '#0b0b0b2c', height: (Platform.OS === 'android') ? 90 : 110, paddingTop: 10 },
@@ -27,12 +25,12 @@ const Layout = () => {
                 )
             }} />
 
-            <Tabs.Screen name='restaurants' options={{
+            <Tabs.Screen name='stores' options={{
                 tabBarHideOnKeyboard: true,
                 tabBarLabel: 'Храна',
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => (
-                    <Shop variant={currentPath === '/restaurants' ? 'Bold' : 'Broken'} size={size} color={color} />
+                    <Shop variant={currentPath === '/stores' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
             }} />
 
@@ -47,11 +45,11 @@ const Layout = () => {
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
                 headerShown: false,
-                tabBarBadge: 1,
-                tabBarBadgeStyle: {
-                    backgroundColor: Colors.dark,
-                    fontFamily: 'extrabold', fontSize: 10,
-                },
+                // tabBarBadge: 1,
+                // tabBarBadgeStyle: {
+                //     backgroundColor: Colors.dark,
+                //     fontFamily: 'extrabold', fontSize: 10,
+                // },
                 tabBarIcon: ({ color, size }) => (
                     <Bag variant={currentPath === '/cart' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )

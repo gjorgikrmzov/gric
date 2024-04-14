@@ -11,6 +11,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 const checkout = () => {
 
+    const [savedAddress, setSavedAddress] = useState<string>('');
+
     const [cartEmpty, setcartEmpty] = useState<boolean>(true)
     const [deleteButton, setdeleteButton] = useState<boolean>(false)
     const snapPoints = useMemo(() => ['40%'], []);
@@ -19,6 +21,11 @@ const checkout = () => {
     const [cardPayment, setcardPayment] = useState(false)
     const [ondeliveryPayment, setondeliveryPayment] = useState(true)
 
+    const [itemQuantity, setItemQuantity] = useState<number>(1);
+    const itemPrice = 180;
+    
+    const deliveryCost = 80
+    const totalItemPrice = itemPrice * itemQuantity + deliveryCost;
 
     const handleSelectCardPayment = () => {
         setcardPayment(true)
@@ -30,13 +37,6 @@ const checkout = () => {
         setcardPayment(false)
     }
 
-    const deliveryCost = 80
-
-    const [itemQuantity, setItemQuantity] = useState<number>(1);
-    const itemPrice = 180;
-
-    const totalItemPrice = itemPrice * itemQuantity + deliveryCost;
-
     useEffect(() => {
         if (itemQuantity === 1) {
             setdeleteButton(false);
@@ -45,8 +45,6 @@ const checkout = () => {
         }
     }, [itemQuantity]);
 
-
-    const [savedAddress, setSavedAddress] = useState<string>('');
 
     useEffect(() => {
         const loadAddress = async () => {
