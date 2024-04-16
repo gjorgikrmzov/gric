@@ -1,35 +1,10 @@
 import React from 'react';
-import * as WebBrowser from "expo-web-browser";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useOAuth } from "@clerk/clerk-expo";
-import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-WebBrowser.maybeCompleteAuthSession();
-
-const Signin = () => {
-
-  useWarmUpBrowser();
-
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
-
-  const signInWithGoogle = React.useCallback(async () => {
-    
-    try {
-      const { createdSessionId, setActive } = await startOAuthFlow();
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
-      }
-    } catch (err) {
-      console.error("OAuth error", err);
-    }
-    router.replace('/(tabs)/');
-  }, [startOAuthFlow]);
+const Page = () => {
 
   return (
     <SafeAreaView className='bg-[#FFFFFC] h-full'>
@@ -61,7 +36,7 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Page;
 
 
 const styles = StyleSheet.create({

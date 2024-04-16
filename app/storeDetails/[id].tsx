@@ -7,58 +7,20 @@ import { StatusBar } from 'expo-status-bar'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Skeleton } from 'moti/skeleton'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../reduxStore'
+import { fetchStoreItems } from '../reduxStore/storeItemSlice'
 
 const Page = () => {
 
-    const { id, name, storeTypeId, isOpen } = useLocalSearchParams();
+    const { id, name, storeTypeName, isOpen } = useLocalSearchParams();
 
-    const [storeTypes, setStoreTypes] = useState<any[]>([])
-    const [storeItems, setstoreItems] = useState<any[]>([])
+    const { storeItems } = useSelector((state: RootState) => state.storeItem)
 
-    useEffect(() => {
-        const fetchStoresAndTypes = async () => {
-            try {
-                const typesResponse = await fetch('http://192.168.1.47:8080/store/type', {})
-                if (typesResponse.ok) {
-                    const types = await typesResponse.json()
-                    setStoreTypes(types)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        fetchStoresAndTypes()
-
-    }, [])
-
-
-    const getStoreTypeName = (storeTypeId: string | string[]) => {
-        if (Array.isArray(storeTypeId)) {
-            const storeType = storeTypes.find(type => type.id === storeTypeId[0]); // Use first element
-            return storeType ? storeType.name : "Unknown Type";
-        } else {
-            const storeType = storeTypes.find(type => type.id === storeTypeId);
-            return storeType ? storeType.name : "Unknown Type";
-        }
-    };
+    const dispatch = useDispatch<any>()
 
     useEffect(() => {
-        const fetchStoreItems = async () => {
-            if (id) {
-                try {
-                    const response = await fetch(`http://192.168.1.47:8080/store/item?storeId=${id}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setstoreItems(data);
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        };
-
-        fetchStoreItems();
+        dispatch(fetchStoreItems({ id }));
     }, []);
 
 
@@ -67,7 +29,7 @@ const Page = () => {
     const [visible, setVisible] = useState(false);
     const [animationPlayed, setAnimationPlayed] = useState(false);
 
-    const animation = useRef(new Animated.Value(0)).current; // Initial value for opacity and position
+    const animation = useRef(new Animated.Value(0)).current;
 
     const addToCart = () => {
 
@@ -75,30 +37,29 @@ const Page = () => {
             setItemQuantity(itemQuantity + 1);
         }
         if (!animationPlayed) {
-            setVisible(true); // Make the button eligible for display
+            setVisible(true);
             Animated.spring(animation, {
-                toValue: 1, // Final value for opacity and translateY
-                speed: 16, // Control speed of the animation
+                toValue: 1,
+                speed: 16,
                 bounciness: 8,
 
-                useNativeDriver: true, // Use native driver for better performance
-            }).start(() => setAnimationPlayed(true)); // Mark animation as played
+                useNativeDriver: true,
+            }).start(() => setAnimationPlayed(true));
         }
     };
 
     const animatedStyle = {
         opacity: animation.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, 1], // Opacity from 0 to 1
+            outputRange: [0, 1], 
         }),
         transform: [{
             translateY: animation.interpolate({
                 inputRange: [0, 1],
-                outputRange: [40, 0], // Move from -20 to 0
+                outputRange: [40, 0], 
             })
         }]
     };
-
 
 
     return (
@@ -108,16 +69,16 @@ const Page = () => {
 
 
             <ScrollView>
-                <View className='bg-[#0b0b0b] pt-20 pb-6 px-6 overflow-hidden'>
+                <View className='bg-[#0b0b0b] pt-16 pb-4 px-6 overflow-hidden'>
                     <View>
                         <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
                             <ArrowLeft variant='Linear' size={20} color={Colors.white} />
                         </TouchableOpacity>
 
-                        <Text className=' text-[#FFFFFC]/60 uppercase mt-10' style={{ fontFamily: "bold" }}>{getStoreTypeName(storeTypeId)}</Text>
+                        <Text className=' text-[#FFFFFC]/60 uppercase mt-8' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
                         <Text className='text-3xl text-[#FFFFFC] mt-1' style={{ fontFamily: "bold" }}>{name}</Text>
 
-                        <View className='flex flex-col gap-y-2 mt-3'>
+                        {/* <View className='flex flex-col gap-y-2 mt-3'>
 
                             <View className='flex flex-row items-center'>
                                 <Clock variant='Bulk' color={Colors.primary} size={16} />
@@ -127,7 +88,7 @@ const Page = () => {
                                 <DirectRight variant='Bulk' color={Colors.primary} size={16} />
                                 <Text className='text-[#FAFAFA]/60 ml-2 text-xs' style={{ fontFamily: "semibold" }}>3 км</Text>
                             </View>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
 

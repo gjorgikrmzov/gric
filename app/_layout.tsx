@@ -1,48 +1,26 @@
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, router } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { NativeWindStyleSheet } from "nativewind";
-import * as SecureStore from 'expo-secure-store'
 import SplashComponent from '../components/splashScreen';
-import { ClerkProvider } from '@clerk/clerk-expo';
-
-const CLERK_PUBLISHABLE_KEY = 'pk_test_cHJvZm91bmQtb3dsLTEzLmNsZXJrLmFjY291bnRzLmRldiQ'
-
-
-const tokenCache = {
-  async getToken(key: string) {
-    try {
-      return SecureStore.getItemAsync(key);
-    } catch (err) {
-      return null;
-    }
-  },
-
-  async saveToken(key: string, value: string) {
-    try {
-      return SecureStore.setItemAsync(key, value);
-    } catch (err) {
-      return
-    }
-  },
-}
+import { Provider } from 'react-redux';
+import { store } from './reduxStore';
 
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
 export {
-  // Catch any errors thrown by the Layout component.
+
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
+
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.hideAsync(); // Optional: Hide the native splash screen
+SplashScreen.hideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -58,16 +36,14 @@ export default function RootLayout() {
   const [splashVisible, setSplashVisible] = useState(true);
 
   useEffect(() => {
-    // Hide the splash screen when loaded
     if (loaded) {
       setTimeout(() => {
         setSplashVisible(false);
-      }, 1000); // Adjust the duration as needed
+      }, 1000);
     }
   }, [loaded]);
 
   useEffect(() => {
-    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
     if (error) throw error;
   }, [error]);
 
@@ -77,14 +53,13 @@ export default function RootLayout() {
 
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+    <Provider store={store}>
       <RootLayoutNav />
-    </ClerkProvider>
+    </Provider>
   )
 }
 
 function RootLayoutNav() {
-
 
   return (
     <Stack>
@@ -95,7 +70,6 @@ function RootLayoutNav() {
       <Stack.Screen name="(auth)/signIn" options={{ headerShown: false }} />
 
       <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false, }} />
-
 
       <Stack.Screen name="storeDetails/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="category" options={{ headerShown: false }} />

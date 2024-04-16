@@ -7,31 +7,13 @@ import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import Animated, { Easing, FadeIn, FadeInDown, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
-interface Store {
-    id: string;
-    name: string;
-    storeTypeId: string;
-    isOpen: boolean;
-}
-
-interface StoreType {
-    id: string;
-    name: string;
-}
-
-interface Category {
-    id: string;
-    name: string;
-}
-
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchStores } from '../reduxStore/storeSlice'
+import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
+import { RootState } from '../reduxStore'
+import { fetchCategories } from '../reduxStore/categorySlice'
 
 const Page = () => {
-
-    const [stores, setStores] = useState<Store[]>([]);
-    const [storeTypes, setStoreTypes] = useState<StoreType[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
 
     const [refreshing, setRefreshing] = useState(false);
     const [savedAddress, setSavedAddress] = useState<string>('');
@@ -44,6 +26,19 @@ const Page = () => {
     const overlayOpacity = useSharedValue(1);
     const searchResult = useSharedValue(0);
     const inputY = useSharedValue(0);
+
+    const dispatch = useDispatch<any>()
+
+    const {stores} = useSelector((state: RootState) => state.store)
+    const {storeTypes} = useSelector((state: RootState) => state.storeType)
+    const {categories} = useSelector((state: RootState) => state.category)
+
+    useEffect(() => {
+        dispatch(fetchStores())
+        dispatch(fetchStoresTypes())
+        dispatch(fetchCategories())
+    }, [])
+
 
     const onFocus = () => {
         setIsFocused(true);
@@ -126,61 +121,36 @@ const Page = () => {
     });
 
 
-    const fetchStoresAndTypes = async () => {
-        try {
-            const storesResponse = await fetch('http://192.168.1.47:8080/store');
-            if (storesResponse.ok) {
-                const fetchedStores = await storesResponse.json();
-                setStores(fetchedStores);
-            }
-
-            const typesResponse = await fetch('http://192.168.1.47:8080/store/type');
-            if (typesResponse.ok) {
-                const types = await typesResponse.json();
-                setStoreTypes(types);
-            }
-        } catch (error) {
-        }
-    };
-
-    useEffect(() => {
-        fetchStoresAndTypes();
-    }, []);
-
+   
     const getStoreTypeName = (storeTypeId: string) => {
         const storeType = storeTypes.find(type => type.id === storeTypeId);
         return storeType ? storeType.name : "Unknown Type";
     };
 
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch('http://192.168.1.47:8080/category', {})
-
-                if (response.ok) {
-                    const data = await response.json()
-                    setCategories(data)
-                }
-            } catch (error) {
-            }
-        }
-
-        fetchCategories()
-    }, [])
-
-
     const onRefresh = () => {
         setRefreshing(true);
-        fetchStoresAndTypes()
+        fetchStores()
         setTimeout(() => {
             setRefreshing(false);
         }, 600);
     };
 
+    const handleRouteStoreDetails = (store: any) => {
+        const storeTypeName = getStoreTypeName(store.storeTypeId);
+        router.push({
+            pathname: '/storeDetails/[id]',
+            params: {
+                id: store.id,
+                name: store.name,
+                storeTypeName,
+                isOpen: store.isOpen
+            }
+        });
+    };
+
+
     return (
         <>
-
             <View className='w-screen  h-screen absolute z-0 left-0 top-0 bg-[#FFFFFC]'>
             </View>
 
@@ -282,7 +252,7 @@ const Page = () => {
                     <Animated.View style={animatedOverlayStyle} className='w-full mt-4 px-6 justify-between items-end flex flex-row'>
                         <View className='flex flex-col ml-1'>
                             <View className='flex items-center flex-row gap-x-2'>
-                                <Element size={19} color={Colors.dark} variant='Bulk' />
+                                <Element size={19} color={Colors.primary} variant='Bulk' />
                                 <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>Категории</Text>
                             </View>
                             <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'medium' }}>Популарни Категории</Text>
@@ -291,7 +261,7 @@ const Page = () => {
                     </Animated.View>
 
 
-                    <ScrollView removeClippedSubviews horizontal contentContainerStyle={{ justifyContent: "center", alignItems: "center" }} className='flex-row flex-1' snapToInterval={324} decelerationRate={'fast'}
+                    <ScrollView removeClippedSubviews horizontal contentContainerStyle={{ justifyContent: "center", alignItems: "center" }} className='flex-row' snapToInterval={324} decelerationRate={'fast'}
                         snapToAlignment='end'
                         showsHorizontalScrollIndicator={false} >
                         <Animated.View entering={FadeIn.springify().duration(300).delay(100)} className='flex flex-row items-center px-6 gap-x-2'>
@@ -309,11 +279,11 @@ const Page = () => {
                     </ScrollView>
 
 
-                    <Animated.View style={animatedOverlayStyle} className='mt-3'>
+                    <Animated.View style={animatedOverlayStyle} className='mt-4'>
                         <View className='w-full px-6 justify-between items-center flex flex-row'>
                             <View className='flex flex-col ml-1'>
                                 <View className='flex items-center flex-row gap-x-2'>
-                                    <Shop size={19} color={Colors.dark} variant='Bulk' />
+                                    <Shop size={19} color={Colors.primary} variant='Bulk' />
                                     <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>Ресторани</Text>
                                 </View>
                                 <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'medium' }}>Популарни Ресторани</Text>
@@ -324,13 +294,13 @@ const Page = () => {
                             </TouchableOpacity>
                         </View>
 
-                        <View className='w-full mt-4 '>
+                        <View className='w-full mt-3 '>
 
                             <ScrollView
                                 removeClippedSubviews
                                 horizontal
                                 contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-                                className='flex-row flex-1'
+                                className='flex-row '
                                 snapToAlignment='start'
                                 showsHorizontalScrollIndicator={false}
                                 decelerationRate={'fast'}
@@ -340,20 +310,14 @@ const Page = () => {
                                     {stores.map((store, index) => (
                                         index < 6 && (
 
-                                            <TouchableOpacity key={index} onPress={() => router.push({ pathname: '/storeDetails/[id]', params: { id: store.id, name: store.name, storeTypeId: store.storeTypeId, isOpen: store.isOpen } } as any)} className='flex-1 items-start'>
-                                                {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
+                                            <TouchableOpacity key={index} onPress={() => handleRouteStoreDetails(store)} className='flex-1 items-start'>
                                                 <View
                                                     className='w-[290px] h-32 p-5 bg-[#fafafa] rounded-3xl'
                                                     style={{ overflow: 'hidden' }}
                                                 >
                                                     <View className='flex flex-row items-center justify-between w-full'>
-                                                        <View className='flex items-center flex-row '>
-                                                            <Clock size={16} variant='Bulk' color={store.isOpen ? Colors.primary : Colors.dark} />
-                                                            <Text className='text-[#0b0b0b]/60 text-xs ml-1' style={{ fontFamily: "medium" }} >{store.isOpen ? 'Отворено' : 'Затворено'}</Text>
-                                                        </View>
-                                                        {/* <TouchableOpacity className='flex flex-row items-center'>
-                                                            <Heart variant='Linear' color={Colors.dark} size={18} />
-                                                        </TouchableOpacity> */}
+
+
                                                     </View>
                                                 </View>
 
@@ -366,8 +330,9 @@ const Page = () => {
                                                             </View>
                                                         </View>
                                                     </View>
-                                                    <View className='flex flex-col gap-y-2'>
-                                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(store.storeTypeId)}</Text>
+                                                    <View className='flex flex-row items-center'>
+                                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(store.storeTypeId)} · </Text>
+                                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }} >{store.isOpen ? 'Отворено' : 'Затворено'}</Text>
                                                     </View>
 
                                                 </View>

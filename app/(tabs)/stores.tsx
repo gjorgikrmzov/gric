@@ -6,11 +6,22 @@ import Colors from '../../constants/Colors'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { Easing } from 'react-native-reanimated';
 import restaurants from '../../data/resataurants'
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../reduxStore';
+import { fetchStores } from '../reduxStore/storeSlice';
+import { fetchStoresTypes } from '../reduxStore/storeTypeSlice';
 
 const Page = () => {
 
-  const [stores, setstores] = useState<any[]>([])
-  const [storeTypes, setStoreTypes] = useState<any[]>([])
+  const dispatch = useDispatch<any>()
+
+  const { stores } = useSelector((state: RootState) => state.store)
+  const { storeTypes } = useSelector((state: RootState) => state.storeType)
+
+  useEffect(() => {
+    dispatch(fetchStores())
+    dispatch(fetchStoresTypes())
+  }, [])
 
   const [search, setSearch] = useState<string>('');
   const [close, setClose] = useState<boolean>(false);
@@ -25,31 +36,6 @@ const Page = () => {
     setSearch(text);
     setClose(text !== '');
   };
-
-
-  useEffect(() => {
-    const fetchStoresAndTypes = async () => {
-      try {
-        const storesResponse = await fetch('http://192.168.1.47:8080/store', {})
-        if (storesResponse.ok) {
-          const fetchedStores = await storesResponse.json()
-          setstores(fetchedStores)
-        }
-
-        const typesResponse = await fetch('http://192.168.1.47:8080/store/type', {})
-        if (typesResponse.ok) {
-          const types = await typesResponse.json()
-          setStoreTypes(types)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    fetchStoresAndTypes()
-
-  }, [])
-
 
   const getStoreTypeName = (storeTypeId: string) => {
     const storeType = storeTypes.find(type => type.id === storeTypeId);
@@ -180,7 +166,7 @@ const Page = () => {
               <View className='flex px-6 gap-y-4'>
                 {stores.map((store, index) => (
                   <TouchableOpacity key={index} onPress={() => router.push({ pathname: '/storeDetails/[id]', params: { id: store.id, name: store.name, storeTypeId: store.storeTypeId, isOpen: store.isOpen } } as any)}>
-                    <View  className='flex overflow-hidden  relative'>
+                    <View className='flex overflow-hidden  relative'>
                       {/* <Image source={restaurant.restaurantImage} className='w-full h-full rounded-3xl left-0 top-0 absolute z-[-1]' /> */}
                       <View className='w-full h-40 p-5 bg-[#fafafa] rounded-2xl' style={{ overflow: 'hidden' }}
                       >
