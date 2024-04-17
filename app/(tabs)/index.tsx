@@ -1,4 +1,4 @@
-import { Animated as RNAnimated, View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { Animated as RNAnimated, View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView, SafeAreaView, FlatList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
@@ -12,6 +12,7 @@ import { fetchStores } from '../reduxStore/storeSlice'
 import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
 import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
+import path from 'path'
 
 const Page = () => {
 
@@ -29,9 +30,9 @@ const Page = () => {
 
     const dispatch = useDispatch<any>()
 
-    const {stores} = useSelector((state: RootState) => state.store)
-    const {storeTypes} = useSelector((state: RootState) => state.storeType)
-    const {categories} = useSelector((state: RootState) => state.category)
+    const { stores } = useSelector((state: RootState) => state.store)
+    const { storeTypes } = useSelector((state: RootState) => state.storeType)
+    const { categories } = useSelector((state: RootState) => state.category)
 
     useEffect(() => {
         dispatch(fetchStores())
@@ -97,31 +98,31 @@ const Page = () => {
     }, []);
 
 
-    const spinValue = useRef(new RNAnimated.Value(0)).current;
+    // const spinValue = useRef(new RNAnimated.Value(0)).current;
 
-    useEffect(() => {
-        const animate = () => {
-            spinValue.setValue(0);
-            RNAnimated.timing(spinValue, {
-                toValue: 1,
-                duration: 1300,
-                easing: Easing.circle,
-                useNativeDriver: true,
-            }).start(() => {
-                spinValue.setValue(1);
-                animate();
-            });
-        };
-        animate();
-    }, []);
+    // useEffect(() => {
+    //     const animate = () => {
+    //         spinValue.setValue(0);
+    //         RNAnimated.timing(spinValue, {
+    //             toValue: 1,
+    //             duration: 1300,
+    //             easing: Easing.circle,
+    //             useNativeDriver: true,
+    //         }).start(() => {
+    //             spinValue.setValue(1);
+    //             animate();
+    //         });
+    //     };
+    //     animate();
+    // }, []);
 
-    const spin = spinValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '180deg'],
-    });
+    // const spin = spinValue.interpolate({
+    //     inputRange: [0, 1],
+    //     outputRange: ['0deg', '180deg'],
+    // });
 
 
-   
+
     const getStoreTypeName = (storeTypeId: string) => {
         const storeType = storeTypes.find(type => type.id === storeTypeId);
         return storeType ? storeType.name : "Unknown Type";
@@ -129,7 +130,7 @@ const Page = () => {
 
     const onRefresh = () => {
         setRefreshing(true);
-        fetchStores()
+        dispatch(fetchStores())
         setTimeout(() => {
             setRefreshing(false);
         }, 600);
@@ -155,7 +156,7 @@ const Page = () => {
             </View>
 
 
-            <Animated.View style={styles.header} className='h-full' entering={FadeIn.springify().duration(400)}>
+            <SafeAreaView className='flex-1' style={styles.header}>
                 <StatusBar style='dark' />
 
                 <View className='bg-[#FFFFFC] z-0 border-b  border-[#757780]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row '>
@@ -193,160 +194,163 @@ const Page = () => {
 
                 <ScrollView keyboardShouldPersistTaps="always" removeClippedSubviews showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
                     onRefresh={onRefresh} className='' />}>
-                    <Animated.View style={animatedOverlayStyle} className='mt-4 mb-2 px-6'>
-
-                        <View className='z-0 w-full items-start flex-col flex justify-between'>
-                            <View className='flex flex-col mt-2'>
-                                <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#1dd868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
-                                <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
-                            </View>
+                    <Animated.View style={animatedOverlayStyle} className='mt-4 px-6'>
+                        <View className='flex flex-col'>
+                            <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='text-4xl text-[#1dd868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                            <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                         </View>
-
-
                     </Animated.View>
 
-                    <Animated.View style={animatedInputStyle}>
-                        <View className='mx-6 bg-[#fafafa]/80 z-[999] items-center flex-row px-5 rounded-2xl'>
-                            {
-                                isFocused ?
-                                    (
-                                        <TouchableOpacity onPress={onBlur} className=' flex justify-center items-center'>
-                                            <ArrowLeft size={20} color={Colors.dark} variant='Broken' />
-                                        </TouchableOpacity>
+                    <View>
 
-                                    ) :
+                        <Animated.View className='mt-3' style={animatedInputStyle}>
+                            <View className='mx-6  bg-[#fafafa]/80 z-[999] items-center flex-row px-5 rounded-2xl'>
+                                {
+                                    isFocused ?
+                                        (
+                                            <TouchableOpacity onPress={onBlur} className=' flex justify-center items-center'>
+                                                <ArrowLeft size={20} color={Colors.dark} variant='Broken' />
+                                            </TouchableOpacity>
 
-                                    (
-                                        <SearchNormal1 size={20} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
-                            }
+                                        ) :
 
-                            <TextInput style={styles.input} onChangeText={onSearch} onFocus={onFocus}
-                                onBlur={onBlur} className='text-[#0b0b0b] px-3 flex-1 ' placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
-                            <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); setClose(false) }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
-                                <CloseSquare size={24} color={Colors.dark} variant='Bold' />
-                            </TouchableOpacity>
+                                        (
+                                            <SearchNormal1 size={20} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
+                                }
 
-                        </View>
+                                <TextInput style={styles.input} onChangeText={onSearch} onFocus={onFocus}
+                                    onBlur={onBlur} className='text-[#0b0b0b] px-3 flex-1 ' placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
+                                <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); setClose(false) }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
+                                    <CloseSquare size={24} color={Colors.dark} variant='Bold' />
+                                </TouchableOpacity>
 
-                        <KeyboardAvoidingView>
-                            <View className={isFocused ? 'flex h-full mt-8 px-6' : 'hidden h-full mt-8 px-6'}>
-                                <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
-                                <ScrollView keyboardShouldPersistTaps="always"
-                                    showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
-                                    {stores.map((store, index) => (
-                                        <TouchableOpacity key={index} className='w-full flex-row  flex items-center justify-between'>
-                                            <View className='flex items-center flex-row gap-x-4'>
-                                                <Shop color={Colors.primary} size={25} variant='Bulk' />
-                                                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                                                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>{store.name}</Text>
+                            </View>
+
+                            <KeyboardAvoidingView>
+                                <View className={isFocused ? 'flex h-full mt-8 px-6' : 'hidden h-full mt-8 px-6'}>
+                                    <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
+                                    <ScrollView keyboardShouldPersistTaps="always"
+                                        showsVerticalScrollIndicator={false} className='flex flex-col mt-3' >
+                                        {stores.map((store, index) => (
+                                            <TouchableOpacity key={index} className='w-full flex-row  flex items-center justify-between'>
+                                                <View className='flex items-center flex-row gap-x-4'>
+                                                    <Shop color={Colors.dark} size={25} variant='Broken' />
+                                                    <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                                                        <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>{store.name}</Text>
+                                                    </View>
                                                 </View>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                            </KeyboardAvoidingView>
+                        </Animated.View>
+
+
+                        <ScrollView removeClippedSubviews horizontal contentContainerStyle={{ justifyContent: "center", alignItems: "center" }} className='flex-row mt-2' snapToInterval={324} decelerationRate={'fast'}
+                            snapToAlignment='end'
+                            showsHorizontalScrollIndicator={false} >
+                            <Animated.View entering={FadeIn.springify().duration(300).delay(100)} className='flex flex-row  items-center px-6 gap-x-2'>
+                                {categories.map((category, index) => (
+                                    index < 12 && (
+                                        <TouchableOpacity onPress={() => router.push({ pathname: "/category", params: { name: category.name, id: category.id } })} key={index} className='flex justify-center'>
+                                            <Image style={{ tintColor: '#0b0b0b' }} className='w-9 h-9 z-10 top-4 self-center ' contentFit='fill' source={require('../../assets/images/burger.png')} />
+                                            <View className='bg-[#fafafa]/80  w-20 py-3 rounded-2xl flex justify-center items-center'>
+                                                <Text className='text-[#0b0b0b]/80 mt-4 text-xs' style={{ fontFamily: 'semibold' }}>{category.name}</Text>
                                             </View>
                                         </TouchableOpacity>
-                                    ))}
-                                </ScrollView>
-                            </View>
-                        </KeyboardAvoidingView>
-                    </Animated.View>
-
-
-                    <Animated.View style={animatedOverlayStyle} className='w-full mt-4 px-6 justify-between items-end flex flex-row'>
-                        <View className='flex flex-col ml-1'>
-                            <View className='flex items-center flex-row gap-x-2'>
-                                <Element size={19} color={Colors.primary} variant='Bulk' />
-                                <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>Категории</Text>
-                            </View>
-                            <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'medium' }}>Популарни Категории</Text>
-                        </View>
-
-                    </Animated.View>
-
-
-                    <ScrollView removeClippedSubviews horizontal contentContainerStyle={{ justifyContent: "center", alignItems: "center" }} className='flex-row' snapToInterval={324} decelerationRate={'fast'}
-                        snapToAlignment='end'
-                        showsHorizontalScrollIndicator={false} >
-                        <Animated.View entering={FadeIn.springify().duration(300).delay(100)} className='flex flex-row items-center px-6 gap-x-2'>
-                            {categories.map((category, index) => (
-                                index < 12 && (
-                                    <TouchableOpacity onPress={() => router.push("/category")} key={index} className='flex justify-center'>
-                                        <Image style={{ tintColor: '#0b0b0b' }} className='w-9 h-9 z-10 top-4 self-center' contentFit='contain' source={require('../../assets/images/burger.png')} />
-                                        <View className='bg-[#fafafa]/80  w-20 py-3 rounded-2xl flex justify-center items-center'>
-                                            <Text className='text-[#0b0b0b]/80 mt-4 text-xs' style={{ fontFamily: 'semibold' }}>{category.name}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-                            ))}
-                        </Animated.View>
-                    </ScrollView>
-
+                                    )
+                                ))}
+                            </Animated.View>
+                        </ScrollView>
+                    </View>
 
                     <Animated.View style={animatedOverlayStyle} className='mt-4'>
                         <View className='w-full px-6 justify-between items-center flex flex-row'>
                             <View className='flex flex-col ml-1'>
-                                <View className='flex items-center flex-row gap-x-2'>
-                                    <Shop size={19} color={Colors.primary} variant='Bulk' />
-                                    <Text className='text-xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>Ресторани</Text>
+                                <View className='flex items-center flex-row gap-x-1.5'>
+                                    <Shop size={18} color={Colors.primary} variant='Bulk' />
+                                    <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: 'bold' }}>Популарни</Text>
                                 </View>
-                                <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'medium' }}>Популарни Ресторани</Text>
+                                {/* <Text className='text-xs text-[#0b0b0b]/60 ' style={{ fontFamily: 'medium' }}> Ресторани</Text> */}
                             </View>
 
                             <TouchableOpacity onPress={() => router.push('/(tabs)/stores')} >
-                                <ArrowCircleRight size={25} color={Colors.dark} variant='Linear' />
+                                <ArrowCircleRight size={22} color={Colors.dark} variant='Broken' />
                             </TouchableOpacity>
                         </View>
 
-                        <View className='w-full mt-3 '>
-
-                            <ScrollView
-                                removeClippedSubviews
-                                horizontal
-                                contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-                                className='flex-row '
-                                snapToAlignment='start'
-                                showsHorizontalScrollIndicator={false}
-                                decelerationRate={'fast'}
-                                snapToInterval={290 + 12}
-                            >
-                                <View className='flex px-6 flex-row items-center gap-x-3'>
-                                    {stores.map((store, index) => (
-                                        index < 6 && (
-
-                                            <TouchableOpacity key={index} onPress={() => handleRouteStoreDetails(store)} className='flex-1 items-start'>
-                                                <View
-                                                    className='w-[290px] h-32 p-5 bg-[#fafafa] rounded-3xl'
-                                                    style={{ overflow: 'hidden' }}
-                                                >
-                                                    <View className='flex flex-row items-center justify-between w-full'>
 
 
-                                                    </View>
-                                                </View>
+                        <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            decelerationRate={'fast'}
+                            snapToAlignment='end'
+                            className='flex-1 flex mt-3'
+                            data={stores.slice(0, 4)}
+                            keyExtractor={(item, index) => item.id.toString()}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity key={index} onPress={() => handleRouteStoreDetails(item)} style={index === stores.length - 1 ? { marginRight: 0 } : { marginRight: 10 }}
+                                    className={index === stores.length - 1 ? '' : 'mr-3'}>
+                                    <View className='w-[290px]  h-32 p-5 bg-[#fafafa] rounded-3xl' style={{ overflow: 'hidden' }}>
+                                    </View>
+                                    <View className='ml-1 mt-2'>
+                                        <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
+                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · {item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+                            contentContainerStyle={{ paddingHorizontal: 24 }}
+                        />
 
-                                                <View className='ml-1 mt-2'>
-                                                    <View className='flex w-full flex-row justify-between items-center'>
-                                                        <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{store.name}</Text>
-                                                        <View>
-                                                            <View className='px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'>
-                                                                <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
-                                                            </View>
-                                                        </View>
-                                                    </View>
-                                                    <View className='flex flex-row items-center'>
-                                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(store.storeTypeId)} · </Text>
-                                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }} >{store.isOpen ? 'Отворено' : 'Затворено'}</Text>
-                                                    </View>
-
-                                                </View>
-                                            </TouchableOpacity>
-                                        )
-                                    ))}
-                                </View>
-                            </ScrollView>
-                        </View>
 
                     </Animated.View>
+
+
+                    <View className='w-full my-5 bg-[#0b0b0b]/5 h-[1px]'></View>
+
+                    <FlatList
+                        data={stores}
+                        scrollEnabled={false}
+                        className='px-6'
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity className='mt-3 pb-4' onPress={() => handleRouteStoreDetails(item)}>
+                                <View className='flex overflow-hidden relative'>
+                                    {/* Placeholder for any image you might want to display */}
+                                    <View className='w-full h-40 p-5 bg-[#fafafa] rounded-2xl overflow-hidden'>
+                                        <View className='flex flex-row items-center justify-end w-full'>
+                                            <TouchableOpacity className='flex flex-row items-center'>
+                                                <Heart color={Colors.dark} size={20} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View className='ml-1 mt-2'>
+                                    <View className='flex flex-row w-full justify-between items-center'>
+                                        <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
+                                        <View className='px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'>
+                                            <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
+                                        </View>
+                                    </View>
+                                    <View className='flex flex-row items-center'>
+                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · </Text>
+                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            paddingBottom: 6,
+                            backgroundColor: '#FFFFFC',
+                        }}
+                    />
                 </ScrollView>
 
-                <View className={orderExists ? 'px-6 flex w-full justify-center items-center absolute bottom-4' : 'hidden'}>
+                {/* <View className={orderExists ? 'px-6 flex w-full justify-center items-center absolute bottom-4' : 'hidden'}>
                     <TouchableOpacity onPress={() => router.push('/(order)/trackOrder')} className='w-full p-4 rounded-2xl flex items-center justify-between flex-row bg-[#FFFFFC] shadow-md'>
                         <View className='flex flex-row items-center  space-x-3'>
                             <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'></View>
@@ -360,10 +364,10 @@ const Page = () => {
                             <Timer variant='Bulk' color={Colors.primary} size={36} />
                         </RNAnimated.View>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
 
-            </Animated.View >
+            </SafeAreaView>
 
 
         </>
@@ -374,7 +378,7 @@ export default Page
 
 const styles = StyleSheet.create({
     header: {
-        paddingTop: (Platform.OS === 'android') ? 58 : 52,
+        paddingTop: (Platform.OS === 'android') ? 44 : 0,
     },
     input: {
         paddingVertical: (Platform.OS === 'android') ? 16 : 22,

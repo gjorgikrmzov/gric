@@ -13,53 +13,56 @@ import { fetchStoreItems } from '../reduxStore/storeItemSlice'
 
 const Page = () => {
 
+    const dispatch = useDispatch<any>()
     const { id, name, storeTypeName, isOpen } = useLocalSearchParams();
 
     const { storeItems } = useSelector((state: RootState) => state.storeItem)
+    const cartItems = useSelector((state: RootState) => state.cart.items);
 
-    const dispatch = useDispatch<any>()
+    const numberOfCartItems = useSelector((state: RootState) => state.cart.items.length);
+    
 
     useEffect(() => {
         dispatch(fetchStoreItems({ id }));
     }, []);
 
 
-    const [itemQuantity, setItemQuantity] = useState<number>(0);
+    // const [itemQuantity, setItemQuantity] = useState<number>(0);
 
-    const [visible, setVisible] = useState(false);
-    const [animationPlayed, setAnimationPlayed] = useState(false);
+    // const [visible, setVisible] = useState(false);
+    // const [animationPlayed, setAnimationPlayed] = useState(false);
 
-    const animation = useRef(new Animated.Value(0)).current;
+    // const animation = useRef(new Animated.Value(0)).current;
 
-    const addToCart = () => {
+    // const addToCart = () => {
 
-        if (itemQuantity < 99) {
-            setItemQuantity(itemQuantity + 1);
-        }
-        if (!animationPlayed) {
-            setVisible(true);
-            Animated.spring(animation, {
-                toValue: 1,
-                speed: 16,
-                bounciness: 8,
+    //     if (itemQuantity < 99) {
+    //         setItemQuantity(itemQuantity + 1);
+    //     }
+    //     if (!animationPlayed) {
+    //         setVisible(true);
+    //         Animated.spring(animation, {
+    //             toValue: 1,
+    //             speed: 16,
+    //             bounciness: 8,
 
-                useNativeDriver: true,
-            }).start(() => setAnimationPlayed(true));
-        }
-    };
+    //             useNativeDriver: true,
+    //         }).start(() => setAnimationPlayed(true));
+    //     }
+    // };
 
-    const animatedStyle = {
-        opacity: animation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1], 
-        }),
-        transform: [{
-            translateY: animation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [40, 0], 
-            })
-        }]
-    };
+    // const animatedStyle = {
+    //     opacity: animation.interpolate({
+    //         inputRange: [0, 1],
+    //         outputRange: [0, 1], 
+    //     }),
+    //     transform: [{
+    //         translateY: animation.interpolate({
+    //             inputRange: [0, 1],
+    //             outputRange: [40, 0], 
+    //         })
+    //     }]
+    // };
 
 
     return (
@@ -100,7 +103,7 @@ const Page = () => {
                         <View className='flex flex-col'>
 
                             {storeItems.map((item, index) => (
-                                <TouchableOpacity key={index} onPress={() => router.push({ pathname: '/foodDetails/[id]', params: { id: item.id, name: item.name, description: item.description, price: item.price } } as any)} className='flex-row flex justify-between items-center py-4 px-6 border-b border-[#0b0b0b]/5'>
+                                <TouchableOpacity key={index} onPress={() => router.push({ pathname: '/foodDetails/[id]', params: { storeId: id, id: item.id, name: item.name, description: item.description, price: item.price } } as any)} className='flex-row flex justify-between items-center py-4 px-6 border-b border-[#0b0b0b]/5'>
                                     <Skeleton.Group show={item == null}>
                                         <View className='flex-1'>
                                             <Skeleton colorMode='light' width='80%' radius='square'><Text className='text-[#0b0b0b] text-[15px] w-4/5' style={{ fontFamily: "semibold" }}>{item.name}</Text></Skeleton>
@@ -109,7 +112,7 @@ const Page = () => {
                                         </View>
 
                                         <View className='flex justify-center items-center bg-[#7577804C]/10 rounded-2xl overflow-hidden w-24 h-24'>
-                                            <TouchableOpacity onPress={addToCart} className='flex justify-center right-1 absolute bottom-1 items-center w-8 h-8 bg-[#FFFFFC] rounded-xl'>
+                                            <TouchableOpacity onPress={() => router.push('/(tabs)/cart')} className='flex justify-center right-1 absolute bottom-1 items-center w-8 h-8 bg-[#FFFFFC] rounded-xl'>
                                                 <Add size={20} variant='Linear' color={Colors.dark} />
                                             </TouchableOpacity>
                                         </View>
@@ -131,11 +134,11 @@ const Page = () => {
                 end={{ x: 0, y: 1 }}
                 className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
                 {
-                    visible && (
-                        <Animated.View style={animatedStyle}>
+                    cartItems.length !== 0 && (
+                        <Animated.View>
                             <TouchableOpacity onPress={() => router.replace('/(tabs)/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                                 <Bag variant='Bulk' size={22} color={Colors.primary} />
-                                <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {itemQuantity}</Text>
+                                <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {numberOfCartItems}</Text>
                             </TouchableOpacity>
                         </Animated.View>
                     )}

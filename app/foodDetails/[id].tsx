@@ -1,19 +1,46 @@
-import { View, Text, Platform, StyleSheet } from 'react-native'
-import React, {useRef, useState } from 'react'
-import { Add, Bag, CloseSquare, Minus, More} from 'iconsax-react-native'
+import { View, Text, Platform, StyleSheet, Alert } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Add, Bag, CloseSquare, Minus, More } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import Colors from '../../constants/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Animated } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { addItem, clearCart } from '../reduxStore/cartSlice'
+import { RootState } from '../reduxStore'
 
 const Page = () => {
 
-    const { id, name, description, price } = useLocalSearchParams()
+    const { storeId, id, name, description, price } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: string }>();
+    const dispatch = useDispatch();
 
-    
+    const cartItems = useSelector((state: RootState) => state.cart.items);
+
+    const handleAddToCart = () => {
+        const differentStoreItemExists = cartItems.some(cartItem => cartItem.storeId !== storeId);
+
+        if (differentStoreItemExists) {
+            Alert.alert(
+                "Корпа",
+                "Вашата корпа содржи продукти од различни продавници. Дали сакате да ги избришете и да ги додадете новите?",
+                [
+                    { text: "Не", style: "cancel" },
+                    {
+                        text: "Да", onPress: () => {
+                            dispatch(clearCart());
+                            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+                        }
+                    }
+                ]
+            );
+        } else {
+            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+        }
+    };
+
+
     const [itemQuantity, setItemQuantity] = useState<number>(0);
-    const itemPrice = 180;
 
     const handleDecreaseQuantity = () => {
         if (itemQuantity > 1) {
@@ -26,12 +53,13 @@ const Page = () => {
     };
 
 
-    const totalItemPrice = itemPrice * itemQuantity;
+    const itemPrice = parseFloat(price);
+    const totalItemPrice: number = itemQuantity * itemPrice;
 
     const [cartButtonVisible, setCartButtonVisible] = useState(false);
     const [cartButtonanimationPlayed, setCartButtonAnimationPlayed] = useState(false);
 
-    const animation = useRef(new Animated.Value(0)).current; 
+    const animation = useRef(new Animated.Value(0)).current;
 
     const addToCart = () => {
 
@@ -39,34 +67,41 @@ const Page = () => {
             setItemQuantity(itemQuantity + 1);
         }
         if (!cartButtonanimationPlayed) {
-            setCartButtonVisible(true); 
+            setCartButtonVisible(true);
             Animated.spring(animation, {
-                toValue: 1, 
-                speed: 16, 
+                toValue: 1,
+                speed: 16,
                 bounciness: 8,
 
-                useNativeDriver: true, 
-            }).start(() => setCartButtonAnimationPlayed(true)); 
+                useNativeDriver: true,
+            }).start(() => setCartButtonAnimationPlayed(true));
         }
     };
 
     const animatedStyle = {
         opacity: animation.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, 1], 
+            outputRange: [0, 1],
         }),
         transform: [{
             translateY: animation.interpolate({
                 inputRange: [0, 1],
-                outputRange: [40, 0], 
+                outputRange: [40, 0],
             })
         }]
     };
+
+    const AddToCartAndRoute = () => {
+        handleAddToCart()
+        router.push({ pathname: '/(tabs)/cart', params: {id, storeId, itemQuantity}})
+    }
 
 
     return (
 
         <View style={styles.header} className='h-full bg-[#0b0b0b]'>
+
+
 
             <View className='bg-[#0b0b0b] px-6 h-44 '>
                 <View className='flex flex-row justify-between items-center w-full'>
@@ -120,7 +155,7 @@ const Page = () => {
                     {
                         cartButtonVisible && (
                             <Animated.View style={animatedStyle}>
-                                <TouchableOpacity onPress={() => router.back()} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                                <TouchableOpacity onPress={AddToCartAndRoute} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                                     <Bag variant='Bulk' size={22} color={Colors.primary} />
                                     <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додади {itemQuantity} во Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {totalItemPrice} ден</Text>
                                 </TouchableOpacity>

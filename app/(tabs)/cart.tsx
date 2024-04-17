@@ -1,50 +1,60 @@
-import { View, Text, ScrollView, FlatList, StyleSheet, Platform, TextInput, Keyboard } from 'react-native'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert } from 'react-native'
+import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Add, ArrowDown, ArrowRight, ArrowRight2, Bag, Bag2, CloseCircle, CloseSquare, DirectboxNotif, DocumentText, FingerCricle, Minus, Note, RecordCircle, Send, Shop, Trash } from 'iconsax-react-native'
+import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import BottomSheet from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics';
+import { useDispatch, useSelector } from 'react-redux'
+import { clearCart, removeItem, selectCartTotal, updateItemQuantity } from '../reduxStore/cartSlice'
+import { RootState } from '../reduxStore'
 
 const Page = () => {
 
+  const { storeId, id, itemQuantity, name, price, description } = useLocalSearchParams<any>()
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  const handleIncreaseQuantity = (storeId: string, id: string, quantity: number) => {
+    dispatch(updateItemQuantity({ storeId, id, quantity: quantity + 1 }));
+    Haptics.selectionAsync();
+  };
+
+  const handleDecreaseQuantity = (storeId: string, id: string, quantity: number) => {
+    if (quantity > 1) {
+      dispatch(updateItemQuantity({ storeId, id, quantity: quantity - 1 }));
+    } else {
+      dispatch(removeItem({ id }));
+    }
+    Haptics.selectionAsync();
+  };
+
+
+  const handleRemoveCart = () => {
+
+    Alert.alert(
+      "Избриши Корпа",
+      "Дали сакате да ја избришете корпата?",
+      [
+        { text: "Не", style: "cancel" },
+        {
+          text: "Да", onPress: () => {
+            dispatch(clearCart());
+          }
+        }
+      ]
+    );
+  }
+
+  const subtotal = useSelector(selectCartTotal);
+
+
   const snapPoints = useMemo(() => ['1%', '50%'], []);
-  const [cartEmpty, setcartEmpty] = useState<boolean>(true)
-
-  const [deleteButton, setdeleteButton] = useState<boolean>(false)
-
-  const deliveryCost = 80
-
-  const [itemQuantity, setItemQuantity] = useState<number>(1);
-  const itemPrice = 180;
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
-
-  const handleIncreaseQuantity = () => {
-    if (itemQuantity < 99) {
-      setItemQuantity(itemQuantity + 1);
-    }
-    Haptics.selectionAsync()
-  };
-
-  const handleDecreaseQuantity = () => {
-    if (itemQuantity > 1) {
-      setItemQuantity(itemQuantity - 1);
-    }
-    Haptics.selectionAsync()
-  };
-
-  const totalItemPrice = itemPrice * itemQuantity + deliveryCost;
-
-  useEffect(() => {
-    if (itemQuantity === 1) {
-      setdeleteButton(false);
-    } else {
-      setdeleteButton(true);
-    }
-  }, [itemQuantity]);
 
   const closeCommentModal = () => {
     snapeToIndex(0)
@@ -53,8 +63,6 @@ const Page = () => {
 
   return (
     <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
-
-
       <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
         <View className='flex flex-row items-center'>
           <Bag variant='Bulk' size={22} color={Colors.primary} />
@@ -66,93 +74,56 @@ const Page = () => {
       </View>
 
 
-      <View className={cartEmpty ? 'flex-1 mt-4 border-t border-[#0b0b0b]/5' : 'hidden'}>
+      <View className={cartItems.length == 0 ? 'hidden' : 'flex-1 mt-4 border-t border-[#0b0b0b]/5'}>
+
         <ScrollView className='flex-1'>
-          <TouchableOpacity onPress={() => router.push({pathname: "/foodDetails/[id]", params: '' as any})} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
-            <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
+          {cartItems.map((cartItem, index) => (
 
-              </View>
+            <View key={index} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
+              <View className='flex flex-row items-center'>
+                <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
 
-              <View className='flex flex-row items-center justify-between flex-1'>
-                <View className='flex flex-col ml-3 flex-1'>
-                  <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>Бонапарта</Text>
-                  <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
                 </View>
 
-                <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
-                    {deleteButton ?
-                      (<Minus
+                <View className='flex flex-row items-center justify-between flex-1'>
+                  <View className='flex flex-col ml-3 flex-1'>
+                    <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
+                    <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{cartItem.price} ден</Text>
+                  </View>
+
+                  <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+                    <TouchableOpacity onPress={() => handleDecreaseQuantity(storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                      {cartItem.quantity == 1 ?
+                        (<Trash
+                          size={20}
+                          color={Colors.dark}
+                          variant='Linear'
+                        />)
+                        :
+                        (<Minus
+                          size={20}
+                          color={Colors.dark}
+                          variant='Linear'
+                        />)}
+                    </TouchableOpacity>
+
+                    <Text className='text-[#0b0b0b]'>{cartItem.quantity}</Text>
+
+                    <TouchableOpacity onPress={() => handleIncreaseQuantity(storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                      <Add
                         size={20}
                         color={Colors.dark}
                         variant='Linear'
-                      />) :
-                      (<Trash
-                        size={20}
-                        color={Colors.dark}
-                        variant='Linear'
-                      />)}
-                  </TouchableOpacity>
-
-                  <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
-
-                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
-                    <Add
-                      size={20}
-                      color={Colors.dark}
-                      variant='Linear'
-                    />
-                  </TouchableOpacity>
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
+
             </View>
-
-          </TouchableOpacity>
-
-
-          <TouchableOpacity onPress={() => router.push({pathname: "/foodDetails/[id]", params: '' as any})} className='py-5  px-6'>
-            <View className='flex flex-row items-center'>
-              <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
-
-              </View>
-
-              <View className='flex flex-row items-center justify-between flex-1'>
-                <View className='flex flex-col ml-3 flex-1'>
-                  <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>Бонапарта</Text>
-                  <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{itemPrice} ден</Text>
-                </View>
-
-                <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                  <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
-                    {deleteButton ?
-                      (<Minus
-                        size={20}
-                        color={Colors.dark}
-                        variant='Linear'
-                      />) :
-                      (<Trash
-                        size={20}
-                        color={Colors.dark}
-                        variant='Linear'
-                      />)}
-                  </TouchableOpacity>
-
-                  <Text className='text-[#0b0b0b]'>{itemQuantity}</Text>
-
-                  <TouchableOpacity onPress={handleIncreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
-                    <Add
-                      size={20}
-                      color={Colors.dark}
-                      variant='Linear'
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-          </TouchableOpacity>
+          ))}
         </ScrollView>
+
 
 
         <View className='w-full h-1 bg-[#757780]/10'></View>
@@ -175,6 +146,16 @@ const Page = () => {
             </View>
           </View> */}
 
+
+          <TouchableOpacity onPress={handleRemoveCart} className='w-full flex-row flex items-center justify-between'>
+            <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
+              <View className=' flex flex-row'>
+                <Trash color={Colors.dark} size={20} variant='Broken' />
+                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Избриши корпа</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => snapeToIndex(1)} className='w-full flex-row flex items-center justify-between'>
             <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
               <View className=' flex flex-row'>
@@ -187,13 +168,13 @@ const Page = () => {
 
           <View className='flex flex-row my-6 justify-between items-center'>
             <Text style={{ fontFamily: "semibold" }} className='text-[16px]'>Без достава</Text>
-            <Text style={{ fontFamily: "semibold" }} className='text-[16px]'>{itemPrice} ден</Text>
+            <Text style={{ fontFamily: "semibold" }} className='text-[16px]'>{subtotal} ден</Text>
           </View>
 
         </View>
 
         <View className='px-6 mb-4 flex'>
-          <TouchableOpacity onPress={() => router.push('/(order)/checkout')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+          <TouchableOpacity onPress={() => router.push({ pathname: '/(order)/checkout', params: { subtotal } })} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
             <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC]'>Кон наплата</Text>
             <ArrowRight variant='Linear' size={24} className='ml-2' color={Colors.primary} />
           </TouchableOpacity>
@@ -201,8 +182,8 @@ const Page = () => {
       </View>
 
 
-      <View className={cartEmpty ? 'hidden' : 'flex-1 justify-center items-center'}>
-        <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#0b0b0b]/5'>
+      <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
+        <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
           <Bag size={56} variant='Bulk' color={Colors.primary} />
         </View>
 
@@ -210,7 +191,7 @@ const Page = () => {
       </View>
 
       <View className='px-6'>
-        <TouchableOpacity onPress={() => router.push('/stores')} className={cartEmpty ? 'hidden' : 'mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'}>
+        <TouchableOpacity onPress={() => router.push('/stores')} className={cartItems.length == 0 ? 'mb-4 w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl' : 'hidden'}>
           <Shop variant='Bulk' size={24} color={Colors.primary} />
           <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Пребарај Ресторани</Text>
         </TouchableOpacity>

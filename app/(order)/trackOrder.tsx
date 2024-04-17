@@ -176,7 +176,7 @@ const Page = () => {
               <View className='mt-8 px-6 flex items-start flex-row justify-between'>
                 <View className='flex flex-row items-start'>
                   <Text className='text-4xl' style={{ fontFamily: 'medium' }}>25-30</Text>
-                  <Text className='border text-[#0b0b0b]/70 text-xs' style={{ fontFamily: "medium" }}>мин</Text>
+                  <Text className='text-[#0b0b0b]/70 text-xs' style={{ fontFamily: "medium" }}>мин</Text>
                 </View>
                 <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-xs text-right'>Проценка на пристигање {'\n'} на нарачката</Text>
               </View>

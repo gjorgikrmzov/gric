@@ -1,7 +1,7 @@
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Keyboard, Animated, Platform, StyleSheet, Dimensions, Touchable } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react';
 import { router } from 'expo-router'
-import { ArrowLeft, CloseSquare, Heart, SearchNormal1, Shop } from 'iconsax-react-native'
+import { ArrowLeft, Bag, CloseSquare, Heart, SearchNormal1, Shop } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { Easing } from 'react-native-reanimated';
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
 import { fetchStores } from '../reduxStore/storeSlice';
 import { fetchStoresTypes } from '../reduxStore/storeTypeSlice';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Page = () => {
 
@@ -24,17 +25,31 @@ const Page = () => {
   }, [])
 
   const [search, setSearch] = useState<string>('');
-  const [close, setClose] = useState<boolean>(false);
+
+  const [filteredStores, setFilteredStores] = useState(stores);
   const inputRef = useRef<TextInput>(null);
 
   const [isFocused, setIsFocused] = useState(false);
   const searchBarResult = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
 
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const numberOfCartItems = useSelector((state: RootState) => state.cart.items.length);
 
-  const onChangeInput = (text: string) => {
+  useEffect(() => {
+    if (search.trim() === '') {
+      setFilteredStores(stores);
+    } else {
+      const lowercasedQuery = search.toLowerCase();
+      const filtered = stores.filter(store =>
+        store.name.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredStores(filtered);
+    }
+  }, [search, stores]);
+
+  const handleSearchChange = (text: string) => {
     setSearch(text);
-    setClose(text !== '');
   };
 
   const getStoreTypeName = (storeTypeId: string) => {
@@ -117,10 +132,8 @@ const Page = () => {
                 <SearchNormal1 size={22} color='#0b0b0b97' className='flex justify-center items-center' variant='Broken' />)
           }
 
-          <TextInput onChangeText={onChangeInput} ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
-          <TouchableOpacity onPress={() => { setSearch(''); inputRef.current?.clear(); setClose(false) }} className={close ? 'flex justify-center items-center opacity-100' : ' opacity-0'}>
-            <CloseSquare size={24} color={Colors.dark} variant='Bold' />
-          </TouchableOpacity>
+          <TextInput onChangeText={handleSearchChange}
+            ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
 
         </View>
       </Animated.View>
@@ -131,15 +144,17 @@ const Page = () => {
         <Text className='text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>Популарни Ресторани</Text>
         <ScrollView keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false} className='flex flex-1 flex-col mt-3' >
-          {stores.map((store, index) => (
-            <TouchableOpacity key={index} className='w-full flex-row  flex items-center justify-between'>
-              <View className='flex items-center flex-row gap-x-4'>
-                <Shop color={Colors.dark} size={24} variant='Bulk' />
-                <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
-                  <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>{store.name}</Text>
+          {filteredStores.map((store, index) => (
+            index < 5 && (
+              <TouchableOpacity onPress={() => router.push({ pathname: '/storeDetails/[id]', params: { id: store.id, name: store.name, storeTypeId: store.storeTypeId, isOpen: store.isOpen } } as any)} key={index} className='w-full flex-row  flex items-center justify-between'>
+                <View className='flex items-center flex-row gap-x-4'>
+                  <Shop color={Colors.dark} size={25} variant='Broken' />
+                  <View className='py-6 border-b border-[#0b0b0b]/10  w-full'>
+                    <Text className='text-[#0b0b0b] text-[16px] ' style={{ fontFamily: 'medium' }}>{store.name}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )
           ))}
         </ScrollView>
       </Animated.View>
@@ -197,6 +212,22 @@ const Page = () => {
           </View>
         </View>
       </ScrollView>
+
+      <LinearGradient
+        colors={['rgba(255, 255, 255, 0)', '#FFFFFC']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
+        {
+          cartItems.length !== 0 && (
+            <Animated.View>
+              <TouchableOpacity onPress={() => router.replace('/(tabs)/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                <Bag variant='Bulk' size={22} color={Colors.primary} />
+                <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {numberOfCartItems}</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          )}
+      </LinearGradient>
     </View>
 
   )

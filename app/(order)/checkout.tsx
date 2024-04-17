@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Money, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../constants/Colors'
 import BottomSheet from '@gorhom/bottom-sheet/'
@@ -10,6 +10,11 @@ import { TextInput } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const checkout = () => {
+
+    const {subtotal} = useLocalSearchParams()
+    const deliveryCost = 100
+    const subtotalNumber = Number(subtotal) || 0;  
+    const total: number = subtotalNumber + deliveryCost;
 
     const [savedAddress, setSavedAddress] = useState<string>('');
 
@@ -22,10 +27,8 @@ const checkout = () => {
     const [ondeliveryPayment, setondeliveryPayment] = useState(true)
 
     const [itemQuantity, setItemQuantity] = useState<number>(1);
-    const itemPrice = 180;
     
-    const deliveryCost = 80
-    const totalItemPrice = itemPrice * itemQuantity + deliveryCost;
+    // const totalItemPrice = itemPrice * itemQuantity + deliveryCost;
 
     const handleSelectCardPayment = () => {
         setcardPayment(true)
@@ -126,7 +129,7 @@ const checkout = () => {
                             <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
                             <View className='flex flex-row items-center'>
                                 <Money size={22} variant='Bulk' color={Colors.primary} />
-                                <Text className='ml-1 text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
+                                <Text className='ml-1 text-[16px] text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
                             </View>
 
                         </View>
@@ -160,12 +163,12 @@ const checkout = () => {
                     <View className='px-6'>
                         <View className='w-full flex-row items-center  justify-between flex'>
                             <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Износ без достава</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>180 ден</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{subtotal} ден</Text>
                         </View>
 
                         <View className='w-full flex-row items-center  mt-5 justify-between flex'>
                             <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Достава</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>80 ден</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{deliveryCost} ден</Text>
                         </View>
 
                         <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
@@ -173,7 +176,7 @@ const checkout = () => {
 
                         <View className='w-full flex-row items-center  mt-5 justify-between flex'>
                             <Text className='text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>Вкупно</Text>
-                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{totalItemPrice} ден</Text>
+                            <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{total} ден</Text>
                         </View>
 
                     </View>
