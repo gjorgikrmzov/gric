@@ -76,7 +76,6 @@ const Page = () => {
     <>
       <StatusBar style='light' />
       <View className='bg-[#0b0b0b] px-6 py-16 flex flex-col h-full justify-between'>
-        <Image source={require('../../assets/images/bg-0.jpg')} className="w-screen h-screen bottom-0 right-0 top-0 z-0 absolute" />
         <View>
           <Text className='text-3xl' style={{ fontFamily: 'heavy', color: Colors.primary }} >GRIC</Text>
           <Text className='text-lg text-white' style={{ fontFamily: "semibold" }}>Внесете ја вашата адреса</Text>

@@ -1,12 +1,17 @@
 import React from 'react'
 import { Tabs, usePathname } from 'expo-router'
 import Colors from '../../constants/Colors'
-import { Bag, DirectboxNotif, Home2, Map, Map1, SearchNormal1, Shop, User } from 'iconsax-react-native';
+import { Bag, DirectboxNotif, Home2, Map, Map1, SearchNormal1, Shop, ShoppingCart, User } from 'iconsax-react-native';
 import { Platform } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reduxStore';
 
 const Layout = () => {
 
     const currentPath = usePathname();
+    const cartItems = useSelector((state: RootState) => state.cart.items);
+
+    const numberOfCartItems: number = cartItems.length
 
     return (
         <Tabs screenOptions={{
@@ -45,13 +50,14 @@ const Layout = () => {
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
                 headerShown: false,
-                // tabBarBadge: 1,
-                // tabBarBadgeStyle: {
-                //     backgroundColor: Colors.dark,
-                //     fontFamily: 'extrabold', fontSize: 10,
-                // },
+                tabBarBadge: numberOfCartItems,
+                tabBarBadgeStyle: {
+                    display: numberOfCartItems === 0 ? 'none' : 'flex',
+                    backgroundColor: Colors.dark,
+                    fontFamily: 'extrabold', fontSize: 10,
+                },
                 tabBarIcon: ({ color, size }) => (
-                    <Bag variant={currentPath === '/cart' ? 'Bold' : 'Broken'} size={size} color={color} />
+                    <ShoppingCart variant={currentPath === '/cart' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
             }} />
         </Tabs>

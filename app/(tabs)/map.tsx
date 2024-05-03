@@ -10,7 +10,7 @@ import { customMapStyle } from '../../mapStyle'
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 const Page = () => {
-  const snapPoints = useMemo(() => ['25%', '75%'], []);
+  const snapPoints = useMemo(() => ['25%'], []);
 
   const INITIAL_REGION = {
     latitude: 41.43917545031447,
@@ -20,7 +20,7 @@ const Page = () => {
   }
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
+  // const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
 
   return (
 
@@ -28,14 +28,14 @@ const Page = () => {
 
       <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
         <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-          <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
+          <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
         </TouchableOpacity>
 
       </View>
 
       <View className='border-black/10  overflow-hidden'>
         <MapView showsUserLocation={true} 
-          showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
+          showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT}  customMapStyle={customMapStyle} >
           <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
             <View className=''>
               <Location size={26} variant='Bulk' color={Colors.white} />
@@ -66,7 +66,7 @@ const Page = () => {
           </View>
         </View>
 
-        <View className='flex flex-col justify-between flex-1 mt-9 px-6 py-4'>
+        {/* <View className='flex flex-col justify-between flex-1 mt-9 px-6 py-4'>
 
 
           <View>
@@ -142,7 +142,7 @@ const Page = () => {
             <Setting4 color={Colors.primary} size={24} />
             <Text className='text-[#FFFFFC] ml-2' style={{ fontFamily: 'medium' }}>Прикажи филтри</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
 
 

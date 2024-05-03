@@ -106,14 +106,14 @@ const Page = () => {
         <StatusBar style='auto' />
         <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
           <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-            <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
+            <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
           </TouchableOpacity>
 
         </View>
 
         <View className='border-black/10  overflow-hidden'>
           <MapView 
-            showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
+            showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_GOOGLE} customMapStyle={customMapStyle} >
               <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
                 <View className='w-6 h-6'>
                   <Shop size={24} variant='Bulk' color={Colors.white} />

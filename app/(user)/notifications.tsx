@@ -9,15 +9,15 @@ const Page = () => {
   return (
 
     <SafeAreaView className=' bg-[#FFFFFC]'>
-      
+
       <View className='h-full bg-[#FFFFFC]'>
         <View className='px-6 py-4 flex flex-row gap-x-3 items-center justify-between'>
-        <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-          <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+            <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
+          </TouchableOpacity>
           <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Известувања</Text>
 
-          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
         <ScrollView refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={false} />} className='h-full' contentContainerStyle={{

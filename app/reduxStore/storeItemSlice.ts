@@ -3,14 +3,20 @@ import { StoreItem } from './models'
 
 interface FetchStoreItemsPayload {
     id: string | string[];
+    accessToken: string
 }
 
-export const fetchStoreItems = createAsyncThunk("fetchStoreItems", async (payload: FetchStoreItemsPayload, thunkAPI) => {
-    const { id } = payload;
+export const fetchStoreItems = createAsyncThunk("fetchStoreItems", async (payload: FetchStoreItemsPayload) => {
+    const { id, accessToken } = payload;
     try {
-        const data = await fetch(`http://192.168.1.47:8080/store/item?storeId=${id}`);
-        return data.json()
-        
+        const response = await fetch(`http://172.20.10.2:8080/item?storeId=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        const data = await response.json(); 
+        return data;
     } catch (error) {
         console.log(error);
     }

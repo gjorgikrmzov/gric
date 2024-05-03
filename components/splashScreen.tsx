@@ -12,7 +12,6 @@ const SplashComponent = () => {
                 resizeMode="contain" 
             />
             
-            {/* Add any other content for your splash screen */}
         </View>
     );
 };

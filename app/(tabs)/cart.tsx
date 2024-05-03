@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert } from 'react-native'
 import React, { useMemo, useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, Trash } from 'iconsax-react-native'
+import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, ShoppingCart, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
 import BottomSheet from '@gorhom/bottom-sheet'
@@ -12,24 +12,24 @@ import { RootState } from '../reduxStore'
 
 const Page = () => {
 
-  const { storeId, id, itemQuantity, name, price, description } = useLocalSearchParams<any>()
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const handleIncreaseQuantity = (storeId: string, id: string, quantity: number) => {
-    dispatch(updateItemQuantity({ storeId, id, quantity: quantity + 1 }));
+  const handleIncreaseQuantity = (storeId: string, itemId: string, quantity: number) => {
+    dispatch(updateItemQuantity({ storeId, id: itemId, quantity: quantity + 1 }));
     Haptics.selectionAsync();
   };
 
-  const handleDecreaseQuantity = (storeId: string, id: string, quantity: number) => {
+  const handleDecreaseQuantity = (storeId: string, itemId: string, quantity: number) => {
     if (quantity > 1) {
-      dispatch(updateItemQuantity({ storeId, id, quantity: quantity - 1 }));
+      dispatch(updateItemQuantity({ storeId, id: itemId, quantity: quantity - 1 }));
     } else {
-      dispatch(removeItem({ id }));
+      dispatch(removeItem({ id: itemId }));
     }
     Haptics.selectionAsync();
   };
+
 
 
   const handleRemoveCart = () => {
@@ -50,7 +50,6 @@ const Page = () => {
 
   const subtotal = useSelector(selectCartTotal);
 
-
   const snapPoints = useMemo(() => ['1%', '50%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -65,12 +64,12 @@ const Page = () => {
     <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
       <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
         <View className='flex flex-row items-center'>
-          <Bag variant='Bulk' size={22} color={Colors.primary} />
+          <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
           <Text className='text-xl ml-1' style={{ fontFamily: "semibold" }}>Корпа</Text>
         </View>
         <TouchableOpacity onPress={() => router.push('/(order)/orders')} className='px-4 bg-[#fafafa]/90 rounded-2xl py-3'>
           <Text style={{ fontFamily: "semibold" }}>Нарачки</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
       </View>
 
 
@@ -87,12 +86,12 @@ const Page = () => {
 
                 <View className='flex flex-row items-center justify-between flex-1'>
                   <View className='flex flex-col ml-3 flex-1'>
-                    <Text className='text-[16px] text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
-                    <Text className='text-md mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{cartItem.price} ден</Text>
+                    <Text className='text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
+                    <Text className='mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{cartItem.price} ден</Text>
                   </View>
 
                   <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                    <TouchableOpacity onPress={() => handleDecreaseQuantity(storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
+                    <TouchableOpacity onPress={() => handleDecreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
                       {cartItem.quantity == 1 ?
                         (<Trash
                           size={20}
@@ -109,7 +108,7 @@ const Page = () => {
 
                     <Text className='text-[#0b0b0b]'>{cartItem.quantity}</Text>
 
-                    <TouchableOpacity onPress={() => handleIncreaseQuantity(storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
+                    <TouchableOpacity onPress={() => handleIncreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
                       <Add
                         size={20}
                         color={Colors.dark}
@@ -184,7 +183,7 @@ const Page = () => {
 
       <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
         <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-          <Bag size={56} variant='Bulk' color={Colors.primary} />
+          <ShoppingCart size={56} variant='Bulk' color={Colors.primary} />
         </View>
 
         <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: 'medium' }}>Вашата корпа {'\n'} е празна</Text>

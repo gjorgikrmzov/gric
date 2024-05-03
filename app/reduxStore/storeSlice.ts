@@ -1,9 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { Store } from './models'
 
-export const fetchStores = createAsyncThunk("fetchStores", async () => {
+export const fetchStores = createAsyncThunk("fetchStores", async (accessToken: string | null) => {
     try {
-        const data = await fetch('http://192.168.1.47:8080/store')
+        const data = await fetch('http://172.20.10.2:8080/store', {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
         return data.json()
     } catch (error) {
         console.log(error)
@@ -21,11 +26,11 @@ const storeSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-       builder.addCase(fetchStores.fulfilled, (state, action) => {
+        builder.addCase(fetchStores.fulfilled, (state, action) => {
             state.stores = action.payload
         })
     }
-        
+
 
 
 })

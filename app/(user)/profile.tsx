@@ -1,13 +1,21 @@
 import { View, Text, Alert } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import { setAccessToken } from '../reduxStore/accessTokenSlice';
 
 const Page = () => {
 
+  const dispatch = useDispatch()
+  
+  const signOut = async () => {
+    dispatch(setAccessToken(''))
+    router.push('/(auth)/welcome')
+  }
 
   const handleSignOut = () => {
     Alert.alert(
@@ -21,7 +29,7 @@ const Page = () => {
         {
           text: 'Да',
           onPress: () => {
-            router.replace('/(auth)/welcome')
+            signOut()
           },
         },
       ],
@@ -33,11 +41,11 @@ const Page = () => {
       <View className=' py-4 bg-[#FFFFFC]'>
         <View className='px-6 flex flex-row gap-x-3 items-center justify-between'>
           <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-            <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
+            <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
           </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Профил</Text>
 
-          <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
+          <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>
         </View>
 
 

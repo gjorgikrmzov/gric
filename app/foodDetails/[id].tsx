@@ -1,6 +1,6 @@
 import { View, Text, Platform, StyleSheet, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Add, Bag, CloseSquare, Minus, More } from 'iconsax-react-native'
+import { Add, Archive, ArrowDown, Bag, CloseSquare, Minus, More, ShoppingCart } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import Colors from '../../constants/Colors'
@@ -12,13 +12,26 @@ import { RootState } from '../reduxStore'
 
 const Page = () => {
 
-    const { storeId, id, name, description, price } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: string }>();
+    const { storeId, id, name, description, price, isOpen, category } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: string, isOpen: string, category: any }>();
+
     const dispatch = useDispatch();
+    const isStoreOpen = isOpen === 'true' ? true : isOpen === 'false' ? false : isOpen;
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
 
     const handleAddToCart = () => {
         const differentStoreItemExists = cartItems.some(cartItem => cartItem.storeId !== storeId);
+
+        if (!isStoreOpen) {
+            Alert.alert(
+                "Продавницата е затворена",
+                "Во моментов сме затворени. Дојдете подоцна",
+                [
+                    { text: "Океј", style: "cancel" },
+                ]
+            );
+            return false
+        }
 
         if (differentStoreItemExists) {
             Alert.alert(
@@ -30,17 +43,21 @@ const Page = () => {
                         text: "Да", onPress: () => {
                             dispatch(clearCart());
                             dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+                            router.back()
                         }
                     }
                 ]
             );
+            return true
         } else {
             dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+            router.back()
         }
+
     };
 
 
-    const [itemQuantity, setItemQuantity] = useState<number>(0);
+    const [itemQuantity, setItemQuantity] = useState<number>(1);
 
     const handleDecreaseQuantity = () => {
         if (itemQuantity > 1) {
@@ -48,7 +65,6 @@ const Page = () => {
         } else {
             animation.setValue(0);
             setCartButtonAnimationPlayed(false);
-            setItemQuantity(0);
         }
     };
 
@@ -91,78 +107,91 @@ const Page = () => {
         }]
     };
 
-    const AddToCartAndRoute = () => {
-        handleAddToCart()
-        router.push({ pathname: '/(tabs)/cart', params: {id, storeId, itemQuantity}})
-    }
-
 
     return (
 
         <View style={styles.header} className='h-full bg-[#0b0b0b]'>
 
-
-
             <View className='bg-[#0b0b0b] px-6 h-44 '>
                 <View className='flex flex-row justify-between items-center w-full'>
 
-                    <TouchableOpacity onPress={() => router.back()} className='flex justify-center items-center rounded-full' >
-                        <CloseSquare variant='Linear' size={28} color={Colors.white} />
+                    <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
+                        <ArrowDown variant='Broken' size={20} color={Colors.white} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity className='flex justify-center items-center rounded-full' >
-                        <More variant='Linear' size={28} color={Colors.white} />
-                    </TouchableOpacity>
+                    {cartItems.length === 0 ? (
+                        null
+                    ) : (
+                        <TouchableOpacity onPress={() => router.push("/(tabs)/cart")} className='flex flex-row justify-center items-center rounded-lg bg-[#1BD868] px-3 py-1.5' >
+                            <ShoppingCart size={18} color={Colors.dark} variant='Broken' />
+                            <Text className='text-[16px] ml-2' style={{ fontFamily: "medium" }}>{cartItems.length}</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
+
+
             </View>
 
             <View className='flex-1 bg-[#FFFFFC]'>
                 <View className='mt-6 px-6'>
-                    <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{name}</Text>
-                    <Text className='text-[#0b0b0b] text-lg' style={{ fontFamily: "semibold" }}>{price} ден</Text>
-                    <Text className='text-[#0b0b0b]/60 mt-3 leading-5' style={{ fontFamily: "medium" }}>{description}</Text>
+                    <View className='flex items-center flex-row'>
+                        <Archive variant='Bulk' size={18} color={Colors.primary} />
+                        <Text className='text-[#0b0b0b]/60 uppercase ml-1' style={{ fontFamily: "bold" }}>{category}</Text>
+                    </View>
+                    <Text className='text-2xl text-[#0b0b0b] mt-1' style={{ fontFamily: "semibold" }}>{name}</Text>
+                    <Text className='text-[#0b0b0b]/80' style={{ fontFamily: "medium" }}>{description}</Text>
+                    <Text className='text-[#0b0b0b] text-lg mt-3' style={{ fontFamily: "semibold" }}>{price} <Text style={{fontFamily: "medium"}} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
                 </View>
 
-                <View className='w-full h-1 bg-[#757780]/10 mt-6'></View>
+                {/* <View className='w-full h-1 bg-[#757780]/10 mt-6'></View> */}
 
-                <Text className='text-[#0b0b0b]  px-6 mt-6' style={{ fontFamily: "semibold" }}>Избери количина</Text>
-                <View className=' bg-[#F0F1F3] p-1 flex-row items-center rounded-xl justify-between w-24 mt-3 mx-6'>
-                    <TouchableOpacity onPress={handleDecreaseQuantity} className='bg-[#FFFFFC]/20 flex justify-center items-center w-8 h-8  rounded-lg '>
-                        <Minus
-                            size={20}
-                            color={Colors.dark}
-                            variant='Linear'
-                        />
-                    </TouchableOpacity>
+                {/* <Text className='text-[#0b0b0b]  px-6 mt-6' style={{ fontFamily: "semibold" }}>Избери количина</Text> */}
 
-                    <Text className='text-[16px] text-[#0b0b0b]'>{itemQuantity}</Text>
-
-                    <TouchableOpacity onPress={addToCart} className='bg-[#FFFFFC]/20 flex justify-center items-center w-8 h-8  rounded-lg ' >
-                        <Add
-                            size={20}
-                            color={Colors.dark}
-                            variant='Linear'
-                        />
-                    </TouchableOpacity>
-                </View>
-
-
-                <LinearGradient
+                {/* <LinearGradient
                     colors={['rgba(255, 255, 255, 0)', '#FFFFFC']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }}
                     className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
                     {
                         cartButtonVisible && (
-                            <Animated.View style={animatedStyle}>
-                                <TouchableOpacity onPress={AddToCartAndRoute} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                            iew style={animatedStyle}>
+                                <TouchableOpacity onPress={handleAddToCart} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                                     <Bag variant='Bulk' size={22} color={Colors.primary} />
                                     <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додади {itemQuantity} во Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {totalItemPrice} ден</Text>
                                 </TouchableOpacity>
                             </Animated.View>
                         )
                     }
-                </LinearGradient>
+                </LinearGradient> */}
+
+                <View className='absolute flex bottom-10 flex-row items-center px-6 gap-x-3'>
+                    <View className=' bg-[#F0F1F3] p-1 flex-row items-center rounded-2xl justify-between '>
+                        <TouchableOpacity onPress={handleDecreaseQuantity} className='flex justify-center items-center w-12 h-10 rounded-xl '>
+                            <Minus
+                                size={20}
+                                color={Colors.dark}
+                                variant='Linear'
+                            />
+                        </TouchableOpacity>
+
+                        <Text className='text-[16px] text-[#0b0b0b]'>{itemQuantity}</Text>
+
+                        <TouchableOpacity onPress={addToCart} className='flex justify-center items-center w-12 h-10 rounded-xl ' >
+                            <Add
+                                size={20}
+                                color={Colors.dark}
+                                variant='Linear'
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity onPress={handleAddToCart} className='flex-1 flex-row py-3.5 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                        <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
+                        <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додади во Корпа</Text>
+                    </TouchableOpacity>
+                </View>
+
+
 
             </View>
         </View>

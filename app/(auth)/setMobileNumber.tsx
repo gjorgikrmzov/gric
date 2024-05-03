@@ -10,15 +10,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Page = () => {
 
-    const { firstName, lastName } = useLocalSearchParams()
-    const [email, setemail] = useState('')
+    const { firstName, lastName, email } = useLocalSearchParams()
+
+    const [mobileNumber, setmobileNumber] = useState('')
     const [errorMessage, seterrorMessage] = useState('')
 
-    const setAccEmail = async () => {
-        if (!email) {
-            seterrorMessage("Внесете валидна Е-маил адреса")
+    const setAccMobileNumber = async () => {
+        if (!mobileNumber) {
+            seterrorMessage("Внесете валиден мобиле број")
         } else {
-            router.push({ pathname: '/(auth)/setMobileNumber', params: { firstName, lastName, email } })
+            router.push({ pathname: '/(auth)/setPassword', params: { firstName, lastName, email, mobileNumber } })
         }
     };
 
@@ -37,20 +38,21 @@ const Page = () => {
                     </View>
 
                     <View className='py-6 px-6 pt-10'>
-                        <Text className='text-lg text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Здраво {firstName},</Text>
-                        <Text className='text-3xl text-[#0b0b0b]/90 mt-1' style={{ fontFamily: "bold" }}>Внесете ја вашата</Text>
-                        <Text className='text-3xl text-[#0b0b0b]/90' style={{ fontFamily: "bold" }}>Е-маил адреса.</Text>
+                        <Text className='text-lg text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}></Text>
+                        <Text className='text-3xl text-[#0b0b0b]/90 mt-1' style={{ fontFamily: "bold" }}>Внесете го вашиот мобилен број.</Text>
                     </View>
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
-                        <TextInput value={email}
-                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+                        <TextInput value={mobileNumber}
+                            onChangeText={(text) => setmobileNumber(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Вашиот мoбилен број' placeholderTextColor='#0b0b0b97' />
+                       
                         <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text>
                     </View>
 
 
+
                     <View className='px-6 pb-4 flex-1 justify-end'>
-                        <TouchableOpacity onPress={setAccEmail} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
+                        <TouchableOpacity onPress={setAccMobileNumber} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Следно</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>

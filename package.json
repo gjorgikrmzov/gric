@@ -38,6 +38,7 @@
     "expo-updates": "~0.18.19",
     "expo-web-browser": "~12.3.2",
     "iconsax-react-native": "^0.0.8",
+    "local-reverse-geocoder": "^0.16.7",
     "moti": "^0.28.1",
     "nativewind": "^2.0.11",
     "react": "^18.2.0",

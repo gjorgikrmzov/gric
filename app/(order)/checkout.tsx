@@ -73,11 +73,11 @@ const checkout = () => {
         <SafeAreaView className='h-full flex flex-col justify-start bg-[#FFFFFC]'>
             <View className='px-6 py-4 flex flex-row gap-x-3 items-center justify-between'>
                 <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-                    <ArrowLeft variant='Linear' size={20} color={Colors.dark} />
+                    <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
                 </TouchableOpacity>
                 <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Наплата</Text>
 
-                <Text className='text-4xl text-[#1dd868]' style={{ fontFamily: "heavy" }}>G</Text>
+                <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>
             </View>
 
             <View className='flex-1 mb-4'>
@@ -127,7 +127,7 @@ const checkout = () => {
                     <View className='w-full px-6 mt-6'>
                         <View>
                             <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
-                            <View className='flex flex-row items-center'>
+                            <View className='flex mt-2 flex-row items-center'>
                                 <Money size={22} variant='Bulk' color={Colors.primary} />
                                 <Text className='ml-1 text-[16px] text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
                             </View>
@@ -135,14 +135,14 @@ const checkout = () => {
                         </View>
                         {/* <View className='flex flex-row gap-x-2 mt-3'>
 
-                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#1dd868] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#1BD868] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
                                 </View>
                                 <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#1dd868] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#1BD868] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
                                 <View className='flex-1 justify-between items-center flex-row'>
                                     <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
                                 </View>
@@ -171,7 +171,7 @@ const checkout = () => {
                             <Text className=' text-[#0b0b0b]' style={{ fontFamily: "bold" }}>{deliveryCost} ден</Text>
                         </View>
 
-                        <View className=' border border-dashed border-[#0b0b0b]/20 mt-5'></View>
+                        <View className=' border-b-0 border border-dashed border-[#0b0b0b]/10  mt-5'></View>
 
 
                         <View className='w-full flex-row items-center  mt-5 justify-between flex'>

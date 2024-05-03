@@ -1,10 +1,10 @@
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { NativeWindStyleSheet } from "nativewind";
 import SplashComponent from '../components/splashScreen';
-import { Provider } from 'react-redux';
-import { store } from './reduxStore';
+import { Provider, useSelector } from 'react-redux';
+import { RootState, store } from './reduxStore';
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -16,7 +16,6 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-
   initialRouteName: '(tabs)',
 };
 
@@ -50,7 +49,7 @@ export default function RootLayout() {
   if (!loaded || splashVisible) {
     return <SplashComponent />;
   }
-
+  
 
   return (
     <Provider store={store}>
@@ -61,11 +60,14 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 
+ 
+
   return (
     <Stack>
       <Stack.Screen name="(auth)/welcome" options={{ headerShown: false, gestureEnabled: false, }} />
       <Stack.Screen name="(auth)/setUsername" options={{ headerShown: false, gestureEnabled: false, }} />
       <Stack.Screen name="(auth)/setEmail" options={{ headerShown: false, gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/setMobileNumber" options={{ headerShown: false, gestureEnabled: false, }} />
       <Stack.Screen name="(auth)/setPassword" options={{ headerShown: false, gestureEnabled: false, }} />
       <Stack.Screen name="(auth)/signIn" options={{ headerShown: false }} />
 
@@ -85,7 +87,8 @@ function RootLayoutNav() {
 
       <Stack.Screen name="(modals)/manageAddresses" options={{ headerShown: false, presentation: "modal" }} />
       <Stack.Screen name="(modals)/setAddressInfo" options={{ headerShown: false, presentation: "modal" }} />
-      <Stack.Screen name="(modals)/filter" options={{ headerShown: false, presentation: "modal" }} />
+      
+      <Stack.Screen name="delivery-admin" options={{ headerShown: false, gestureEnabled: false }} />
     </Stack>
   );
 }

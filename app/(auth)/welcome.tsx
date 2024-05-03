@@ -14,7 +14,7 @@ const Page = () => {
 
         <View className=''>
           <Text className='text-xl text-center mt-8 text-[#0b0b0b]/80' style={{ fontFamily: 'bold' }}>Добредојде на</Text>
-          <Text className='text-7xl text-[#1dd868] text-center' style={{ fontFamily: 'heavy' }}>GRIC</Text>
+          <Text className='text-7xl text-[#1BD868] text-center' style={{ fontFamily: 'heavy' }}>GRIC</Text>
         </View>
 
 
