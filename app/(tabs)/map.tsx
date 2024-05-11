@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import Colors from '../../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { ArrowLeft, Location, SearchNormal1, Setting4 } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -23,6 +23,7 @@ const Page = () => {
   // const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
 
   return (
+    <GestureHandlerRootView>
 
     <View className='bg-[#FFFFFC] flex-1'>
 
@@ -149,6 +150,7 @@ const Page = () => {
       </BottomSheet>
 
     </View>
+    </GestureHandlerRootView>
   );
 }
 

@@ -9,17 +9,14 @@ import { RootState } from '../reduxStore'
 import { fetchStoreItems } from '../reduxStore/storeItemSlice'
 import { ActivityIndicator } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import { SearchBar } from 'react-native-screens'
 import { fetchCategories } from '../reduxStore/categorySlice'
 import { Easing } from 'react-native-reanimated'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { isLoaded } from 'expo-font'
 
 const Page = () => {
 
     const dispatch = useDispatch<any>()
 
-    const { id, name, storeTypeName, isOpen } = useLocalSearchParams();
+    const { id, name, storeTypeName, isOpen } = useLocalSearchParams<{id: string, name: string, storeTypeName: string, isOpen: string }>();
     const { accessToken } = useSelector((state: RootState) => state.accessToken)
 
     const [loadingItems, setLoadingItems] = useState(true)

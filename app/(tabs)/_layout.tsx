@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs, usePathname } from 'expo-router'
 import Colors from '../../constants/Colors'
-import { Bag, DirectboxNotif, Home2, Map, Map1, SearchNormal1, Shop, ShoppingCart, User } from 'iconsax-react-native';
+import { Archive, DirectboxNotif, Home2, Map, Map1, Shop, ShoppingCart, User } from 'iconsax-react-native';
 import { Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
@@ -10,6 +10,7 @@ const Layout = () => {
 
     const currentPath = usePathname();
     const cartItems = useSelector((state: RootState) => state.cart.items);
+    const user = useSelector((state: RootState) => state.user);
 
     const numberOfCartItems: number = cartItems.length
 
@@ -28,7 +29,8 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Home2 color={color} variant={currentPath === '/' ? 'Bold' : 'Broken'} size={size} />
                 )
-            }} />
+
+            }} redirect={user.role === 'DELIVERER'}  />
 
             <Tabs.Screen name='stores' options={{
                 tabBarHideOnKeyboard: true,
@@ -37,7 +39,7 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Shop variant={currentPath === '/stores' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} />
+            }} redirect={user.role === 'DELIVERER'}  />
 
             <Tabs.Screen name='map' options={{
                 tabBarLabel: 'Мапа',
@@ -45,7 +47,7 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Map1 variant={currentPath === '/map' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} />
+            }} redirect={user.role === 'DELIVERER'}  />
 
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
@@ -59,7 +61,32 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <ShoppingCart variant={currentPath === '/cart' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} />
+            }} redirect={user.role === 'DELIVERER'}  />
+
+
+            <Tabs.Screen name='(deliverer)/orders' options={{
+                tabBarLabel: 'Нарачки',
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                    <DirectboxNotif variant={currentPath === '/orders' ? 'Bold' : 'Broken'} size={size} color={color} />
+                )
+            }} redirect={user.role === 'CUSTOMER'}  />
+
+            <Tabs.Screen name='(deliverer)/map' options={{
+                tabBarLabel: 'Мапа',
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                    <Map variant={currentPath === '/map' ? 'Bold' : 'Broken'} size={size} color={color} />
+                )
+            }} redirect={user.role === 'CUSTOMER'} />
+
+            <Tabs.Screen name='(deliverer)/profile' options={{
+                tabBarLabel: 'Профил',
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                    <User variant={currentPath === '/profile' ? 'Bold' : 'Broken'} size={size} color={color} />
+                )
+            }} redirect={user.role === 'CUSTOMER'} />
         </Tabs>
     )
 }

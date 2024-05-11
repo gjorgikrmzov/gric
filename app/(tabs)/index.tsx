@@ -6,51 +6,43 @@ import { Notification1, SearchNormal1, User, Location, Shop, ArrowDown2, Heart, 
 import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import Animated, { Easing, FadeIn, FadeInDown, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchStores } from '../reduxStore/storeSlice'
 import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
 import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
+import { fetchUserInfo } from '../reduxStore/userSlice'
 
 const Page = () => {
 
-    const [refreshing, setRefreshing] = useState(false);
-    const [savedAddress, setSavedAddress] = useState<string>('');
-    const [isFocused, setIsFocused] = useState(false);
-    const [search, setSearch] = useState<string>('');
-    const [close, setClose] = useState<boolean>(false);
-
-
-    const [orderExists, setorderExists] = useState(false)
-
-    const inputRef = useRef<TextInput>(null);
-    const overlayOpacity = useSharedValue(1);
-    const searchResult = useSharedValue(0);
-    const inputY = useSharedValue(0);
-
     const dispatch = useDispatch<any>()
-    const [isLoading, setIsLoading] = useState(true)
 
     const { stores } = useSelector((state: RootState) => state.store)
     const { storeTypes } = useSelector((state: RootState) => state.storeType)
     const { categories } = useSelector((state: RootState) => state.category)
     const { accessToken } = useSelector((state: RootState) => state.accessToken)
-  
-    useEffect(() => {
-        if(accessToken === '') {
-          setTimeout(() => {
-            router.replace('/(auth)/welcome')
-          }, 600); 
-        }
-      }, [accessToken])
+    const addresses = useSelector((state: RootState) => state.user.addresses)
+
+    const [refreshing, setRefreshing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true)
+
+    const [savedAddress, setSavedAddress] = useState<string>('');
+    const [isFocused, setIsFocused] = useState(false);
+    const [search, setSearch] = useState<string>('');
+    const [filteredStores, setFilteredStores] = useState(stores);
+
+    const overlayOpacity = useSharedValue(1);
+    const searchResult = useSharedValue(0);
+    const inputY = useSharedValue(0);
+
+    const [orderExists, setorderExists] = useState(false)
 
     useEffect(() => {
         if (accessToken) {
             Promise.all([
                 dispatch(fetchStores(accessToken)),
                 dispatch(fetchStoresTypes(accessToken)),
-                dispatch(fetchCategories(accessToken))
+                dispatch(fetchCategories(accessToken)),
             ]).then(() => {
                 setIsLoading(false);
             }).catch((error) => {
@@ -95,8 +87,6 @@ const Page = () => {
     }));
 
 
-    const [filteredStores, setFilteredStores] = useState(stores);
-
     useEffect(() => {
         if (search.trim() === '') {
             setFilteredStores(stores);
@@ -112,25 +102,6 @@ const Page = () => {
     const handleSearchChange = (text: string) => {
         setSearch(text);
     };
-
-
-    const maxLength = 20;
-    const trimmedAdress = savedAddress.length > maxLength ? `${savedAddress.substring(0, maxLength)}...` : savedAddress;
-
-
-    useEffect(() => {
-        const loadAddress = async () => {
-            try {
-                const storedAddress = await AsyncStorage.getItem('savedAddress');
-                if (storedAddress) {
-                    setSavedAddress(storedAddress);
-                }
-            } catch (error) {
-            }
-        };
-
-        loadAddress();
-    });
 
 
     const getStoreTypeName = (storeTypeId: string) => {
@@ -165,8 +136,6 @@ const Page = () => {
     };
 
 
-
-
     return (
         <>
             <View className='w-screen  h-screen absolute z-0 left-0 top-0 bg-[#FFFFFC]'>
@@ -187,7 +156,11 @@ const Page = () => {
                             <ArrowDown2 className='ml-0.5' size={12} color={Colors.dark} variant='Linear' />
                         </View>
                         <View className='rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#fafafa]'>
-                            <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{trimmedAdress}</Text>
+                            {addresses.length > 0 ? (
+                                    <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{addresses[0].street}</Text>
+                            ) : (
+                                <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
+                            )}
                         </View>
                     </TouchableOpacity>
 
@@ -205,33 +178,8 @@ const Page = () => {
                             <User color={Colors.dark} size={20} variant='Broken' />
                         </TouchableOpacity>
                     </View>
-
-                    {/* <TouchableOpacity onPress={() => router.push('/(modals)/manageAddresses')}>
-                        
-                        {savedAddress ?
-                            (
-                                <Text className='text-[#0b0b0b] mt-1 ' style={{ fontFamily: 'medium' }}>{trimmedAdress}</Text>
-
-                            ) :
-
-                            (
-                                <Text className='text-[#0b0b0b] mt-1 ' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
-                            )
-                        }
-                    </TouchableOpacity> */}
-                    {/* 
-                    <View className='flex flex-row items-center gap-x-2'>
-                        <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
-                            <View className='rounded-full absolute z-10 right-3.5 top-3 flex justify-center items-center'>
-                                <RecordCircle variant='Bulk' size={16} color={Colors.primary} />
-                            </View>
-                            <Notification1 color={Colors.dark} size={20} variant='Broken' />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => router.push('/(user)/profile')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
-                            <User color={Colors.dark} size={20} variant='Broken' />
-                        </TouchableOpacity>
-                    </View> */}
                 </View>
+
 
 
                 <ScrollView
@@ -246,15 +194,17 @@ const Page = () => {
                         />
                     }
                 >
+
                     <Animated.View style={animatedOverlayStyle} className='mt-4 px-6'>
                         <View className='flex flex-col'>
-                            <Animated.Text entering={FadeInDown.springify().duration(300).delay(100)} className='text-4xl text-[#1BD868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
-                            <Animated.Text entering={FadeInDown.springify().duration(300).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
+
+                            <Animated.Text entering={FadeInDown.springify().duration(600).delay(100)} className='text-4xl text-[#1BD868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                            <Animated.Text entering={FadeInDown.springify().duration(600).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                         </View>
                     </Animated.View>
 
-                    <View>
 
+                    <View>
                         <Animated.View className='mt-3' style={animatedInputStyle}>
                             <View className='mx-6  bg-[#fafafa] z-[999] items-center flex-row px-5 rounded-2xl'>
                                 {
@@ -413,6 +363,7 @@ const Page = () => {
                             }}
                         />
                     </View>
+
                 </ScrollView>
 
                 <View className={orderExists ? 'px-6 flex w-full justify-center items-center absolute bottom-4' : 'hidden'}>

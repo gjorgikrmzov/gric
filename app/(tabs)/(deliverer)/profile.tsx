@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
-import Colors from '../../constants/Colors';
+import Colors from '../../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAccessToken } from '../reduxStore/accessTokenSlice';
+import { setAccessToken } from '../../reduxStore/accessTokenSlice';
 import * as SecureStore from 'expo-secure-store';
-import { RootState } from '../reduxStore';
+import { RootState } from '../../reduxStore';
 
 const Page = () => {
 
@@ -17,7 +17,6 @@ const Page = () => {
   const signOut = async () => {
     dispatch(setAccessToken(null))
     await SecureStore.deleteItemAsync('accessToken')
-    // router.replace('/(auth)/welcome')
   }
 
   const handleSignOut = () => {
@@ -57,8 +56,9 @@ const Page = () => {
         <View className='flex flex-col mt-10 pb-3'>
           <View className='flex flex-row px-6 items-center justify-between'>
             <View>
-              <Text className='text-2xl text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>{user.firstName} {user.lastName}</Text>
-              <Text className='text-md text-[#0b0b0b]/70' style={{ fontFamily: 'medium' }}>{user.email}</Text>
+              <Text className='text-sm text-[#0b0b0b]/70 uppercase' style={{ fontFamily: 'bold' }}>{user.role}</Text>
+              <Text className='text-2xl mt-1 text-[#0b0b0b]' style={{ fontFamily: 'semibold' }}>{user.firstName} {user.lastName}</Text>
+              <Text className='text-md text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{user.email}</Text>
             </View>
 
           </View>
@@ -69,6 +69,7 @@ const Page = () => {
       <View className='flex-1 flex flex-col'>
 
         <View className='flex flex-col'>
+          
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6  flex-row items-center border-b border-[#0b0b0b]/10  flex'>
             <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
               <DirectboxNotif variant="Broken" size={24} color={Colors.dark} />
@@ -79,7 +80,7 @@ const Page = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.replace('/')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
+          <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
             <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
               <User variant="Broken" size={24} color={Colors.dark} />
             </View>
@@ -88,26 +89,6 @@ const Page = () => {
               <Text className='text-[#0b0b0b] text-lg mt-[1px]' style={{ fontFamily: 'medium' }}>Поставки</Text>
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/manageAddresses')} className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
-              <Location variant="Broken" size={24} color={Colors.dark} />
-            </View>
-            <View className='flex-col ml-3'>
-              <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Адреса на достава</Text>
-              <Text className='text-[#0b0b0b] text-lg mt-[1px]' style={{ fontFamily: 'medium' }}>Адреси</Text>
-            </View>
-          </TouchableOpacity>
-
-          {/* <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
-            <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
-              <Heart variant="Broken" size={24} color={Colors.dark} />
-            </View>
-            <View className='flex-col ml-3'>
-              <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Омилени Ресторани</Text>
-              <Text className='text-[#0b0b0b] text-lg mt-[1px]' style={{ fontFamily: 'medium' }}>Омилени</Text>
-            </View>
-          </TouchableOpacity> */}
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6 flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
             <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>

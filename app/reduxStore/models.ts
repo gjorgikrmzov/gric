@@ -24,3 +24,25 @@ export type StoreItem = {
     storeId: number,
     categoryId: number
 }
+
+export type Address = {
+    id: string,
+    name: string,
+    street: string,
+    streetNumber: string,
+    flat: number,
+    apartment: number,
+    longitude: number,
+    latitude: number
+}
+
+
+export type User = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    mobileNumber: string,
+    role: string,
+    addresses: Address[]
+}

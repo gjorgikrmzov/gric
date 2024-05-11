@@ -7,10 +7,11 @@ import { router, useLocalSearchParams } from 'expo-router'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
 import { setAccessToken } from '../reduxStore/accessTokenSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Page = () => {
 
-    const { firstName, lastName, email, mobileNumber } = useLocalSearchParams()
+    const { firstName, lastName, email, mobileNumber } = useLocalSearchParams<{firstName: string, lastName: string, email: any, mobileNumber: string}>()
     const dispatch = useDispatch<any>()
 
     const [password, setPassword] = useState('');
@@ -79,7 +80,8 @@ const Page = () => {
             if (response.ok) {
                 const jsonResponse = await response.json();
                 dispatch(setAccessToken(jsonResponse.accessToken));
-                router.push('/(tabs)/');
+                await AsyncStorage.setItem("@accessToken", jsonResponse.accessToken)
+                router.replace('/(tabs)/');
             }
         } catch (error) {
             console.log(error);

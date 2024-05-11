@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { StoreItem } from './models'
 
 interface FetchStoreItemsPayload {
-    id: string | string[];
+    id: string | undefined;
     accessToken: string
 }
 

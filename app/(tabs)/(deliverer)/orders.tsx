@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const Page = () => {
   return (
     <SafeAreaView className='flex-1 bg-[#fffffc] px-6'>
-      <Text>Page</Text>
+      <Text>Orders</Text>
     </SafeAreaView>
   )
 }

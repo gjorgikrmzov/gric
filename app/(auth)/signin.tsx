@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
 import { setAccessToken } from '../reduxStore/accessTokenSlice'
+import * as SecureStore from 'expo-secure-store';
 
 const Page = () => {
 
@@ -24,33 +25,34 @@ const Page = () => {
 
 
   const signIn = async () => {
-    try {
-      const response = await fetch('http://172.20.10.2:8080/authenticate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  try {
+    const response = await fetch('http://172.20.10.2:8080/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      }),
+    });
 
-        body: JSON.stringify({
-          email: email,
-          password: password
-        }),
-      })
-
-      if (response.status === 403) {
-        seterrorMessage('Е-маил адресата или лозинка е не валидна')
-      }
-
-      if (response.ok) {
-        const jsonResponse = await response.json()
-        dispatch(setAccessToken(jsonResponse.accessToken))
-        router.push('/(tabs)/')
-      }
-    } catch (error) {
-      console.log(error)
-      seterrorMessage(error)
+    if (response.status === 403) {
+      seterrorMessage('Е-маил адресата или лозинка е не валидна');
+      return;
     }
+
+    if (response.ok) {
+      const jsonResponse = await response.json();
+      dispatch(setAccessToken(jsonResponse.accessToken));
+      await SecureStore.setItemAsync('accessToken', jsonResponse.accessToken);
+      router.push('/(tabs)/')
+    }
+  } catch (error) {
+    console.log(error);
+    seterrorMessage(error)
   }
+};
 
   return (
     <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
@@ -84,13 +86,13 @@ const Page = () => {
 
           <TouchableOpacity className='mt-4 px-6 ml-1'>
             <Text className='text-sm text-[#1BD868]' style={{ fontFamily: 'semibold' }}>Заборавена лозинка</Text>
+          </TouchableOpacity>
 
-            {errorMessage &&
+          {errorMessage &&
               (
-                <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text>
+                <Text className='mt-3 px-6 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text>
               )
             }
-          </TouchableOpacity>
 
           <View className='px-6 pb-4 flex-1 justify-end'>
             <TouchableOpacity onPress={signIn} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>

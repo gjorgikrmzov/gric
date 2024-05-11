@@ -1,6 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert, TouchableOpacity } from 'react-native'
 import React, { useMemo, useRef, useState } from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, ShoppingCart, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -9,6 +8,7 @@ import * as Haptics from 'expo-haptics';
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCart, removeItem, selectCartTotal, updateItemQuantity } from '../reduxStore/cartSlice'
 import { RootState } from '../reduxStore'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const Page = () => {
 
@@ -61,6 +61,8 @@ const Page = () => {
   }
 
   return (
+    <GestureHandlerRootView>
+
     <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
       <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
         <View className='flex flex-row items-center'>
@@ -224,6 +226,7 @@ const Page = () => {
       </BottomSheet>
 
     </View>
+          </GestureHandlerRootView>
   )
 }
 

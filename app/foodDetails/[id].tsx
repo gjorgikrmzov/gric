@@ -12,12 +12,12 @@ import { RootState } from '../reduxStore'
 
 const Page = () => {
 
-    const { storeId, id, name, description, price, isOpen, category } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: string, isOpen: string, category: any }>();
+    const { storeId, id, name, description, price, isOpen, category } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: any, isOpen: string, category: any }>();
 
     const dispatch = useDispatch();
     const isStoreOpen = isOpen === 'true' ? true : isOpen === 'false' ? false : isOpen;
-
     const cartItems = useSelector((state: RootState) => state.cart.items);
+    const [itemQuantity, setItemQuantity] = useState<number>(1);
 
     const handleAddToCart = () => {
         const differentStoreItemExists = cartItems.some(cartItem => cartItem.storeId !== storeId);
@@ -42,7 +42,7 @@ const Page = () => {
                     {
                         text: "Да", onPress: () => {
                             dispatch(clearCart());
-                            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+                            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price } as any));
                             router.back()
                         }
                     }
@@ -50,14 +50,13 @@ const Page = () => {
             );
             return true
         } else {
-            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price }));
+            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price } as any));
             router.back()
         }
 
     };
 
 
-    const [itemQuantity, setItemQuantity] = useState<number>(1);
 
     const handleDecreaseQuantity = () => {
         if (itemQuantity > 1) {

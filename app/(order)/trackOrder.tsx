@@ -3,13 +3,11 @@ import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native
 import { Alert, Linking, Modal, Platform, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { ArrowLeft, Call, Clock, ExportSquare, Location, LocationAdd, SearchNormal1, Setting4, Shop, SidebarBottom, SidebarTop, StopCircle, TickCircle, Trash } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'
-import { BlurView } from 'expo-blur';
-import { Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Page = () => {
@@ -36,10 +34,8 @@ const Page = () => {
         const storedAddress = await AsyncStorage.getItem('savedAddress');
         if (storedAddress) {
           setSavedAddress(storedAddress);
-          console.log('Address loaded from AsyncStorage');
         }
       } catch (error) {
-        console.error('Failed to fetch the address from AsyncStorage', error);
       }
     };
 
@@ -49,13 +45,13 @@ const Page = () => {
   const maxLength = 20;
   const trimmedAdress = savedAddress.length > maxLength ? `${savedAddress.substring(0, maxLength)}...` : savedAddress;
 
-  
+
   const onRefresh = () => {
     setRefreshing(true);
 
     setTimeout(() => {
       setRefreshing(false);
-    }, 600); 
+    }, 600);
   };
 
 
@@ -101,7 +97,8 @@ const Page = () => {
 
   return (
 
-    <>
+    <GestureHandlerRootView>
+
       <View className='bg-[#FFFFFC] flex-1 h-screen'>
         <StatusBar style='auto' />
         <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
@@ -112,13 +109,13 @@ const Page = () => {
         </View>
 
         <View className='border-black/10  overflow-hidden'>
-          <MapView 
-            showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_GOOGLE} customMapStyle={customMapStyle} >
-              <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
-                <View className='w-6 h-6'>
-                  <Shop size={24} variant='Bulk' color={Colors.white} />
-                </View>
-              </Marker>
+          <MapView
+            showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
+            <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
+              <View className='w-6 h-6'>
+                <Shop size={24} variant='Bulk' color={Colors.white} />
+              </View>
+            </Marker>
           </MapView>
         </View>
 
@@ -133,11 +130,11 @@ const Page = () => {
             <View className='px-6 flex flex-row items-center justify-between'>
               <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/80 text-lg'>Детали на нарачка</Text>
               <TouchableOpacity onPress={() => {
-                const newIndex = currentSheetIndex === 2 ? 0 : 2; 
+                const newIndex = currentSheetIndex === 2 ? 0 : 2;
                 snapeToIndex(newIndex);
                 setcurrentSheetIndex(newIndex);
               }} className='w-12 h-12 flex justify-center items-center rounded-2xl bg-[#fafafa]/90'>
-                
+
                 {currentSheetIndex === 2 ? (
                   <SidebarBottom size={24} color={Colors.dark} variant='Broken' />
                 ) : (
@@ -151,7 +148,7 @@ const Page = () => {
             </View>
 
 
-            <BottomSheetScrollView keyboardShouldPersistTaps="always" 
+            <BottomSheetScrollView keyboardShouldPersistTaps="always"
               showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
                 onRefresh={onRefresh} className='z-10 ' />}>
 
@@ -259,7 +256,7 @@ const Page = () => {
 
 
       </View>
-    </>
+    </GestureHandlerRootView>
   );
 }
 

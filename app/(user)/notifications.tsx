@@ -1,6 +1,5 @@
-import { View, Text, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import Colors from '../../constants/Colors'
 import { router } from 'expo-router'
 import { ArrowLeft, Notification } from 'iconsax-react-native'
