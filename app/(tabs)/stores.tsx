@@ -121,7 +121,7 @@ const Page = () => {
   };
 
   return (
-    <GestureHandlerRootView >
+    <GestureHandlerRootView>
 
       <View style={styles.header} className='bg-[#fffffc] flex-1'>
         <Animated.View className='px-6 flex flex-row items-center mt-4 mb-4 '>

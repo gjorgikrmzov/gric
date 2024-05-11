@@ -47,7 +47,7 @@ const Page = () => {
             <TextInput value={lastName}
               onChangeText={(text) => setlastName(text)} className=' px-5 bg-[#fafafa]/90 rounded-2xl border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Презиме' placeholderTextColor='#0b0b0b97' />
 
-            <TouchableOpacity className='mt-4 ml-0.5'>
+            <TouchableOpacity onPress={() => router.push('/signIn')} className='mt-4 ml-0.5'>
               <Text className='text-[#1BD868] text-sm' style={{ fontFamily: 'semibold' }}>Веќе имам профил</Text>
             </TouchableOpacity>
 

@@ -43,6 +43,7 @@ const Page = () => {
                 dispatch(fetchStores(accessToken)),
                 dispatch(fetchStoresTypes(accessToken)),
                 dispatch(fetchCategories(accessToken)),
+                dispatch(fetchUserInfo(accessToken))
             ]).then(() => {
                 setIsLoading(false);
             }).catch((error) => {
@@ -157,7 +158,7 @@ const Page = () => {
                         </View>
                         <View className='rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#fafafa]'>
                             {addresses.length > 0 ? (
-                                    <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{addresses[0].street}</Text>
+                                <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{addresses[0].street}</Text>
                             ) : (
                                 <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
                             )}
@@ -198,8 +199,8 @@ const Page = () => {
                     <Animated.View style={animatedOverlayStyle} className='mt-4 px-6'>
                         <View className='flex flex-col'>
 
-                            <Animated.Text entering={FadeInDown.springify().duration(600).delay(100)} className='text-4xl text-[#1BD868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
-                            <Animated.Text entering={FadeInDown.springify().duration(600).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
+                            <Animated.Text entering={FadeInDown.springify().duration(1000).delay(100)} className='text-4xl text-[#1BD868]' style={{ fontFamily: 'heavy' }} >GRIC</Animated.Text>
+                            <Animated.Text entering={FadeInDown.springify().duration(1000).delay(200)} className='mt-[-3px] text-[#0b0b0b]/80' style={{ fontFamily: 'heavy' }} >DELIVERY</Animated.Text>
                         </View>
                     </Animated.View>
 

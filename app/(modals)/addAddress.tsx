@@ -36,6 +36,7 @@ const Page = () => {
     const [flat, setFlat] = useState<string>('');
     const [apartment, setApartment] = useState<string>('');
 
+
     const getCurrentLocation = async () => {
         setLoading(true);
         try {
@@ -70,28 +71,42 @@ const Page = () => {
 
 
     const addAddress = async () => {
+
+
         try {
-            const response = await fetch(`http://172.20.10.2:8080/address?personId=${person.id}`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    name: addressDescription,
-                    street: street,
-                    streetNumber: streetNumber,
-                    flat: flat,
-                    apartment: apartment,
-                    latitude: location?.latitude,
-                    longitude: location?.longitude
-                }),
-            })
 
-            if (response.ok) {
-                dispatch(fetchUserInfo(accessToken))
+            if (!addressDescription) {
+                Alert.alert(
+                    "Адреса на достава",
+                    "Полето 'зачувај адреса како' е празно.",
+                    [
+                        { text: "Океј", style: "cancel" },
+                    ]
+                );
+
+            } else {
+                const response = await fetch(`http://172.20.10.2:8080/address?personId=${person.id}`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({
+                        name: addressDescription,
+                        street: street,
+                        streetNumber: streetNumber,
+                        flat: flat,
+                        apartment: apartment,
+                        latitude: location?.latitude,
+                        longitude: location?.longitude
+                    }),
+                })
+
+                if (response.ok) {
+                    dispatch(fetchUserInfo(accessToken))
+                    router.back()
+                }
             }
-
         } catch (error) {
             console.log(error)
         }
@@ -100,7 +115,7 @@ const Page = () => {
 
 
     return (
-        <SafeAreaView className='bg-[#FFFFFC] px-6 flex-1'>
+        <View style={styles.header} className='bg-[#FFFFFC] px-6 flex-1'>
 
             <View className='flex flex-row items-center justify-between'>
                 <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
@@ -199,7 +214,7 @@ const Page = () => {
                 ) : (
                     <></>
                 )}
-        </SafeAreaView>
+        </View>
 
     )
 }
@@ -208,7 +223,9 @@ export default Page
 
 const styles = StyleSheet.create({
     header: {
-        paddingTop: (Platform.OS === 'android') ? 40 : 30,
+        paddingTop: (Platform.OS === 'android') ? 48 : 28,
+        paddingBottom: (Platform.OS === 'android') ? 20 : 28,
+
     },
     input: {
         paddingVertical: (Platform.OS === 'android') ? 16 : 22,

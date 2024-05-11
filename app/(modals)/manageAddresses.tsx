@@ -1,23 +1,22 @@
-import { View, Text, TextInput, StyleSheet, Platform, ScrollView } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Platform, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { ArrowDown, ArrowDown2, ArrowLeft2, CloseSquare, Edit, Edit2, Export, ExportSquare, Gps, Location, LocationAdd, SearchNormal, SearchNormal1, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
-import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
 import { fetchUserInfo } from '../reduxStore/userSlice';
+import { TouchableOpacity } from 'react-native';
 
 const Page = () => {
-
 
   // const maxLength = 20;
   // const trimmedAdress = st?.length > maxLength ? `${address.substring(0, maxLength)}...` : address;
 
   const dispatch = useDispatch<any>()
   const addresses = useSelector((state: RootState) => state.user.addresses)
-  const {accessToken} = useSelector((state: RootState) => state.accessToken)
+  const { accessToken } = useSelector((state: RootState) => state.accessToken)
 
 
   useEffect(() => {
@@ -25,13 +24,45 @@ const Page = () => {
   }, [accessToken])
 
 
+  const deleteAddress = async (id: string) => {
+    try {
+      Alert.alert(
+        "Избриши Адреса",
+        "Дали сакате да ја избришете адресата?",
+        [
+          { text: "Не", style: "cancel" },
+          {
+            text: "Да", onPress: async () => {
+              const response = await fetch(`http://172.20.10.2:8080/address?addressId=${id}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${accessToken}`
+                }
+              })
+
+              if (response.ok) {
+                dispatch(fetchUserInfo(accessToken))
+              }
+            }
+          }
+        ]
+      );
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
 
   return (
-    <SafeAreaView className='flex flex-1 bg-[#FFFFFC] '>
+    <View style={styles.header} className='flex flex-1 bg-[#FFFFFC] '>
 
       <View className='bg-[#FFFFFC] flex-1'>
         <View className='flex px-6 flex-row items-center justify-between'>
-          <TouchableOpacity  onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
             <ArrowDown variant='Broken' size={20} color={Colors.dark} />
           </TouchableOpacity>
           <Text className='text-lg text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Адреси</Text>
@@ -78,20 +109,14 @@ const Page = () => {
                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>стан - {address.apartment}</Text>
                           </View>
                         </View>
-                        ) : null
+                      ) : null
                       }
 
                     </View>
 
-                    <View className='flex flex-row items-center space-x-2'>
-                      <TouchableOpacity className='w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#fffffc]'>
-                        <Edit size={18} color={Colors.dark} variant='Broken' />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity className='w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#fffffc]'>
-                        <Trash size={18} color={Colors.dark} variant='Broken' />
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => deleteAddress(address.id)} className='w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#fffffc]'>
+                      <Trash size={18} color={Colors.dark} variant='Broken' />
+                    </TouchableOpacity>
 
                   </TouchableOpacity>
                 ))}
@@ -110,7 +135,7 @@ const Page = () => {
       </View>
 
 
-    </SafeAreaView >
+    </View>
   )
 }
 
@@ -118,7 +143,8 @@ export default Page
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: (Platform.OS === 'android') ? 40 : 30,
+    paddingTop: (Platform.OS === 'android') ? 48 : 28,
+    paddingBottom: (Platform.OS === 'android') ? 20 : 28,
   },
   input: {
     paddingVertical: (Platform.OS === 'android') ? 16 : 22,

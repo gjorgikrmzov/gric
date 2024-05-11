@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs, usePathname } from 'expo-router'
 import Colors from '../../constants/Colors'
 import { Archive, DirectboxNotif, Home2, Map, Map1, Shop, ShoppingCart, User } from 'iconsax-react-native';
 import { Platform } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
+import { fetchUserInfo } from '../reduxStore/userSlice';
 
 const Layout = () => {
 
     const currentPath = usePathname();
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const user = useSelector((state: RootState) => state.user);
-
     const numberOfCartItems: number = cartItems.length
 
     return (

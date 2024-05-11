@@ -8,6 +8,7 @@ import { RootState, store } from './reduxStore';
 import * as SecureStore from 'expo-secure-store'
 import { setAccessToken } from './reduxStore/accessTokenSlice';
 import { fetchUserInfo } from './reduxStore/userSlice';
+import "react-native-reanimated"
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -66,21 +67,23 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
-  const user = useSelector((state: RootState) => state.user)
-
   const dispatch = useDispatch<any>()
 
-  useEffect(() => {
-    dispatch(fetchUserInfo(accessToken))
-  }, [accessToken])
 
+  useEffect(() => {
+    if (accessToken === null || accessToken === '') {
+      router.replace('/(auth)/welcome')
+    } else {
+      router.replace('/(tabs)/')
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     const getAccessTokenFromStorage = async () => {
       try {
         const token = await SecureStore.getItemAsync('accessToken');
         if (token) {
-          const sliceAccessToken = store.dispatch(setAccessToken(token))
+          store.dispatch(setAccessToken(token))
         }
       } catch (error) {
         console.log(error);
@@ -91,18 +94,8 @@ function RootLayoutNav() {
   }, []);
 
   useEffect(() => {
-    if (accessToken === null || accessToken === '') {
-      router.replace('/(auth)/welcome')
-    } else {
-      if (user.role === 'CUSTOMER') {
-        router.replace('/(tabs)/')
-      } else if (user.role === 'DELIVERER') {
-        router.replace('/(deliverer)/orders')
-      } else if (user.role === 'STORE') {
-        router.replace('/(deliverer)/orders')
-      }
-    }
-  }, [accessToken]);
+    dispatch(fetchUserInfo(accessToken))
+  }, [accessToken])
 
 
   return (
