@@ -12,7 +12,6 @@ const Layout = () => {
     const currentPath = usePathname();
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const user = useSelector((state: RootState) => state.user);
-    const numberOfCartItems: number = cartItems.length
 
     return (
         <Tabs screenOptions={{
@@ -52,9 +51,9 @@ const Layout = () => {
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
                 headerShown: false,
-                tabBarBadge: numberOfCartItems,
+                tabBarBadge: cartItems.length,
                 tabBarBadgeStyle: {
-                    display: numberOfCartItems === 0 ? 'none' : 'flex',
+                    display: cartItems.length === 0 ? 'none' : 'flex',
                     backgroundColor: Colors.dark,
                     fontFamily: 'extrabold', fontSize: 10,
                 },

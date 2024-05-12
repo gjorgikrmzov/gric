@@ -18,13 +18,6 @@ const Page = () => {
   const { storeTypes } = useSelector((state: RootState) => state.storeType)
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
 
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(fetchStores(accessToken))
-      dispatch(fetchStoresTypes(accessToken))
-    }
-  }, [accessToken, dispatch])
-
   const [search, setSearch] = useState<string>('');
 
   const [filteredStores, setFilteredStores] = useState(stores);
@@ -101,7 +94,7 @@ const Page = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    dispatch(fetchStores(accessToken))
+    // dispatch(fetchStores(accessToken))
     setTimeout(() => {
       setRefreshing(false);
     }, 600);
@@ -223,7 +216,7 @@ const Page = () => {
         <View
           className='px-6 flex absolute py-4 bottom-0 w-full justify-center'>
           {
-            cartItems.length !== 0 && (
+            cartItems?.length !== 0 && (
               <Animated.View>
                 <TouchableOpacity onPress={() => router.push('/(tabs)/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                   <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />

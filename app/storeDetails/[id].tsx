@@ -30,7 +30,6 @@ const Page = () => {
     const inputRef = useRef<any>()
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
-    const numberOfCartItems = useSelector((state: RootState) => state.cart.items.length);
 
     const [openSearch, setOpenSearch] = useState(false);
     const [isFocused, setIsFocused] = useState(true);
@@ -84,7 +83,6 @@ const Page = () => {
         setLoadingItems(true);
         if (accessToken) {
             dispatch(fetchStoreItems({ id, accessToken })).finally(() => setLoadingItems(false));
-            dispatch(fetchCategories(accessToken));
         }
     }, [accessToken, id, dispatch]);
 
@@ -232,11 +230,11 @@ const Page = () => {
                 <View
                     className='px-6 flex absolute py-8 bottom-0 w-full justify-center'>
                     {
-                        cartItems.length !== 0 && (
+                        cartItems?.length !== 0 && (
                             <Animated.View>
-                                <TouchableOpacity onPress={() => router.push('/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                                <TouchableOpacity onPress={() => router.replace('/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                                     <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
-                                    <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {numberOfCartItems}</Text>
+                                    <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
                                 </TouchableOpacity>
                             </Animated.View>
                         )}

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
 import { fetchUserInfo } from '../reduxStore/userSlice';
 import { TouchableOpacity } from 'react-native';
+import { fetchAddress } from '../reduxStore/addressSlice';
 
 const Page = () => {
 
@@ -15,13 +16,9 @@ const Page = () => {
   // const trimmedAdress = st?.length > maxLength ? `${address.substring(0, maxLength)}...` : address;
 
   const dispatch = useDispatch<any>()
-  const addresses = useSelector((state: RootState) => state.user.addresses)
+  const { addresses } = useSelector((state: RootState) => state.addresses)
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
-
-
-  useEffect(() => {
-    dispatch(fetchUserInfo(accessToken))
-  }, [accessToken])
+  const personId = useSelector((state: RootState) => state.user.id)
 
 
   const deleteAddress = async (id: string) => {
@@ -42,7 +39,7 @@ const Page = () => {
               })
 
               if (response.ok) {
-                dispatch(fetchUserInfo(accessToken))
+                dispatch(fetchAddress({ personId, accessToken }))
               }
             }
           }
@@ -55,8 +52,7 @@ const Page = () => {
 
   }
 
-
-
+  
   return (
     <View style={styles.header} className='flex flex-1 bg-[#FFFFFC] '>
 
@@ -86,9 +82,9 @@ const Page = () => {
 
             <ScrollView>
 
-              <View className='mt-4 w-full flex-1 border-b border-[#0b0b0b]/5'>
+              <View className='mt-4 w-full flex-1'>
                 {addresses?.map((address, index) => (
-                  <TouchableOpacity key={index} className=' bg-[#fafafa]/80 px-6 w-full py-5 flex flex-row items-center justify-between' >
+                  <TouchableOpacity key={index} className='border-b border-[#0b0b0b]/5 px-6 w-full py-5 flex flex-row items-center justify-between' >
                     <View className='flex-col items-start'>
                       <View className='flex flex-row items-center'>
                         <Location size={22} variant='Bold' color={Colors.dark} />
@@ -98,19 +94,20 @@ const Page = () => {
                         </View>
                       </View>
 
-                      {address.apartment && address.flat ? (
 
-                        <View className='flex flex-row mt-2 items-center space-x-1'>
+                      <View className='flex flex-row mt-2 items-center space-x-1'>
+                        {address.flat &&
                           <View className='p-1 px-2 border border-[#0b0b0b]/5 bg-[#fffffc] rounded-lg flex justify-center items-center'>
                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>кат - {address.flat}</Text>
                           </View>
+                        }
 
+                        {address.apartment &&
                           <View className='p-1 px-2 border border-[#0b0b0b]/5 bg-[#fffffc] rounded-lg flex justify-center items-center'>
                             <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>стан - {address.apartment}</Text>
                           </View>
-                        </View>
-                      ) : null
-                      }
+                        }
+                      </View>
 
                     </View>
 

@@ -12,6 +12,7 @@ import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
 import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
 import { fetchUserInfo } from '../reduxStore/userSlice'
+import { fetchAddress } from '../reduxStore/addressSlice'
 
 const Page = () => {
 
@@ -21,7 +22,8 @@ const Page = () => {
     const { storeTypes } = useSelector((state: RootState) => state.storeType)
     const { categories } = useSelector((state: RootState) => state.category)
     const { accessToken } = useSelector((state: RootState) => state.accessToken)
-    const addresses = useSelector((state: RootState) => state.user.addresses)
+    const { addresses } = useSelector((state: RootState) => state.addresses)
+    const personId = useSelector((state: RootState) => state.user.id)
 
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
@@ -43,6 +45,7 @@ const Page = () => {
                 dispatch(fetchStores(accessToken)),
                 dispatch(fetchStoresTypes(accessToken)),
                 dispatch(fetchCategories(accessToken)),
+                dispatch(fetchAddress({ personId, accessToken })),
                 dispatch(fetchUserInfo(accessToken))
             ]).then(() => {
                 setIsLoading(false);
@@ -51,7 +54,7 @@ const Page = () => {
                 setIsLoading(false);
             });
         }
-    }, [accessToken, dispatch]);
+    }, [personId, accessToken, dispatch]);
 
 
     const onFocus = () => {
@@ -113,9 +116,9 @@ const Page = () => {
     const onRefresh = () => {
         setRefreshing(true);
         setIsLoading(true)
-        dispatch(fetchStores(accessToken))
-        dispatch(fetchStoresTypes(accessToken))
-        dispatch(fetchCategories(accessToken))
+        // dispatch(fetchStores(accessToken))
+        // dispatch(fetchStoresTypes(accessToken))
+        // dispatch(fetchCategories(accessToken))
         setTimeout(() => {
             setRefreshing(false);
             setIsLoading(false)
@@ -157,7 +160,7 @@ const Page = () => {
                             <ArrowDown2 className='ml-0.5' size={12} color={Colors.dark} variant='Linear' />
                         </View>
                         <View className='rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#fafafa]'>
-                            {addresses.length > 0 ? (
+                            {addresses?.length > 0 ? (
                                 <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{addresses[0].street}</Text>
                             ) : (
                                 <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
@@ -307,12 +310,12 @@ const Page = () => {
                                         <View className='flex flex-row items-center justify-between'>
                                             <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
 
-                                            <View className='px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'>
-                                                <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
+                                            <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-full' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'}>
+                                                <Text style={{ fontFamily: "medium" }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
                                             </View>
                                         </View>
 
-                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · {item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} </Text>
                                     </View>
                                 </TouchableOpacity>
                             )}
@@ -346,13 +349,12 @@ const Page = () => {
                                     <View className='ml-1 mt-2'>
                                         <View className='flex flex-row w-full justify-between items-center'>
                                             <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
-                                            <View className='px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'>
-                                                <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
+                                            <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-full' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'}>
+                                                <Text style={{ fontFamily: "medium" }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
                                             </View>
                                         </View>
                                         <View className='flex flex-row items-center'>
                                             <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · </Text>
-                                            <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>

@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store'
 import { setAccessToken } from './reduxStore/accessTokenSlice';
 import { fetchUserInfo } from './reduxStore/userSlice';
 import "react-native-reanimated"
+import { fetchAddress } from './reduxStore/addressSlice';
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -93,9 +94,7 @@ function RootLayoutNav() {
     getAccessTokenFromStorage();
   }, []);
 
-  useEffect(() => {
-    dispatch(fetchUserInfo(accessToken))
-  }, [accessToken])
+
 
 
   return (
