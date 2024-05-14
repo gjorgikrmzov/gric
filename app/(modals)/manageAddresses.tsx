@@ -1,14 +1,12 @@
-import { View, Text, TextInput, StyleSheet, Platform, ScrollView, Alert } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { ArrowDown, ArrowDown2, ArrowLeft2, CloseSquare, Edit, Edit2, Export, ExportSquare, Gps, Location, LocationAdd, SearchNormal, SearchNormal1, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
-import { fetchUserInfo } from '../reduxStore/userSlice';
 import { TouchableOpacity } from 'react-native';
-import { fetchAddress } from '../reduxStore/addressSlice';
+import { deleteAddress, fetchAddress, selectAddress, } from '../reduxStore/addressSlice';
 
 const Page = () => {
 
@@ -19,9 +17,9 @@ const Page = () => {
   const { addresses } = useSelector((state: RootState) => state.addresses)
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
   const personId = useSelector((state: RootState) => state.user.id)
+  const selectedAddressId = useSelector((state: RootState) => state.addresses.selectedAddressId)
 
-
-  const deleteAddress = async (id: string) => {
+  const handleDeleteAddress = async (id: string) => {
     try {
       Alert.alert(
         "Избриши Адреса",
@@ -39,20 +37,22 @@ const Page = () => {
               })
 
               if (response.ok) {
+                dispatch(deleteAddress(id))
                 dispatch(fetchAddress({ personId, accessToken }))
               }
             }
           }
         ]
       );
-
     } catch (error) {
-      console.log(error)
     }
-
   }
 
-  
+  const onSelectAddress = (id: string) => {
+    dispatch(selectAddress(id))
+  }
+
+
   return (
     <View style={styles.header} className='flex flex-1 bg-[#FFFFFC] '>
 
@@ -68,7 +68,7 @@ const Page = () => {
         {addresses?.length === 0 ? (
           <View className='flex-1 justify-center items-center'>
             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-              <Location size={56} variant='Bulk' color={Colors.primary} />
+              <Location size={56} variant='Bulk' color={Colors.dark} />
             </View>
 
             <Text className='text-[#0b0b0b]/80 text-[16px] mt-4 text-center' style={{ fontFamily: 'medium' }}>Во моментов немате внесено {'\n'} адреса на достава</Text>
@@ -84,10 +84,11 @@ const Page = () => {
 
               <View className='mt-4 w-full flex-1'>
                 {addresses?.map((address, index) => (
-                  <TouchableOpacity key={index} className='border-b border-[#0b0b0b]/5 px-6 w-full py-5 flex flex-row items-center justify-between' >
+
+                  <TouchableOpacity onPress={() => onSelectAddress(address.id)} key={index} className='border-b border-[#0b0b0b]/5 px-6 w-full py-5 flex flex-row items-center justify-between' >
                     <View className='flex-col items-start'>
                       <View className='flex flex-row items-center'>
-                        <Location size={22} variant='Bold' color={Colors.dark} />
+                        <Location size={22} variant={address.id === selectedAddressId ? 'Bold' : 'Broken'} color={Colors.dark} />
                         <View className='ml-4'>
                           <Text className='text-xs text-[#0b0b0b]/80 uppercase' style={{ fontFamily: "semibold" }}>{address.name}</Text>
                           <Text className='text-md text-[15px]' style={{ fontFamily: "medium" }}>{address.street} {address.streetNumber}</Text>
@@ -111,7 +112,7 @@ const Page = () => {
 
                     </View>
 
-                    <TouchableOpacity onPress={() => deleteAddress(address.id)} className='w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#fffffc]'>
+                    <TouchableOpacity onPress={() => handleDeleteAddress(address.id)} className='w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#fffffc]'>
                       <Trash size={18} color={Colors.dark} variant='Broken' />
                     </TouchableOpacity>
 

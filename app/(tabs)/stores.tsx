@@ -192,13 +192,12 @@ const Page = () => {
                     <View className='ml-1 mt-2'>
                       <View className='flex flex-row w-full justify-between items-center'>
                         <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
-                        <View className='px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'>
-                          <Text style={{ fontFamily: "semibold" }} className='text-xs'>25-30 мин</Text>
+                        <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-full' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'}>
+                          <Text style={{ fontFamily: "medium" }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
                         </View>
                       </View>
                       <View className='flex flex-row items-center'>
-                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · </Text>
-                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)}</Text>
                       </View>
                     </View>
                   </TouchableOpacity>

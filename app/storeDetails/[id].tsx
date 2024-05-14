@@ -207,7 +207,7 @@ const Page = () => {
                                     keyExtractor={(item) => item.id.toString()}
                                     renderItem={
                                         ({ item }) => (
-                                            <TouchableOpacity onPress={() => router.push({ pathname: '/foodDetails/[id]', params: { storeId: id, id: item.id, name: item.name, description: item.description, price: item.price, isOpen, category: getCategoryName(item.categoryId) } }) as any} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: '#0b0b0b20' }}>
+                                            <TouchableOpacity onPress={() => router.push({ pathname: '/foodDetails/[id]', params: { storeId: id, id: item.id, name: item.name, description: item.description, price: item.price, isOpen, category: getCategoryName(item.categoryId) } }) as any} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1 }} className='border-[#0b0b0b]/5'>
                                                 <View style={{ flex: 1 }}>
                                                     <Text className='hidden'>{getCategoryName(item.categoryId)}</Text>
                                                     <Text style={{ color: '#0b0b0b', fontSize: 16, marginTop: 2, fontFamily: "semibold" }}>{item.name}</Text>

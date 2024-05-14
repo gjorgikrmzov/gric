@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, Money, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
+import { ArrowLeft, ArrowLeft2, Box, Card, Check, DirectboxNotif, ExportSquare, Location, LocationAdd, Money, Receipt1, StopCircle, TickSquare } from 'iconsax-react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Colors from '../../constants/Colors'
@@ -12,14 +12,14 @@ import { RootState } from '../reduxStore'
 const Page = () => {
 
     const { subtotal } = useLocalSearchParams()
-    const addresses = useSelector((state: RootState) => state.user.addresses)
+    const { addresses } = useSelector((state: RootState) => state.addresses)
+    const selectedAddressId = useSelector((state: RootState) => state.addresses.selectedAddressId)
+
+    const selectedAddres = addresses.find(address => address.id === selectedAddressId)
 
     const deliveryCost = 100
-
     const subtotalNumber = Number(subtotal) || 0;
     const total: number = subtotalNumber + deliveryCost;
-
-    const [savedAddress, setSavedAddress] = useState<string>('');
 
     const snapPoints = useMemo(() => ['40%'], []);
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -38,8 +38,6 @@ const Page = () => {
     }
 
 
-    const maxLength = 25;
-    const trimmedAdress = savedAddress.length > maxLength ? `${savedAddress.substring(0, maxLength)}...` : savedAddress;
 
     return (
 
@@ -64,33 +62,46 @@ const Page = () => {
                             </View>
 
                             <View className='w-full mt-3'>
-                                <TouchableOpacity className='border-b border-[#0b0b0b]/5 px-6 w-full py-4  flex flex-row items-center justify-between' >
-                                    <View className='flex-col items-start'>
-                                        <View className='flex flex-row items-center'>
-                                            <Location size={22} variant='Bold' color={Colors.dark} />
-                                            <View className='ml-1'>
-                                                <Text className='text-xs text-[#0b0b0b]/80 uppercase' style={{ fontFamily: "semibold" }}>{addresses[0].name}</Text>
-                                                <Text className='' style={{ color: 'black', fontSize: 16, fontFamily: 'medium' }}>{addresses[0].street} {addresses[0].streetNumber}</Text>
+                                {selectedAddres ? (
+                                    <TouchableOpacity className='border-b border-[#0b0b0b]/5 px-6 w-full py-4  flex flex-row items-center justify-between' >
+                                        <View className='flex-col items-start'>
+                                            <View className='flex flex-row items-center'>
+                                                <Location size={22} variant='Bold' color={Colors.dark} />
+                                                <View className='ml-1'>
+                                                    <Text className='text-xs text-[#0b0b0b]/80 uppercase' style={{ fontFamily: "semibold" }}>{selectedAddres.name}</Text>
+                                                    <Text className='' style={{ color: 'black', fontSize: 16, fontFamily: 'medium' }}>{selectedAddres.street} {selectedAddres.streetNumber}</Text>
+                                                </View>
                                             </View>
+
+                                            <View className='flex flex-row mt-2 items-center space-x-1'>
+                                                {selectedAddres.flat &&
+                                                    <View className='p-1 px-2 border border-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                                                        <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Кат - {selectedAddres.flat}</Text>
+                                                    </View>
+                                                }
+
+                                                {selectedAddres.apartment &&
+                                                    <View className='p-1 px-2 border border-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
+                                                        <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Стан - {selectedAddres.apartment}</Text>
+                                                    </View>
+                                                }
+                                            </View>
+
                                         </View>
 
-                                        <View className='flex flex-row mt-2 items-center space-x-1'>
-                                            <View className='p-1 px-2 border border-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
-                                                <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Кат - {addresses[0].flat}</Text>
-                                            </View>
-
-                                            <View className='p-1 px-2 border border-[#0b0b0b]/5 rounded-lg flex justify-center items-center'>
-                                                <Text style={{ fontFamily: "medium" }} className='text-xs text-[#0b0b0b]'>Стан - {addresses[0].apartment}</Text>
-                                            </View>
-                                        </View>
-
-                                    </View>
-
-                                    <TouchableOpacity onPress={() => router.push('/manageAddresses')} className='p-3' >
-                                        <ExportSquare variant='Linear' size={20} color={Colors.dark} />
+                                        <TouchableOpacity onPress={() => router.push('/(modals)/manageAddresses')} className='p-3' >
+                                            <ExportSquare variant='Linear' size={20} color={Colors.dark} />
+                                        </TouchableOpacity>
                                     </TouchableOpacity>
-                                </TouchableOpacity>
 
+                                ) : (
+                                    <View>
+                                        <TouchableOpacity onPress={() => router.push('/manageAddresses')} className='border-b border-[#0b0b0b]/5 px-6 w-full py-6  flex flex-row items-center justify-start' >
+                                            <LocationAdd variant='Bold' className='' size={22} color={Colors.dark} />
+                                            <Text style={{ fontFamily: "medium" }} className='ml-2 text-[16px] text-[#0b0b0b]'>Додај адреса</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
                             </View>
 
                         </View>
@@ -99,29 +110,30 @@ const Page = () => {
 
                         <View className='w-full px-6 mt-6'>
                             <View>
-                                <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
-                                <View className='flex mt-2 flex-row items-center'>
+                                <Text className=' text-[#0B0B0B]/60' style={{ fontFamily: 'medium' }}>Избери</Text>
+                                <Text className='text-lg text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Начин на плаќање</Text>
+                                {/* <View className='flex mt-2 flex-row items-center'>
                                     <Money size={22} variant='Bold' color={Colors.dark} />
-                                    <Text className='ml-1 text-[16px] text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
-                                </View>
+                                    <Text className='ml-2 text-[16px] text-[#0B0B0B]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
+                                </View> */}
 
                             </View>
-                            {/* <View className='flex flex-row gap-x-2 mt-3'>
+                            <View className='flex flex-row gap-x-2 mt-3'>
 
-                            <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#1BD868] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
-                                <View className='flex-1 justify-between items-center flex-row'>
-                                    <Card size={24} color={cardPayment ? Colors.primary : Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
-                                </View>
-                                <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity onPress={handleSelectCardPayment} className={cardPayment ? ' flex flex-col justify-between border-2 border-[#0b0b0b] flex-1 p-3.5 rounded-2xl' : ' border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                                    <View className='flex-1 justify-between items-center flex-row'>
+                                        <Card size={24} color={Colors.dark} variant={cardPayment ? 'Bold' : 'Linear'} />
+                                    </View>
+                                    <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>Со Картичка</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#1BD868] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
-                                <View className='flex-1 justify-between items-center flex-row'>
-                                    <Box size={24} color={ondeliveryPayment ? Colors.primary : Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
-                                </View>
-                                <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>При достава</Text>
-                            </TouchableOpacity>
-                        </View> */}
+                                <TouchableOpacity onPress={handleSelectOnDeliveryPayment} className={ondeliveryPayment ? ' flex flex-col justify-between border-2 border-[#0b0b0b] flex-1 p-3.5 rounded-2xl' : 'border-2 border-[#0b0b0b]/5 flex flex-col justify-between flex-1 p-3.5 rounded-2xl'}>
+                                    <View className='flex-1 justify-between items-center flex-row'>
+                                        <Box size={24} color={Colors.dark} variant={ondeliveryPayment ? 'Bold' : 'Linear'} />
+                                    </View>
+                                    <Text className='text-[#0B0B0B] mt-6' style={{ fontFamily: 'medium' }}>При достава</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </ScrollView>
                 </View>

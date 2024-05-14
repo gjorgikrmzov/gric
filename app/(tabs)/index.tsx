@@ -22,6 +22,7 @@ const Page = () => {
     const { storeTypes } = useSelector((state: RootState) => state.storeType)
     const { categories } = useSelector((state: RootState) => state.category)
     const { accessToken } = useSelector((state: RootState) => state.accessToken)
+    const selectedAddressId = useSelector((state: RootState) => state.addresses.selectedAddressId)
     const { addresses } = useSelector((state: RootState) => state.addresses)
     const personId = useSelector((state: RootState) => state.user.id)
 
@@ -139,6 +140,7 @@ const Page = () => {
         } as any);
     };
 
+    const selectedAddres = addresses.find(address => address.id === selectedAddressId)
 
     return (
         <>
@@ -160,8 +162,8 @@ const Page = () => {
                             <ArrowDown2 className='ml-0.5' size={12} color={Colors.dark} variant='Linear' />
                         </View>
                         <View className='rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#fafafa]'>
-                            {addresses?.length > 0 ? (
-                                <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{addresses[0].street}</Text>
+                            {selectedAddres?.street ? (
+                                <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>{selectedAddres?.street}</Text>
                             ) : (
                                 <Text className='text-[#0b0b0b]' style={{ fontFamily: 'medium' }}>Внесете адреса</Text>
                             )}
@@ -272,7 +274,7 @@ const Page = () => {
                                                 source={require('../../assets/images/pizza.svg')}
                                             />
                                             <View className='bg-[#fafafa] w-20 py-3 rounded-2xl flex justify-center items-center'>
-                                                <Text className='text-[#0b0b0b]/80 mt-4 text-xs' style={{ fontFamily: 'semibold' }}>{category.name}</Text>
+                                                <Text className='text-[#0b0b0b]/80 mt-3 text-xs' style={{ fontFamily: 'semibold' }}>{category.name}</Text>
                                             </View>
                                         </TouchableOpacity>
                                     )
@@ -284,7 +286,7 @@ const Page = () => {
                     <Animated.View style={animatedOverlayStyle} className='mt-4'>
                         <View className='w-full px-6 justify-between items-center flex flex-row'>
                             <View className='flex flex-row items-center'>
-                                <Shop size={18} color={Colors.primary} variant='Bulk' />
+                                {/* <Shop size={18} color={Colors.primary} variant='Bulk' /> */}
                                 <Text className='text-[16px] text-[#0b0b0b] ml-1' style={{ fontFamily: 'semibold' }}>Препорачано</Text>
                             </View>
 
@@ -304,7 +306,7 @@ const Page = () => {
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity key={index} onPress={() => handleRouteStoreDetails(item)} style={index === stores.length - 1 ? { marginRight: 0 } : { marginRight: 10 }}
                                     className={index === stores.length - 1 ? '' : 'mr-3'}>
-                                    <View className='w-[290px] mt-3  h-32 p-5 bg-[#fafafa] rounded-3xl' style={{ overflow: 'hidden' }}>
+                                    <View className='w-[290px] mt-2.5 h-32 p-5 bg-[#fafafa] rounded-3xl' style={{ overflow: 'hidden' }}>
                                     </View>
                                     <View className='ml-1 mt-2'>
                                         <View className='flex flex-row items-center justify-between'>
@@ -315,7 +317,7 @@ const Page = () => {
                                             </View>
                                         </View>
 
-                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} </Text>
+                                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )}
@@ -354,7 +356,7 @@ const Page = () => {
                                             </View>
                                         </View>
                                         <View className='flex flex-row items-center'>
-                                            <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)} · </Text>
+                                            <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>

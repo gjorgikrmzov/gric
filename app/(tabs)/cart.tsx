@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert, TouchableOpacity } from 'react-native'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, ShoppingCart, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -8,13 +8,60 @@ import * as Haptics from 'expo-haptics';
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCart, removeItem, selectCartTotal, updateItemQuantity } from '../reduxStore/cartSlice'
 import { RootState } from '../reduxStore'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
+
+interface CartItemType {
+  id: string;
+  name: string;
+  price: string;
+  storeId: string;
+  quantity: number;
+}
+
+interface CartItemProps {
+  cartItem: {
+    id: string;
+    name: string;
+    price: string;
+    storeId: string;
+    quantity: number;
+  };
+  handleIncreaseQuantity: (storeId: string, itemId: string, quantity: number) => void;
+  handleDecreaseQuantity: (storeId: string, itemId: string, quantity: number) => void;
+}
+
+const CartItem: React.FC<CartItemProps> = React.memo(({ cartItem, handleIncreaseQuantity, handleDecreaseQuantity }) => (<View className='py-5 border-b border-[#0b0b0b]/5 px-6'>
+  <View className='flex flex-row items-center'>
+    <View className='flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden' />
+    <View className='flex flex-row items-center justify-between flex-1'>
+      <View className='flex flex-col ml-3 flex-1'>
+        <Text className='text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
+        <Text className='mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{cartItem.price} ден</Text>
+      </View>
+      <View className='bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
+        <TouchableOpacity onPress={() => handleDecreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7 rounded-lg'>
+          {cartItem?.quantity === 1 ? (
+            <Trash size={20} color={Colors.dark} variant='Linear' />
+          ) : (
+            <Minus size={20} color={Colors.dark} variant='Linear' />
+          )}
+        </TouchableOpacity>
+        <Text className='text-[#0b0b0b]'>{cartItem.quantity}</Text>
+        <TouchableOpacity onPress={() => handleIncreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7 rounded-lg'>
+          <Add size={20} color={Colors.dark} variant='Linear' />
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</View>
+));
 
 const Page = () => {
 
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const subtotal = useSelector(selectCartTotal);
 
   const handleIncreaseQuantity = (storeId: string, itemId: string, quantity: number) => {
     dispatch(updateItemQuantity({ storeId, id: itemId, quantity: quantity + 1 }));
@@ -61,17 +108,25 @@ const Page = () => {
     );
   }
 
-  const subtotal = useSelector(selectCartTotal);
 
   const snapPoints = useMemo(() => ['1%', '50%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
+  const snapToIndex = useCallback((index: number) => bottomSheetRef.current?.snapToIndex(index), []);
 
-  const closeCommentModal = () => {
-    snapeToIndex(0)
-    Keyboard.dismiss()
-  }
+  const closeCommentModal = useCallback(() => {
+    snapToIndex(0);
+    Keyboard.dismiss();
+  }, [snapToIndex]);
+
+
+  const renderItem = useCallback(({ item }: { item: CartItemType }) => (
+    <CartItem
+      cartItem={item}
+      handleIncreaseQuantity={handleIncreaseQuantity}
+      handleDecreaseQuantity={handleDecreaseQuantity}
+    />
+  ), [handleIncreaseQuantity, handleDecreaseQuantity]);
 
   return (
     <GestureHandlerRootView>
@@ -90,54 +145,13 @@ const Page = () => {
 
         <View className={cartItems.length == 0 ? 'hidden' : 'flex-1 mt-4 border-t border-[#0b0b0b]/5'}>
 
-          <ScrollView className='flex-1'>
-            {cartItems?.map((cartItem, index) => (
 
-              <View key={index} className='py-5 border-b border-[#0b0b0b]/5 px-6'>
-                <View className='flex flex-row items-center'>
-                  <View className=' flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden'>
-
-                  </View>
-
-                  <View className='flex flex-row items-center justify-between flex-1'>
-                    <View className='flex flex-col ml-3 flex-1'>
-                      <Text className='text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
-                      <Text className='mt-1 text-[#0b0b0b]/60' style={{ fontFamily: "semibold" }}>{cartItem.price} ден</Text>
-                    </View>
-
-                    <View className=' bg-[#fafafa]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24'>
-                      <TouchableOpacity onPress={() => handleDecreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg '>
-                        {cartItem?.quantity == 1 ?
-                          (<Trash
-                            size={20}
-                            color={Colors.dark}
-                            variant='Linear'
-                          />)
-                          :
-                          (<Minus
-                            size={20}
-                            color={Colors.dark}
-                            variant='Linear'
-                          />)}
-                      </TouchableOpacity>
-
-                      <Text className='text-[#0b0b0b]'>{cartItem.quantity}</Text>
-
-                      <TouchableOpacity onPress={() => handleIncreaseQuantity(cartItem.storeId, cartItem.id, cartItem.quantity)} className='bg-[#FFFFFC]/20 flex justify-center items-center w-7 h-7  rounded-lg ' >
-                        <Add
-                          size={20}
-                          color={Colors.dark}
-                          variant='Linear'
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-
-              </View>
-            ))}
-          </ScrollView>
-
+          <FlatList
+            data={cartItems}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
 
 
           <View className='w-full h-1 bg-[#757780]/10'></View>
@@ -170,7 +184,7 @@ const Page = () => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => snapeToIndex(1)} className='w-full flex-row flex items-center justify-between'>
+            <TouchableOpacity onPress={() => snapToIndex(1)} className='w-full flex-row flex items-center justify-between'>
               <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
                 <View className=' flex flex-row'>
                   <DocumentText color={Colors.dark} size={20} variant='Broken' />
@@ -198,7 +212,7 @@ const Page = () => {
 
         <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
           <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-            <ShoppingCart size={56} variant='Bulk' color={Colors.primary} />
+            <ShoppingCart size={56} variant='Bulk' color={Colors.dark} />
           </View>
 
           <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: 'medium' }}>Вашата корпа {'\n'} е празна</Text>

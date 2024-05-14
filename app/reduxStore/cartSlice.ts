@@ -38,8 +38,6 @@ const cartSlice = createSlice({
             const itemIndex = state.items.findIndex(item => item.id === id && item.storeId === storeId);
             if (itemIndex !== -1) {
                 state.items[itemIndex].quantity = quantity;
-            } else {
-                console.warn("Item not found for update:", storeId, id);
             }
         },
         removeItem(state, action: PayloadAction<{ id: string }>) {
@@ -54,7 +52,7 @@ const cartSlice = createSlice({
 
 export const selectCartTotal = (state: any) => {
     return state.cart.items.reduce((total: number, item: any) => {
-        const price = parseFloat(item.price);  // Ensure the price is a number
+        const price = parseFloat(item.price);  
         const itemTotal = price * item.quantity;
         return total + itemTotal;
     }, 0);

@@ -24,7 +24,7 @@ const Page = () => {
           </View>
 
           <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/setUsername')} className='w-full  py-6 mt-3 flex flex-row justify-center items-center bg-[#0b0b0b] rounded-2xl'>
-            <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Креирај Профил</Text>
+            <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Креирај профил</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/signIn')} className='w-full mt-3  py-6 flex flex-row justify-center items-center bg-[#0b0b0b] rounded-2xl'>

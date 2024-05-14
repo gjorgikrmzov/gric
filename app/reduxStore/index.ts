@@ -18,6 +18,7 @@ export const store = configureStore({
         accessToken: accessTokenSlice.reducer,
         user: userSlice.reducer,
         addresses: addressSlice.reducer
+        
     }
 })
 

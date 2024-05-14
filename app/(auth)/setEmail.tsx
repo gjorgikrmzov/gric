@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeft, ArrowLeft2, ArrowRight, Eye, EyeSlash } from 'iconsax-react-native'
@@ -14,8 +14,23 @@ const Page = () => {
     const [email, setemail] = useState('')
     const [errorMessage, seterrorMessage] = useState('')
 
+
+    const validateEmail = (text: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(text) || text === "") {
+            seterrorMessage('');
+        } else {
+            seterrorMessage('Внесете валидна Е-маил адреса');
+        }
+    };
+
+    const handleTextChange = (text: string) => {
+        setemail(text);
+        validateEmail(text);
+    };
+
     const setAccEmail = async () => {
-        if (!email) {
+        if (!email || errorMessage) {
             seterrorMessage("Внесете валидна Е-маил адреса")
         } else {
             router.push({ pathname: '/(auth)/setMobileNumber', params: { firstName, lastName, email } })
@@ -24,9 +39,10 @@ const Page = () => {
 
     return (
         <Animated.View className='flex-1 pt-4 bg-[#FFFFFC]' entering={FadeIn.springify().delay(150).duration(200)}>
-            <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
-                <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
+            <SafeAreaView className='flex-col justify-between flex-1 bg-[#FFFFFC]'>
 
+
+                <View>
                     <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
                         <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
                             <ArrowLeft variant='Broken' size={20} color={Colors.white} />
@@ -44,20 +60,20 @@ const Page = () => {
 
                     <View className='flex px-6 h-min flex-col gap-y-3'>
                         <TextInput value={email}
-                            onChangeText={(text) => setemail(text)} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
-                        <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text>
+                            onChangeText={handleTextChange} className='px-5 bg-[#fafafa] rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='example@gmail.com' placeholderTextColor='#0b0b0b97' />
+                        {errorMessage ? <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text> : null}
                     </View>
+                </View>
 
-
-                    <View className='px-6 pb-4 flex-1 justify-end'>
+                <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
+                    <View className=' justify-end px-6 pb-6'>
                         <TouchableOpacity onPress={setAccEmail} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Следно</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>
                     </View>
+                </KeyboardAvoidingView>
 
-
-                </TouchableOpacity>
             </SafeAreaView>
         </Animated.View>
     )
