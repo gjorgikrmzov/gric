@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Tabs, usePathname } from 'expo-router'
 import Colors from '../../constants/Colors'
-import { Archive, DirectboxNotif, Home2, Map, Map1, Shop, ShoppingCart, User } from 'iconsax-react-native';
+import { DirectboxNotif, Home2, Map, Map1, Shop, ShoppingCart, User } from 'iconsax-react-native';
 import { Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
-import { fetchUserInfo } from '../reduxStore/userSlice';
 
 const Layout = () => {
 
     const currentPath = usePathname();
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const user = useSelector((state: RootState) => state.user);
-
     return (
         <Tabs screenOptions={{
             tabBarActiveTintColor: Colors.dark,
@@ -29,7 +27,7 @@ const Layout = () => {
                     <Home2 color={color} variant={currentPath === '/' ? 'Bold' : 'Broken'} size={size} />
                 )
 
-            }} redirect={user.role === 'DELIVERER'}  />
+            }} redirect={user.role === 'DELIVERER'} />
 
             <Tabs.Screen name='stores' options={{
                 tabBarHideOnKeyboard: true,
@@ -38,7 +36,7 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Shop variant={currentPath === '/stores' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} redirect={user.role === 'DELIVERER'}  />
+            }} redirect={user.role === 'DELIVERER'} />
 
             <Tabs.Screen name='map' options={{
                 tabBarLabel: 'Мапа',
@@ -46,7 +44,7 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <Map1 variant={currentPath === '/map' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} redirect={user.role === 'DELIVERER'}  />
+            }} redirect={user.role === 'DELIVERER'} />
 
             <Tabs.Screen name='cart' options={{
                 tabBarLabel: 'Корпа',
@@ -60,7 +58,7 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <ShoppingCart variant={currentPath === '/cart' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} redirect={user.role === 'DELIVERER'}  />
+            }} redirect={user.role === 'DELIVERER'} />
 
 
             <Tabs.Screen name='(deliverer)/orders' options={{
@@ -69,15 +67,8 @@ const Layout = () => {
                 tabBarIcon: ({ color, size }) => (
                     <DirectboxNotif variant={currentPath === '/orders' ? 'Bold' : 'Broken'} size={size} color={color} />
                 )
-            }} redirect={user.role === 'CUSTOMER'}  />
-
-            <Tabs.Screen name='(deliverer)/map' options={{
-                tabBarLabel: 'Мапа',
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => (
-                    <Map variant={currentPath === '/map' ? 'Bold' : 'Broken'} size={size} color={color} />
-                )
             }} redirect={user.role === 'CUSTOMER'} />
+
 
             <Tabs.Screen name='(deliverer)/profile' options={{
                 tabBarLabel: 'Профил',

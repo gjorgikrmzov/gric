@@ -1,8 +1,8 @@
-import { Animated as RNAnimated, View, Text, TouchableOpacity, ScrollView, RefreshControl, Dimensions, AppState, StyleSheet, Platform, TextInput, Keyboard, KeyboardAvoidingView, SafeAreaView, FlatList, ActivityIndicator } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, RefreshControl, StyleSheet, Platform, TextInput, Keyboard, SafeAreaView, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
-import { Notification1, SearchNormal1, User, Location, Shop, ArrowDown2, Heart, Element, ArrowLeft, CloseSquare, ArrowCircleRight, RecordCircle, Timer, Clock, MessageQuestion } from 'iconsax-react-native'
+import { Notification1, SearchNormal1, User, Location, Shop, ArrowDown2, Heart, ArrowLeft, RecordCircle, Timer, MessageQuestion } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { Image } from 'expo-image'
 import Animated, { Easing, FadeIn, FadeInDown, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -11,7 +11,6 @@ import { fetchStores } from '../reduxStore/storeSlice'
 import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
 import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
-import { fetchUserInfo } from '../reduxStore/userSlice'
 import { fetchAddress } from '../reduxStore/addressSlice'
 
 const Page = () => {
@@ -47,7 +46,7 @@ const Page = () => {
                 dispatch(fetchStoresTypes(accessToken)),
                 dispatch(fetchCategories(accessToken)),
                 dispatch(fetchAddress({ personId, accessToken })),
-                dispatch(fetchUserInfo(accessToken))
+                // dispatch(fetchUserInfo(accessToken))
             ]).then(() => {
                 setIsLoading(false);
             }).catch((error) => {
@@ -117,9 +116,8 @@ const Page = () => {
     const onRefresh = () => {
         setRefreshing(true);
         setIsLoading(true)
-        // dispatch(fetchStores(accessToken))
-        // dispatch(fetchStoresTypes(accessToken))
-        // dispatch(fetchCategories(accessToken))
+        dispatch(fetchStores(accessToken))
+        dispatch(fetchStoresTypes(accessToken))
         setTimeout(() => {
             setRefreshing(false);
             setIsLoading(false)
@@ -129,18 +127,41 @@ const Page = () => {
     const handleRouteStoreDetails = (store: any) => {
         const storeTypeName = getStoreTypeName(store.storeTypeId);
         router.push({
-            pathname: '/storeDetails/[id]',
+            pathname: '/store/[id]',
             params: {
                 id: store.id,
                 name: store.name,
                 isOpen: store.isOpen,
                 storeTypeName,
-                accessToken
+                address: JSON.stringify(store.address)
             }
         } as any);
     };
 
     const selectedAddres = addresses.find(address => address.id === selectedAddressId)
+
+    const renderCategoryIcon = (categoryName: string) => {
+        switch (categoryName) {
+            case 'Бургер':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/burger.svg')} />)
+            case 'Пица':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pizza.svg')} />)
+            case 'Кафе':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/coffe.svg')} />)
+            case 'Десерт':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/donut.svg')} />)
+            case 'Паста':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pasta.svg')} />)
+            case 'Месо':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/meet.svg')} />)
+
+            case 'Тако':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/cake.svg')} />)
+
+            case 'Сендвич':
+                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/bread.svg')} />)
+        }
+    };
 
     return (
         <>
@@ -174,9 +195,6 @@ const Page = () => {
                     <View className='flex flex-row items-center gap-x-2'>
 
                         <TouchableOpacity onPress={() => router.push('/(user)/notifications')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
-                            <View className='rounded-full absolute z-10 right-3.5 top-3 flex justify-center items-center'>
-                                <RecordCircle variant='Bulk' size={16} color={Colors.primary} />
-                            </View>
                             <Notification1 color={Colors.dark} size={20} variant='Broken' />
                         </TouchableOpacity>
 
@@ -266,13 +284,8 @@ const Page = () => {
                             <Animated.View entering={FadeIn.springify().duration(300).delay(100)} className='flex flex-row  items-center px-6 gap-x-2'>
                                 {categories && categories.map((category, index) => (
                                     index < 8 && (
-                                        <TouchableOpacity key={index} className='flex justify-center'>
-                                            <Image
-                                                style={{ tintColor: '#0b0b0b' }}
-                                                className='w-10 h-10 z-10 top-4 self-center'
-                                                contentFit='fill'
-                                                source={require('../../assets/images/pizza.svg')}
-                                            />
+                                        <TouchableOpacity key={index} onPress={() => router.push({ pathname: '/category', params: { name: category.name, id: category.id } })} className='flex justify-center'>
+                                            {renderCategoryIcon(category.name)}
                                             <View className='bg-[#fafafa] w-20 py-3 rounded-2xl flex justify-center items-center'>
                                                 <Text className='text-[#0b0b0b]/80 mt-3 text-xs' style={{ fontFamily: 'semibold' }}>{category.name}</Text>
                                             </View>
@@ -283,11 +296,10 @@ const Page = () => {
                         </ScrollView>
                     </View>
 
-                    <Animated.View style={animatedOverlayStyle} className='mt-4'>
+                    {/* <Animated.View style={animatedOverlayStyle} className='mt-4'>
                         <View className='w-full px-6 justify-between items-center flex flex-row'>
                             <View className='flex flex-row items-center'>
-                                {/* <Shop size={18} color={Colors.primary} variant='Bulk' /> */}
-                                <Text className='text-[16px] text-[#0b0b0b] ml-1' style={{ fontFamily: 'semibold' }}>Препорачано</Text>
+                                <Text className='text-[16px] text-[#0b0b0b] ml-1' style={{ fontFamily: 'semibold' }}>Понуди</Text>
                             </View>
 
                             <TouchableOpacity onPress={() => router.push('/(tabs)/stores')} >
@@ -325,11 +337,9 @@ const Page = () => {
                         />
 
 
-                    </Animated.View>
+                    </Animated.View> */}
 
-                    <View>
-                        <View className='w-full mb-4 mt-6 bg-[#0b0b0b]/5 h-[1px]'></View>
-
+                    <View className='mt-3'>
                         <FlatList
                             data={stores}
                             scrollEnabled={false}

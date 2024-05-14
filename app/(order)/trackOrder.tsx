@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Alert, Linking, Modal, Platform, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import { Alert, Linking, Platform, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '../../constants/Colors';
 import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
-import { ArrowLeft, Call, Clock, ExportSquare, Location, LocationAdd, SearchNormal1, Setting4, Shop, SidebarBottom, SidebarTop, StopCircle, TickCircle, Trash } from 'iconsax-react-native';
+import { ArrowLeft, Call, Location, Shop, SidebarBottom, SidebarTop, StopCircle } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { User } from './models'
-import { Address } from 'react-native-maps'
 
 
 export const fetchUserInfo = createAsyncThunk("fetchUserInfo", async (accessToken: string | null) => {

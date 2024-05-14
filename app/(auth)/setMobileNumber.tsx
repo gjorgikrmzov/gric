@@ -1,12 +1,11 @@
-import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ArrowLeft, ArrowLeft2, ArrowRight, Eye, EyeSlash } from 'iconsax-react-native'
+import { ArrowLeft, ArrowRight} from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { CountryPicker } from "react-native-country-codes-picker";
-import { Image } from 'expo-image'
 
 const Page = () => {
 

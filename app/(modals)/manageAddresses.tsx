@@ -1,17 +1,14 @@
-import { View, Text, TextInput, StyleSheet, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react';
-import { ArrowDown, ArrowDown2, ArrowLeft2, CloseSquare, Edit, Edit2, Export, ExportSquare, Gps, Location, LocationAdd, SearchNormal, SearchNormal1, Trash } from 'iconsax-react-native'
+import { View, Text, TextInput, StyleSheet, Platform, ScrollView, Alert } from 'react-native'
+import React from 'react';
+import { ArrowDown, Location, LocationAdd, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
 import { TouchableOpacity } from 'react-native';
 import { deleteAddress, fetchAddress, selectAddress, } from '../reduxStore/addressSlice';
 
 const Page = () => {
-
-  // const maxLength = 20;
-  // const trimmedAdress = st?.length > maxLength ? `${address.substring(0, maxLength)}...` : address;
 
   const dispatch = useDispatch<any>()
   const { addresses } = useSelector((state: RootState) => state.addresses)
@@ -68,7 +65,7 @@ const Page = () => {
         {addresses?.length === 0 ? (
           <View className='flex-1 justify-center items-center'>
             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-              <Location size={56} variant='Bulk' color={Colors.dark} />
+              <Location size={56} variant='Bulk' color={Colors.primary} />
             </View>
 
             <Text className='text-[#0b0b0b]/80 text-[16px] mt-4 text-center' style={{ fontFamily: 'medium' }}>Во моментов немате внесено {'\n'} адреса на достава</Text>

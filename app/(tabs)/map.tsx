@@ -1,16 +1,22 @@
-import React, { useMemo, useRef } from 'react';
-import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { useMemo, useRef, useState } from 'react';
+import MapView, { Marker, PROVIDER_DEFAULT, Region } from 'react-native-maps';
+import { Platform, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Colors from '../../constants/Colors';
-import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
-import { ArrowLeft, Location, SearchNormal1, Setting4 } from 'iconsax-react-native';
+import { GestureHandlerRootView, } from 'react-native-gesture-handler';
+import { ArrowLeft, CloseCircle, ExportSquare, SearchNormal1, Shop } from 'iconsax-react-native';
 import { router } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { customMapStyle } from '../../mapStyle'
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reduxStore';
+import * as Haptics from 'expo-haptics';
 
 const Page = () => {
+
   const snapPoints = useMemo(() => ['25%'], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [selectedStoreId, setSelectedStoreId] = useState<string | any>(null);
+  const mapRef = useRef<MapView>(null);
 
   const INITIAL_REGION = {
     latitude: 41.43917545031447,
@@ -19,137 +25,109 @@ const Page = () => {
     longitudeDelta: 0.1,
   }
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  // const snapeToIndex = (index: number) => bottomSheetRef.current?.snapToIndex(index)
+  const { stores } = useSelector((state: RootState) => state.store)
+  const { storeTypes } = useSelector((state: RootState) => state.storeType)
+
+  const getStoreTypeName = (storeTypeId: string) => {
+    const storeType = storeTypes.find(type => type.id === storeTypeId);
+    return storeType ? storeType.name : "Unknown Type";
+  };
+
+  const handleMarkerPress = (store: any) => {
+    setSelectedStoreId(store.id);
+    Haptics.notificationAsync()
+
+    const region: Region = {
+      latitude: store.address.latitude,
+      longitude: store.address.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+
+    mapRef.current?.animateToRegion(region, 1000);
+  };
+
+  const handleRouteStoreDetails = (store: any) => {
+    const storeTypeName = getStoreTypeName(store.storeTypeId);
+    router.push({
+      pathname: '/store/[id]',
+      params: {
+        id: store.id,
+        name: store.name,
+        storeTypeName,
+        isOpen: store.isOpen,
+        address: JSON.stringify(store.address)
+      }
+    });
+  };
 
   return (
     <GestureHandlerRootView>
+      <View className='bg-[#fffffc] flex-1'>
 
-    <View className='bg-[#FFFFFC] flex-1'>
+        <View style={styles.header} className='flex px-6 jb absolute left-0 z-20  w-full flex-row items-center justify-between'>
+          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+            <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
+          </TouchableOpacity>
 
-      <View style={styles.header} className='flex px-6 absolute left-0 z-20  w-full flex-row items-center justify-start'>
-        <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
-          <ArrowLeft variant='Broken' size={20} color={Colors.dark} />
-        </TouchableOpacity>
-
-      </View>
-
-      <View className='border-black/10  overflow-hidden'>
-        <MapView showsUserLocation={true} 
-          showsMyLocationButton={false} className='w-full h-full' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT}  customMapStyle={customMapStyle} >
-          <Marker title='Bucks Pizza' description='Pizza Restaurant' coordinate={INITIAL_REGION}>
-            <View className=''>
-              <Location size={26} variant='Bulk' color={Colors.white} />
-            </View>
-          </Marker>
-        </MapView>
-      </View>
-
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        backgroundStyle={{ backgroundColor: Colors.white }}
-        handleIndicatorStyle={{ backgroundColor: Colors.dark }}
-        snapPoints={snapPoints}
-      >
-        <View className='flex px-6 py-3 flex-row items-center justify-between'>
-          <View>
-            <Text style={{ fontFamily: "heavy" }} className='text-[#0b0b0b]/80'>МАПА</Text>
-            <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b] mt-1'>Пребарај Ресторани</Text>
-          </View>
-
-
-          <View className='flex-row items-center gap-x-2'>
-
-            <TouchableOpacity onPress={() => router.push('/stores')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
-              <SearchNormal1 color={Colors.dark} size={20} variant='Broken' />
+          {selectedStoreId !== null ? (
+            <TouchableOpacity onPress={() => setSelectedStoreId(null)} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full' >
+              <CloseCircle variant='Broken' size={20} color={Colors.dark} />
             </TouchableOpacity>
-          </View>
+            ) : null
+          }
         </View>
 
-        {/* <View className='flex flex-col justify-between flex-1 mt-9 px-6 py-4'>
+        <View className='border-black/10 h-3/4 overflow-hidden'>
+          <MapView ref={mapRef} maxDelta={0.03} className='w-full flex-1' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
+            {stores?.map((store, index) => (
+              <Marker key={index} className='' coordinate={{ latitude: store.address?.latitude, longitude: store.address?.longitude } as any}>
+                <View className='flex items-center flex-1'>
+                  {selectedStoreId === store.id && (
+                    <TouchableOpacity onPress={() => handleRouteStoreDetails(store)} className='opacity-100 w-32  relative flex-1 flex justify-center items-start  p-2.5 bg-[#fffffc] mb-2 rounded-2xl'>
+                      <View className='w-full h-16 bg-[#0b0b0b]/5 rounded-xl mb-2'>
+                        <ExportSquare variant='Broken' className='absolute right-2 top-2' color={Colors.dark} size={16} />
+                      </View>
+                      <Text style={{ fontFamily: 'bold' }} className=' text-[10px] mb-0.5 uppercase text-[#0b0b0b]/80'>
+                        {getStoreTypeName(store.storeTypeId)}
+                      </Text>
 
+                      <Text style={{ fontFamily: 'medium' }}>{store.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                  <TouchableOpacity className='-z-0' onPress={() => handleMarkerPress(store)}>
+                    <Shop size={24} variant='Bulk' color={Colors.white} />
+                  </TouchableOpacity>
+                </View>
+              </Marker>
+            ))}
+          </MapView>
+        </View>
 
-          <View>
-            <View className='flex-row items-center'>
-              <Setting4 variant='Bulk' color={Colors.dark} size={24} />
-              <Text className='text-[#0b0b0b] text-lg ml-2' style={{ fontFamily: "extrabold" }}>Филтер</Text>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={0}
+          backgroundStyle={{ backgroundColor: Colors.white }}
+          handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+          snapPoints={snapPoints}
+        >
+          <View className='flex px-6 py-3 flex-row items-center justify-between'>
+            <View>
+              <Text style={{ fontFamily: "heavy" }} className='text-[#0b0b0b]/80'>МАПА</Text>
+              <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b] mt-1'>Пребарај Ресторани</Text>
             </View>
 
-            <View className='flex flex-row justify-between'>
-              <View className='flex flex-col gap-y-3 mt-2 '>
 
-                <Text className='text-[#0b0b0b]/60 text-xs' style={{ fontFamily: "extrabold" }}>ХРАНА</Text>
-                <BouncyCheckbox
-                  size={22}
-                  fillColor={Colors.dark}
-                  unfillColor={Colors.white}
-                  text="Пица"
-                  textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                  innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                  onPress={(isChecked: boolean) => { }}
-                />
+            <View className='flex-row items-center gap-x-2'>
 
-                <BouncyCheckbox
-                  size={22}
-                  fillColor={Colors.dark}
-                  unfillColor={Colors.white}
-                  text="Тако"
-                  textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                  innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                  onPress={(isChecked: boolean) => { }}
-                />
-
-                <BouncyCheckbox
-                  size={22}
-                  fillColor={Colors.dark}
-                  unfillColor={Colors.white}
-                  text="Бургер"
-                  textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                  innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                  onPress={(isChecked: boolean) => { }}
-                />
-
-                <BouncyCheckbox
-                  size={22}
-                  fillColor={Colors.dark}
-                  unfillColor={Colors.white}
-                  text="Пастрмајлија"
-                  textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                  innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                  onPress={(isChecked: boolean) => { }}
-                />
-
-                <BouncyCheckbox
-                  size={22}
-                  fillColor={Colors.dark}
-                  unfillColor={Colors.white}
-                  text="Скара"
-                  textStyle={{ fontFamily: "medium", color: Colors.dark, textDecorationLine: 'none' }}
-                  iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                  innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                  onPress={(isChecked: boolean) => { }}
-                />
-
-              </View>
+              <TouchableOpacity onPress={() => router.push('/stores')} className='w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5'>
+                <SearchNormal1 color={Colors.dark} size={20} variant='Broken' />
+              </TouchableOpacity>
             </View>
           </View>
+        </BottomSheet>
 
-          <TouchableOpacity onPress={() => snapeToIndex(0)} className='mt-6 py-6 flex-row flex bottom-0 relative justify-center items-center rounded-2xl bg-[#0b0b0b]'>
-            <Setting4 color={Colors.primary} size={24} />
-            <Text className='text-[#FFFFFC] ml-2' style={{ fontFamily: 'medium' }}>Прикажи филтри</Text>
-          </TouchableOpacity>
-        </View> */}
-
-
-
-      </BottomSheet>
-
-    </View>
+      </View>
     </GestureHandlerRootView>
   );
 }

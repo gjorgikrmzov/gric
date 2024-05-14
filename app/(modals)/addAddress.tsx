@@ -1,14 +1,14 @@
-import { View, Text, StyleSheet, Platform, TextInput, Alert, Vibration } from 'react-native'
+import { View, Text, StyleSheet, Platform, TextInput, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { ArrowDown, Edit, InfoCircle, Location, SaveAdd } from 'iconsax-react-native'
+import { ArrowDown, Location, SaveAdd } from 'iconsax-react-native'
 import { router } from 'expo-router'
 import Colors from '../../constants/Colors'
 import * as ExpoLocation from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../reduxStore'
 import { fetchAddress } from '../reduxStore/addressSlice'
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps'
+import MapView, { PROVIDER_DEFAULT } from 'react-native-maps'
 import { customMapStyle } from '../../mapStyle'
 
 const Page = () => {
@@ -59,8 +59,21 @@ const Page = () => {
         getCurrentLocation();
     }, []);
 
+    const isWithinStrumitsaBounds = (latitude: number, longitude: number) => {
+        const latMin = 41.423;
+        const latMax = 41.455;
+        const lonMin = 22.611;
+        const lonMax = 22.675;
+
+        return latitude >= latMin && latitude <= latMax && longitude >= lonMin && longitude <= lonMax;
+    };
+
     const handleRegionChangeComplete = async (newRegion: any) => {
-        
+        if (!isWithinStrumitsaBounds(newRegion.latitude, newRegion.longitude)) {
+            setstreet('Одбери адреса во опсег на градот')
+            return;
+        }
+
         try {
             const addressResponse = await ExpoLocation.reverseGeocodeAsync({
                 latitude: newRegion.latitude,
@@ -69,16 +82,15 @@ const Page = () => {
 
             if (addressResponse.length > 0) {
                 const { street, streetNumber } = addressResponse[0];
-                const newAddress = `${street || ''} ${streetNumber || ''}`;
                 setstreet(street);
-                setstreetNumber(streetNumber)
-
+                setstreetNumber(streetNumber);
             }
         } catch (error) {
         }
 
         setMapRegion(newRegion);
     };
+
 
     const geocodeAddress = async () => {
         if (!street || !streetNumber) {
@@ -153,7 +165,6 @@ const Page = () => {
     };
 
 
-
     return (
         <View style={styles.header} className='bg-[#FFFFFC] px-6 flex-1'>
 
@@ -169,9 +180,9 @@ const Page = () => {
 
 
             <View className='mt-5 flex-1'>
-            
+
                 <View className='flex  flex-row items-center ml-1'>
-                    <Location variant='Bulk' color={Colors.dark} size={18} />
+                    <Location variant='Bold' color={Colors.dark} size={18} />
                     <Text style={{ fontFamily: "medium" }} className='ml-1 text-[15px] text-[#0b0b0b]'>Податоци на адреса</Text>
                 </View>
                 <View className='flex flex-row items-center space-x-2 mt-2'>
@@ -179,14 +190,12 @@ const Page = () => {
                     <TextInput onChange={geocodeAddress} onChangeText={(text) => setstreetNumber(text)} value={streetNumber} maxLength={5} style={{ fontFamily: 'medium' }} className='p-5 border-2 border-[#fafafa]/80 rounded-2xl bg-[#fafafa]/80 ' placeholder='Број' placeholderTextColor='#0b0b0b97' />
                 </View>
 
-
-                <View className='mt-3'>
+                <View className='mt-2'>
                     <TextInput value={addressDescription} selectionColor={Colors.primary} onChangeText={(text) => setaddressDescription(text)} style={{ fontFamily: 'medium' }} className=' px-5 py-5 border-2 border-[#fafafa]/80 rounded-2xl bg-[#fafafa]/80' placeholder='Зачувај како:  Дома/Работа..' placeholderTextColor='#0b0b0b97' />
                 </View>
 
 
-                <View className='mt-3'>
-                    <Text className='text-[#0b0b0b]/60 text-[10px] ml-2 mb-1.5' style={{ fontFamily: 'medium' }}>Опционално*</Text>
+                <View className='mt-2'>
                     <View className='flex flex-row space-x-2 items-center'>
                         <TextInput onChangeText={(text) => setFlat(text)} value={flat} style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2  rounded-2xl bg-[#fafafa]/80 ' placeholder='Број на кат' placeholderTextColor='#0b0b0b97' />
                         <TextInput onChangeText={(text) => setApartment(text)} value={apartment} style={{ fontFamily: 'medium' }} selectionColor={Colors.primary} className='flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2  rounded-2xl bg-[#fafafa]/80' placeholder='Број на стан' placeholderTextColor='#0b0b0b97' />
@@ -194,7 +203,7 @@ const Page = () => {
                 </View>
 
 
-                <View className='rounded-3xl my-3 border-2 border-[#0b0b0b] flex-1  overflow-hidden'>
+                <View className='rounded-3xl my-3 flex-1 overflow-hidden'>
                     <MapView
                         region={mapRegion}
                         onRegionChangeComplete={handleRegionChangeComplete}

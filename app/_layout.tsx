@@ -68,16 +68,8 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
+  const user = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<any>()
-
-
-  useEffect(() => {
-    if (accessToken === null || accessToken === '') {
-      router.replace('/(auth)/welcome')
-    } else {
-      router.replace('/(tabs)/')
-    }
-  }, [accessToken]);
 
   useEffect(() => {
     const getAccessTokenFromStorage = async () => {
@@ -95,31 +87,42 @@ function RootLayoutNav() {
   }, []);
 
 
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(fetchUserInfo(accessToken));
+    }
+  }, [accessToken, dispatch]);
 
+  useEffect(() => {
+    if (!accessToken || user.role === 'ADMIN') {
+      router.replace('/(auth)/welcome');
+    } else {
+      router.replace('/(tabs)/');
+    }
+  }, [accessToken, user, router]);
 
+  return <NavigationStack />;
+}
+
+function NavigationStack() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
-
-      <Stack.Screen name="(tabs)" options={{ gestureEnabled: false, }} />
-      <Stack.Screen name="(auth)/welcome" options={{ gestureEnabled: false, }} />
-      <Stack.Screen name="(auth)/setUsername" options={{ gestureEnabled: false, }} />
-      <Stack.Screen name="(auth)/setEmail" options={{ gestureEnabled: false, }} />
-      <Stack.Screen name="(auth)/setMobileNumber" options={{ gestureEnabled: false, }} />
-      <Stack.Screen name="(auth)/setPassword" options={{ gestureEnabled: false, }} />
+      <Stack.Screen name="(auth)/welcome" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="(auth)/setUsername" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="(auth)/setEmail" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="(auth)/setMobileNumber" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="(auth)/setPassword" options={{ gestureEnabled: false }} />
       <Stack.Screen name="(auth)/signIn" />
-
-
-      <Stack.Screen name="storeDetails/[id]" />
+      <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="store/[id]" />
       <Stack.Screen name="category" />
-      <Stack.Screen name="foodDetails/[id]" options={{ presentation: "modal" }} />
+      <Stack.Screen name="storeItem/[id]" options={{ presentation: "modal" }} />
       <Stack.Screen name="(order)/orders" />
       <Stack.Screen name="(order)/checkout" />
       <Stack.Screen name="(order)/orderPlaced" />
       <Stack.Screen name="(order)/trackOrder" />
-
       <Stack.Screen name="(user)/notifications" />
       <Stack.Screen name="(user)/profile" />
-
       <Stack.Screen name="(modals)/manageAddresses" options={{ presentation: "modal" }} />
       <Stack.Screen name="(modals)/addAddress" options={{ presentation: "modal" }} />
     </Stack>

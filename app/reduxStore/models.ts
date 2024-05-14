@@ -3,6 +3,7 @@ export type Store = {
     name: string,
     storeTypeId: string,
     isOpen: boolean,
+    address?: Address
 }
 
 export type StoreType = {
@@ -22,7 +23,7 @@ export type StoreItem = {
     price: number,
     available: boolean,
     storeId: number,
-    categoryId: number
+    categoryId: number,
 }
 
 export type Address = {

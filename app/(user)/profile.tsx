@@ -1,8 +1,8 @@
 import { View, Text, Alert, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, DirectboxNotif, Edit, Edit2, Heart, Information, Lifebuoy, Location, LogoutCurve, Trash, User } from 'iconsax-react-native';
+import { ArrowLeft, DirectboxNotif, Heart, Lifebuoy, Location, LogoutCurve, User } from 'iconsax-react-native';
 import Colors from '../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccessToken } from '../reduxStore/accessTokenSlice';
@@ -17,7 +17,6 @@ const Page = () => {
   const signOut = async () => {
     dispatch(setAccessToken(null))
     await SecureStore.deleteItemAsync('accessToken')
-    // router.replace('/(auth)/welcome')
   }
 
   const handleSignOut = () => {
@@ -38,6 +37,8 @@ const Page = () => {
       ],
     );
   };
+
+
 
 
   return (
@@ -99,7 +100,7 @@ const Page = () => {
             </View>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
+          <TouchableOpacity className='py-6 px-6  flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
             <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>
               <Heart variant="Broken" size={24} color={Colors.dark} />
             </View>
@@ -107,7 +108,7 @@ const Page = () => {
               <Text className='text-[#0b0b0b]/60 text-[14px]' style={{ fontFamily: "medium" }}>Омилени Ресторани</Text>
               <Text className='text-[#0b0b0b] text-lg mt-[1px]' style={{ fontFamily: 'medium' }}>Омилени</Text>
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.replace('/orders')} className='py-6 px-6 flex-row items-center  border-b border-[#0b0b0b]/10  flex'>
             <View className='w-10 h-10 flex justify-center items-center bg-[#fafafa]/90 rounded-xl'>

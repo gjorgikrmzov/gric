@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeft, ArrowRight, Eye, EyeSlash } from 'iconsax-react-native'
@@ -46,7 +46,6 @@ const Page = () => {
       const jsonResponse = await response.json();
       dispatch(setAccessToken(jsonResponse.accessToken));
       await SecureStore.setItemAsync('accessToken', jsonResponse.accessToken);
-      router.push('/(tabs)/')
     }
   } catch (error) {
     console.log(error);

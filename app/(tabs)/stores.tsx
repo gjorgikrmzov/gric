@@ -1,19 +1,18 @@
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Keyboard, Animated, Platform, StyleSheet, Dimensions, Touchable, FlatList } from 'react-native'
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Keyboard, Animated, Platform, StyleSheet, FlatList } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react';
 import { router } from 'expo-router'
-import { ArrowLeft, Bag, CloseSquare, Heart, MessageQuestion, SearchNormal1, Shop, ShoppingCart } from 'iconsax-react-native'
+import { ArrowLeft, Heart, MessageQuestion, SearchNormal1, Shop, ShoppingCart } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { GestureHandlerRootView, RefreshControl } from 'react-native-gesture-handler'
 import { Easing } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reduxStore';
 import { fetchStores } from '../reduxStore/storeSlice';
-import { fetchStoresTypes } from '../reduxStore/storeTypeSlice';
 
 const Page = () => {
 
   const dispatch = useDispatch<any>()
-
+  
   const { stores } = useSelector((state: RootState) => state.store)
   const { storeTypes } = useSelector((state: RootState) => state.storeType)
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
@@ -94,7 +93,7 @@ const Page = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // dispatch(fetchStores(accessToken))
+    dispatch(fetchStores(accessToken))
     setTimeout(() => {
       setRefreshing(false);
     }, 600);
@@ -103,12 +102,13 @@ const Page = () => {
   const handleRouteStoreDetails = (store: any) => {
     const storeTypeName = getStoreTypeName(store.storeTypeId);
     router.push({
-      pathname: '/storeDetails/[id]',
+      pathname: '/store/[id]',
       params: {
         id: store.id,
         name: store.name,
         storeTypeName,
-        isOpen: store.isOpen
+        isOpen: store.isOpen,
+        address: JSON.stringify(store.address)
       }
     });
   };
@@ -139,7 +139,6 @@ const Page = () => {
         </Animated.View>
 
         <Animated.View style={{ transform: [{ translateY: searchBarResult }] }} className={isFocused ? 'flex h-full mt-4 px-6' : 'hidden'}>
-          {/* <Text className={search == '' ? 'text-[#0b0b0b]/60' : 'hidden'} style={{ fontFamily: "semibold" }}>Препорачани</Text> */}
           <ScrollView keyboardShouldPersistTaps="always"
             showsVerticalScrollIndicator={false} className='flex flex-1 flex-col mt-3' >
             {filteredStores.map((store, index) => (

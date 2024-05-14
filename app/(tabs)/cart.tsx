@@ -1,8 +1,8 @@
-import { View, Text, ScrollView, StyleSheet, Platform, TextInput, Keyboard, Alert, TouchableOpacity } from 'react-native'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Add, ArrowRight, ArrowRight2, Bag, CloseSquare, DocumentText, Minus, Send, Shop, ShoppingCart, Trash } from 'iconsax-react-native'
+import { View, Text, StyleSheet, Platform, TextInput, Keyboard, Alert, TouchableOpacity } from 'react-native'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { Add, ArrowRight, ArrowRight2, CloseSquare, DocumentText, Minus, Send, Shop, ShoppingCart, Trash } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import BottomSheet from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics';
 import { useDispatch, useSelector } from 'react-redux'
@@ -108,7 +108,6 @@ const Page = () => {
     );
   }
 
-
   const snapPoints = useMemo(() => ['1%', '50%'], []);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -156,25 +155,6 @@ const Page = () => {
 
           <View className='w-full h-1 bg-[#757780]/10'></View>
           <View className='px-6'>
-            {/* <View className='w-full flex-row flex items-center justify-between'>
-            <View className='py-6  border-b flex flex-row items-center  justify-between border-[#0b0b0b]/5  w-full'>
-              <View className=' flex flex-row'>
-                <RecordCircle color={Colors.dark} size={20} variant='Broken' />
-                <Text className='text-[#0b0b0b] ml-3 ' style={{ fontFamily: 'medium' }}>Побарај прибор</Text>
-              </View>
-              <BouncyCheckbox
-              size={20}
-                disableText
-                fillColor={Colors.dark}
-                unfillColor={Colors.white}
-                iconStyle={{ borderColor: Colors.primary, borderRadius: 6 }}
-                innerIconStyle={{ borderColor: Colors.dark, borderRadius: 6 }}
-                onPress={(isChecked: boolean) => { }}
-              />
-            </View>
-          </View> */}
-
-
             <TouchableOpacity onPress={handleRemoveCart} className='w-full flex-row flex items-center justify-between'>
               <View className='py-6 border-b flex flex-row items-center justify-between border-[#0b0b0b]/5  w-full'>
                 <View className=' flex flex-row'>
@@ -212,7 +192,7 @@ const Page = () => {
 
         <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
           <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-            <ShoppingCart size={56} variant='Bulk' color={Colors.dark} />
+            <ShoppingCart size={56} variant='Bulk' color={Colors.primary} />
           </View>
 
           <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: 'medium' }}>Вашата корпа {'\n'} е празна</Text>

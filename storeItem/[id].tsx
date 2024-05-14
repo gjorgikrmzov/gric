@@ -1,13 +1,12 @@
 import { View, Text, Platform, StyleSheet, Alert } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Add, Archive, ArrowDown, Minus, ShoppingCart } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
-import Colors from '../../constants/Colors'
-import { Animated } from 'react-native'
+import Colors from '../constants/Colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItem, clearCart } from '../reduxStore/cartSlice'
-import { RootState } from '../reduxStore'
+import { addItem, clearCart } from '../app/reduxStore/cartSlice'
+import { RootState } from '../app/reduxStore'
 
 const Page = () => {
 
@@ -42,7 +41,7 @@ const Page = () => {
                 "Продавницата е затворена",
                 "Во моментов сме затворени. Дојдете подоцна",
                 [
-                    { text: "Океј", style: "cancel" },
+                    { text: "Во ред", style: "cancel" },
                 ]
             );
             return false
@@ -122,7 +121,7 @@ const Page = () => {
 
                     <TouchableOpacity onPress={handleAddToCart} className='flex-1 flex-row py-3.5 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                         <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
-                        <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додади во Корпа</Text>
+                        <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додај во Корпа</Text>
                     </TouchableOpacity>
                 </View>
 
