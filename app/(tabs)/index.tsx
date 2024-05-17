@@ -12,6 +12,8 @@ import { fetchStoresTypes } from '../reduxStore/storeTypeSlice'
 import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
 import { fetchAddress } from '../reduxStore/addressSlice'
+import StoreCard from '../../components/storeCard'
+import SkeletonLoader from '../../components/skeletonLoader'
 
 const Page = () => {
 
@@ -41,12 +43,12 @@ const Page = () => {
 
     useEffect(() => {
         if (accessToken) {
+            setIsLoading(true);
             Promise.all([
                 dispatch(fetchStores(accessToken)),
                 dispatch(fetchStoresTypes(accessToken)),
                 dispatch(fetchCategories(accessToken)),
                 dispatch(fetchAddress({ personId, accessToken })),
-                // dispatch(fetchUserInfo(accessToken))
             ]).then(() => {
                 setIsLoading(false);
             }).catch((error) => {
@@ -118,11 +120,11 @@ const Page = () => {
         setIsLoading(true)
         dispatch(fetchStores(accessToken))
         dispatch(fetchStoresTypes(accessToken))
-        setTimeout(() => {
-            setRefreshing(false);
-            setIsLoading(false)
-        }, 600);
+            .finally(() => { 
+                setIsLoading(false)
+                setRefreshing(false) });
     };
+
 
     const handleRouteStoreDetails = (store: any) => {
         const storeTypeName = getStoreTypeName(store.storeTypeId);
@@ -340,43 +342,22 @@ const Page = () => {
                     </Animated.View> */}
 
                     <View className='mt-3'>
-                        <FlatList
-                            data={stores}
-                            scrollEnabled={false}
-                            className='px-6 pb-4'
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-
-                                <TouchableOpacity className='mt-3 pb-1' onPress={() => handleRouteStoreDetails(item)}>
-                                    <View className='flex overflow-hidden relative'>
-                                        <View className='w-full h-40 p-5 bg-[#fafafa] rounded-2xl overflow-hidden'>
-                                            <View className='flex flex-row items-center justify-end w-full'>
-                                                <TouchableOpacity className='flex flex-row items-center'>
-                                                    <Heart color={Colors.dark} size={20} />
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                    </View>
-
-                                    <View className='ml-1 mt-2'>
-                                        <View className='flex flex-row w-full justify-between items-center'>
-                                            <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
-                                            <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-full' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'}>
-                                                <Text style={{ fontFamily: "medium" }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
-                                            </View>
-                                        </View>
-                                        <View className='flex flex-row items-center'>
-                                            <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{
-                                paddingBottom: 6,
-                                backgroundColor: '#FFFFFC',
-                            }}
-                        />
+                        {isLoading ? (
+                            <SkeletonLoader />
+                        ) : (
+                            <FlatList
+                                data={stores}
+                                scrollEnabled={false}
+                                className='px-6 pb-4'
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({ item }) => <StoreCard item={item} />}
+                                showsVerticalScrollIndicator={false}
+                                contentContainerStyle={{
+                                    paddingBottom: 6,
+                                    backgroundColor: '#FFFFFC',
+                                }}
+                            />
+                        )}
                     </View>
 
                 </ScrollView>

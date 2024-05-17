@@ -83,10 +83,6 @@ const Page = () => {
             </View>
           </View>
 
-          <TouchableOpacity className='mt-4 px-6 ml-1'>
-            <Text className='text-sm text-[#1BD868]' style={{ fontFamily: 'semibold' }}>Заборавена лозинка</Text>
-          </TouchableOpacity>
-
           {errorMessage &&
               (
                 <Text className='mt-3 px-6 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text>

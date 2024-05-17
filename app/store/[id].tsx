@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView, Animated, FlatList, StyleSheet, Platform } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Clock, Heart, Location, ShoppingCart } from 'iconsax-react-native'
-import { Link, Redirect, Stack, router, useLocalSearchParams } from 'expo-router'
+import { ArrowLeft, Heart, Location, ShoppingCart } from 'iconsax-react-native'
+import { Link, router, useLocalSearchParams } from 'expo-router'
 import Colors from '../../constants/Colors'
 import { StatusBar } from 'expo-status-bar'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,15 +9,16 @@ import { RootState } from '../reduxStore'
 import { fetchStoreItems } from '../reduxStore/storeItemSlice'
 import { ActivityIndicator } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import StoreItemCard from '../../components/storeItemCard'
+import { Image } from 'expo-image'
 
 const Page = () => {
 
     const dispatch = useDispatch<any>();
 
-    const { address, id, name, storeTypeName, isOpen } = useLocalSearchParams<{ address: any, id: any, name: string, storeTypeName: string, isOpen: string }>();
+    const { address, id, name, storeTypeName, isOpen, imageUrl } = useLocalSearchParams<{ address: any, id: any, name: string, storeTypeName: string, isOpen: string, imageUrl: string }>();
     const { accessToken } = useSelector((state: RootState) => state.accessToken);
     const { storeItems } = useSelector((state: RootState) => state.storeItem);
-    const { categories } = useSelector((state: RootState) => state.category);
     const cartItems = useSelector((state: RootState) => state.cart.items);
 
     const [loadingItems, setLoadingItems] = useState(true);
@@ -35,46 +36,45 @@ const Page = () => {
     }, [accessToken, id, dispatch, memoizedStoreItems.length]);
 
 
-    const getCategoryName = (categoryId: any) => {
-        const category = categories.find((category) => category.id === categoryId);
-        return category ? category.name : 'Unknown Type';
-    };
-
     return (
         <GestureHandlerRootView>
             <View className='flex-1 pb-6 bg-[#fffffc]'>
-                <Stack.Screen options={{ headerShown: false }} />
 
                 <StatusBar style='light' />
-                <View style={styles.header} className='bg-[#0b0b0b] pb-6 px-6 overflow-hidden'>
-                    <View className='flex flex-row items-center justify-between'>
-                        <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-                            <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-                        </TouchableOpacity>
+                <View style={styles.header} className='bg-[#0b0b0b] z-50 w-full h-72 px-6 '>
+                    <View className='w-screen absolute h-72 z-30 left-0 top-0 bg-[#0b0b0b]/80'></View>
+                    <Image source={imageUrl} className=' absolute left-0 z-20 h-72 top-0 w-screen' />
 
-                        <TouchableOpacity className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-                            <Heart variant='Broken' size={20} color={Colors.white} />
-                        </TouchableOpacity>
-                    </View>
+                    <View className='z-[999]'>
+                        <View className='flex  flex-row items-center justify-between'>
+                            <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
+                                <ArrowLeft variant='Broken' size={20} color={Colors.white} />
+                            </TouchableOpacity>
 
-                    <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
-
-                    <Text className='text-3xl  text-[#FFFFFC]' style={{ fontFamily: "bold" }}>{name}</Text>
-
-                    {storeAddress?.street ? (
-
-                        <View className='flex items-center mt-0.5 flex-row'>
-                            <Location variant='Bulk' size={16} color={Colors.primary} />
-                            <Text className='text-[#fafafa]/80 ml-1' style={{ fontFamily: "medium" }}>{storeAddress?.street} {storeAddress?.streetNumber}</Text>
+                            <TouchableOpacity className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
+                                <Heart variant='Broken' size={20} color={Colors.white} />
+                            </TouchableOpacity>
                         </View>
-                    ) : (
-                        null
-                    )
-                    }
-                    <View className={isStoreOpen ? 'bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : 'bg-[#fffffc]/20 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
-                        <Text className={isStoreOpen ? 'text-[#000]/80 text-xs' : "text-[#fff]/80 text-xs"} style={{ fontFamily: "semibold" }}>{isStoreOpen ? 'Отворено' : 'Затворено'}</Text>
-                    </View>
 
+                        <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
+
+                        <Text className=' text-3xl  text-[#FFFFFC]' style={{ fontFamily: "bold" }}>{name}</Text>
+
+                        {storeAddress?.street ? (
+
+                            <View className=' flex items-center mt-0.5 flex-row'>
+                                <Location variant='Bulk' size={16} color={Colors.primary} />
+                                <Text className='text-[#fafafa]/80 ml-1' style={{ fontFamily: "medium" }}>{storeAddress?.street} {storeAddress?.streetNumber}</Text>
+                            </View>
+                        ) : (
+                            null
+                        )
+                        }
+                        <View className={isStoreOpen ? ' bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : ' bg-[#fffffc]/20 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
+                            <Text className={isStoreOpen ? ' text-[#000]/80 text-xs' : " text-[#fff]/80 text-xs"} style={{ fontFamily: "semibold" }}>{isStoreOpen ? 'Отворено' : 'Затворено'}</Text>
+                        </View>
+
+                    </View>
                 </View>
 
                 <ScrollView>
@@ -83,7 +83,6 @@ const Page = () => {
                         {loadingItems ?
                             (
                                 <ActivityIndicator />
-
                             )
                             : (
                                 <FlatList
@@ -92,19 +91,9 @@ const Page = () => {
                                     keyExtractor={(item) => item.id.toString()}
                                     renderItem={
                                         ({ item }) => (
-                                            <TouchableOpacity onPress={() => router.push({ pathname: '/storeItem/[id]', params: { storeId: id, id: item.id, name: item.name, description: item.description, price: item.price, isOpen, category: getCategoryName(item.categoryId) } }) as any} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1 }} className='border-[#0b0b0b]/5'>
-                                                <View style={{ flex: 1 }}>
-                                                    <Text className='hidden'>{getCategoryName(item.categoryId)}</Text>
-                                                    <Text style={{ color: '#0b0b0b', fontSize: 16, marginTop: 2, fontFamily: "semibold" }}>{item.name}</Text>
-                                                    <Text className='text-[#0b0b0b] text-md' style={{ fontFamily: "semibold", marginTop: 4 }}>{item.price} <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
-                                                    <Text style={{ color: '#0b0b0b90', marginTop: 8, fontFamily: "medium" }}>{item.description}</Text>
-                                                </View>
-
-                                                <View className='flex justify-center items-center bg-[#7577804C]/10 rounded-2xl overflow-hidden w-24 h-24'></View>
-                                            </TouchableOpacity>
+                                            <StoreItemCard storeId={id} item={item} isOpen={isStoreOpen} />
                                         )}
                                 />
-
                             )
                         }
                     </View>
@@ -186,7 +175,7 @@ export default Page
 // }, [isVisible, opacity, scrollY]);
 
 
-{/* <Animated.View className='flex-col bg-[#FFFFFC] absolute pt-16 z-[999] top-0'>
+{/* <Animated.View className='flex-col bg-[#FFFFFC] absolute pt-16  top-0'>
 
                 <ScrollView removeClippedSubviews
                     horizontal

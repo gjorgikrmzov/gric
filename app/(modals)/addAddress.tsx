@@ -71,6 +71,7 @@ const Page = () => {
     const handleRegionChangeComplete = async (newRegion: any) => {
         if (!isWithinStrumitsaBounds(newRegion.latitude, newRegion.longitude)) {
             setstreet('Одбери адреса во опсег на градот')
+            setstreetNumber(null)
             return;
         }
 
@@ -123,7 +124,7 @@ const Page = () => {
                     "Адреса на достава",
                     "Полето 'зачувај адреса како' е празно.",
                     [
-                        { text: "Океј", style: "cancel" },
+                        { text: "Во ред", style: "cancel" },
                     ]
                 );
 
@@ -132,7 +133,15 @@ const Page = () => {
                     "Адреса на достава",
                     "Внесете име и број на улица.",
                     [
-                        { text: "Океј", style: "cancel" },
+                        { text: "Во ред", style: "cancel" },
+                    ]
+                );
+            } else if (!isWithinStrumitsaBounds(mapRegion.latitude, mapRegion.longitude)) {
+                Alert.alert(
+                    "Адреса на достава",
+                    "Одбери адреса во опсег на градот",
+                    [
+                        { text: "Во ред", style: "cancel" },
                     ]
                 );
             } else {
@@ -209,7 +218,6 @@ const Page = () => {
                         onRegionChangeComplete={handleRegionChangeComplete}
                         className='w-full flex h-full justify-center relative items-center'
                         showsCompass={false}
-                        maxDelta={0.05}
                         provider={PROVIDER_DEFAULT}
                         customMapStyle={customMapStyle}
                     />

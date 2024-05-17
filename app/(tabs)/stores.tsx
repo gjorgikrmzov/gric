@@ -1,18 +1,22 @@
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Keyboard, Animated, Platform, StyleSheet, FlatList } from 'react-native'
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Keyboard, Animated, Platform, StyleSheet, FlatList, Pressable } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react';
 import { router } from 'expo-router'
-import { ArrowLeft, Heart, MessageQuestion, SearchNormal1, Shop, ShoppingCart } from 'iconsax-react-native'
+import { ArrowLeft, Bag2, Coffee, Element4, Graph, Heart, Home2, HomeHashtag, MessageQuestion, SearchNormal1, Shop, ShoppingCart } from 'iconsax-react-native'
 import Colors from '../../constants/Colors'
 import { GestureHandlerRootView, RefreshControl } from 'react-native-gesture-handler'
 import { Easing } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../reduxStore';
+import { RootState, store } from '../reduxStore';
 import { fetchStores } from '../reduxStore/storeSlice';
+import StoreCard from '../../components/storeCard';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as Haptics from 'expo-haptics'
+import SkeletonLoader from '../../components/skeletonLoader';
 
 const Page = () => {
 
   const dispatch = useDispatch<any>()
-  
+
   const { stores } = useSelector((state: RootState) => state.store)
   const { storeTypes } = useSelector((state: RootState) => state.storeType)
   const { accessToken } = useSelector((state: RootState) => state.accessToken)
@@ -28,6 +32,8 @@ const Page = () => {
 
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const numberOfCartItems = useSelector((state: RootState) => state.cart.items.length);
+  const [selectedType, setselectedType] = useState<string>('Сите')
+  const [isLoading, setisLoading] = useState(false)
 
   useEffect(() => {
     if (search.trim() === '') {
@@ -93,10 +99,12 @@ const Page = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
+    setisLoading(true)
     dispatch(fetchStores(accessToken))
     setTimeout(() => {
+      setisLoading(false)
       setRefreshing(false);
-    }, 600);
+    });
   };
 
   const handleRouteStoreDetails = (store: any) => {
@@ -108,16 +116,53 @@ const Page = () => {
         name: store.name,
         storeTypeName,
         isOpen: store.isOpen,
-        address: JSON.stringify(store.address)
+        address: JSON.stringify(store.address),
+        imageUrl: store.imageUrl
       }
     });
+  };
+
+  useEffect(() => {
+    filterStores();
+    setisLoading(false);
+  }, [stores, selectedType]);
+
+  const filterStores = () => {
+    let filtered = stores;
+    setisLoading(true)
+
+    if (selectedType === 'Храна') {
+      filtered = filtered.filter(store => {
+        const storeTypeName = getStoreTypeName(store.storeTypeId);
+        return storeTypeName !== 'Кафе' && storeTypeName !== 'Тобако';
+      });
+    } else if (selectedType === 'Сите') {
+      setFilteredStores(stores)
+    } else if (selectedType) {
+      filtered = filtered.filter(store => getStoreTypeName(store.storeTypeId) === selectedType);
+    }
+
+    if (search.trim() !== '') {
+      const lowercasedQuery = search.toLowerCase();
+      filtered = filtered.filter(store => store.name.toLowerCase().includes(lowercasedQuery));
+    }
+
+
+    setFilteredStores(filtered);
+  };
+
+
+  const handleTypeFilter = (type: string) => {
+    Haptics.selectionAsync()
+    setselectedType(type);
+    setSearch('');
   };
 
   return (
     <GestureHandlerRootView>
 
       <View style={styles.header} className='bg-[#fffffc] flex-1'>
-        <Animated.View className='px-6 flex flex-row items-center mt-4 mb-4 '>
+        <Animated.View className='px-6 flex flex-row items-center mt-4 mb-2.5 '>
           <View className=' bg-[#fafafa]/90 flex-1 items-center flex-row px-5 rounded-2xl'>
             {
               isFocused ?
@@ -133,14 +178,39 @@ const Page = () => {
             }
 
             <TextInput onChangeText={handleSearchChange}
-              ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
+              ref={inputRef} onFocus={handleFocus} onBlur={handleBlur} value={search} className='text-[#0b0b0b] px-3 flex-1 ' style={styles.input} placeholder='Пребарај' placeholderTextColor='#0b0b0b97' />
 
           </View>
         </Animated.View>
 
-        <Animated.View style={{ transform: [{ translateY: searchBarResult }] }} className={isFocused ? 'flex h-full mt-4 px-6' : 'hidden'}>
+        <View className='space-x-1 px-6 flex flex-row justify-center items-center'>
+
+          <Pressable onPress={() => handleTypeFilter('Сите')} className={selectedType === 'Сите' ? 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#fafafa]/90'}>
+            <Element4 variant='Bold' size={16} color={selectedType === 'Сите' ? Colors.white : Colors.dark} />
+            <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Сите' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Сите</Text>
+          </Pressable>
+
+          <Pressable onPress={() => handleTypeFilter('Храна')} className={selectedType === 'Храна' ? 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#fafafa]/90'}>
+            <Bag2 variant='Bold' size={16} color={selectedType === 'Храна' ? Colors.white : Colors.dark} />
+            <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Храна' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Храна</Text>
+          </Pressable>
+
+
+          <Pressable onPress={() => handleTypeFilter('Кафе')} className={selectedType === 'Кафе' ? 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#fafafa]/90'}>
+            <Coffee variant='Bold' size={16} color={selectedType === 'Кафе' ? Colors.white : Colors.dark} />
+            <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Кафе' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Кафе</Text>
+          </Pressable>
+
+          <Pressable onPress={() => handleTypeFilter('Тобако')} className={selectedType === 'Тобако' ? 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-4 py-2.5 flex-1 flex justify-center items-center bg-[#fafafa]/90'}>
+            <HomeHashtag variant='Bold' size={16} color={selectedType === 'Тобако' ? Colors.white : Colors.dark} />
+            <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Тобако' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Тобако</Text>
+          </Pressable>
+
+        </View>
+
+        <Animated.View style={{ transform: [{ translateY: searchBarResult }] }} className={isFocused ? 'flex h-full mt-12 px-6' : 'hidden'}>
           <ScrollView keyboardShouldPersistTaps="always"
-            showsVerticalScrollIndicator={false} className='flex flex-1 flex-col mt-3' >
+            showsVerticalScrollIndicator={false} className='flex flex-1 flex-col ' >
             {filteredStores.map((store, index) => (
               index < 5 && (
                 <TouchableOpacity onPress={() => handleRouteStoreDetails(store)} key={index} className='w-full flex-row  flex items-center justify-between'>
@@ -157,7 +227,7 @@ const Page = () => {
             {filteredStores.length === 0 ? (
               <View className='flex-1 mt-6 justify-center items-center flex '>
                 <View className='w-14 h-14 bg-[#fafafa]/80 flex justify-center items-center rounded-lg'>
-                  <MessageQuestion size={26} color={Colors.primary} variant='Bulk' />
+                  <MessageQuestion size={26} color={Colors.dark} variant='Bulk' />
                 </View>
                 <Text className='text-center mt-2 text-[#0b0b0b]/60 text-[16px]' style={{ fontFamily: "medium" }}>Нема пронајдено {'\n'} резултати</Text>
               </View>
@@ -167,62 +237,44 @@ const Page = () => {
 
         <ScrollView keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false} refreshControl={<RefreshControl tintColor={Colors.dark} refreshing={refreshing}
-            onRefresh={onRefresh} />} className='h-full bg-[#FFFFFC]'>
+            onRefresh={onRefresh} />} className='h-full bg-[#FFFFFC] mt-2'>
           <View className='h-full  mb-4'>
 
-            <View className='w-full  '>
-              <FlatList
-                data={stores}
-                scrollEnabled={false}
-                className='px-6'
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity className='mt-3 pb-1' onPress={() => handleRouteStoreDetails(item)}>
-                    <View className='flex overflow-hidden relative'>
-                      <View className='w-full h-40 p-5 bg-[#fafafa] rounded-2xl overflow-hidden'>
-                        <View className='flex flex-row items-center justify-end w-full'>
-                          <TouchableOpacity className='flex flex-row items-center'>
-                            <Heart color={Colors.dark} size={20} />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    </View>
-
-                    <View className='ml-1 mt-2'>
-                      <View className='flex flex-row w-full justify-between items-center'>
-                        <Text className='text-lg ' style={{ fontFamily: "semibold" }}>{item.name}</Text>
-                        <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-full' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-full'}>
-                          <Text style={{ fontFamily: "medium" }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
-                        </View>
-                      </View>
-                      <View className='flex flex-row items-center'>
-                        <Text className='text-[#0b0b0b]/60 text-sm' style={{ fontFamily: "medium" }}>{getStoreTypeName(item.storeTypeId)}</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                )}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingBottom: 6,
-                  backgroundColor: '#FFFFFC',
-                }}
-              />
+            <View className={cartItems?.length !== 0 ? 'pb-20 w-full' : 'w-full'}>
+              {isLoading ? (
+                <SkeletonLoader />
+              ) : (
+                <FlatList
+                  data={filteredStores}
+                  scrollEnabled={false}
+                  className='px-6 pb-4'
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => <StoreCard item={item} />}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingBottom: 6,
+                    backgroundColor: '#FFFFFC',
+                  }}
+                />
+              )}
             </View>
           </View>
         </ScrollView>
 
-        <View
-          className='px-6 flex absolute py-4 bottom-0 w-full justify-center'>
-          {
-            cartItems?.length !== 0 && (
+
+        {
+          cartItems?.length !== 0 && (
+            <LinearGradient
+              className='px-6 flex absolute py-4 bottom-0 w-full justify-center'
+              colors={['rgba(255, 255, 252, 0.01)', 'rgba(255, 255, 252, 0.8)', '#fffffc']}        >
               <Animated.View>
                 <TouchableOpacity onPress={() => router.push('/(tabs)/cart')} className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
                   <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
                   <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {numberOfCartItems}</Text>
                 </TouchableOpacity>
               </Animated.View>
-            )}
-        </View>
+            </LinearGradient>
+          )}
       </View>
     </GestureHandlerRootView>
   )

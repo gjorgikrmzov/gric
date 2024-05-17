@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 import { Add, Archive, ArrowDown, Minus, ShoppingCart } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
-import Colors from '../constants/Colors'
+import Colors from '../../constants/Colors'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItem, clearCart } from '../app/reduxStore/cartSlice'
-import { RootState } from '../app/reduxStore'
+import { addItem, clearCart } from '../reduxStore/cartSlice'
+import { RootState } from '../reduxStore'
 
 const Page = () => {
 
-    const { storeId, id, name, description, price, isOpen, category } = useLocalSearchParams<{ storeId: string; id: string; name: string; description: string; price: any, isOpen: string, category: any }>();
+    const { imageUrl, storeId, id, name, description, price, isOpen, category } = useLocalSearchParams<{ imageUrl: string, storeId: string; id: string; name: string; description: string; price: any, isOpen: string, category: any }>();
 
     const dispatch = useDispatch();
     const isStoreOpen = isOpen === 'true' ? true : isOpen === 'false' ? false : isOpen;
@@ -56,7 +56,7 @@ const Page = () => {
                     {
                         text: "Да", onPress: () => {
                             dispatch(clearCart());
-                            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price } as any));
+                            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price, imageUrl } as any));
                             router.back()
                         }
                     }
@@ -64,7 +64,7 @@ const Page = () => {
             );
             return true
         } else {
-            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price } as any));
+            dispatch(addItem({ storeId, id, quantity: itemQuantity, name, price, imageUrl } as any));
             router.back()
 
         }

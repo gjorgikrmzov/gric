@@ -3,7 +3,8 @@ export type Store = {
     name: string,
     storeTypeId: string,
     isOpen: boolean,
-    address?: Address
+    address?: Address,
+    imageUrl: string
 }
 
 export type StoreType = {
@@ -24,6 +25,7 @@ export type StoreItem = {
     available: boolean,
     storeId: number,
     categoryId: number,
+    imageUrl: string
 }
 
 export type Address = {

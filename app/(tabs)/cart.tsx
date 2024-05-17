@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { clearCart, removeItem, selectCartTotal, updateItemQuantity } from '../reduxStore/cartSlice'
 import { RootState } from '../reduxStore'
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Image } from 'expo-image'
 
 interface CartItemType {
   id: string;
@@ -16,6 +17,7 @@ interface CartItemType {
   price: string;
   storeId: string;
   quantity: number;
+  imageUrl: string
 }
 
 interface CartItemProps {
@@ -25,14 +27,16 @@ interface CartItemProps {
     price: string;
     storeId: string;
     quantity: number;
+    imageUrl: string
   };
   handleIncreaseQuantity: (storeId: string, itemId: string, quantity: number) => void;
   handleDecreaseQuantity: (storeId: string, itemId: string, quantity: number) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = React.memo(({ cartItem, handleIncreaseQuantity, handleDecreaseQuantity }) => (<View className='py-5 border-b border-[#0b0b0b]/5 px-6'>
+const CartItem: React.FC<CartItemProps> = React.memo(({ cartItem, handleIncreaseQuantity, handleDecreaseQuantity }) => (
+<View className='py-5 border-b border-[#0b0b0b]/5 px-6'>
   <View className='flex flex-row items-center'>
-    <View className='flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden' />
+    <Image source={cartItem.imageUrl} className='flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden' />
     <View className='flex flex-row items-center justify-between flex-1'>
       <View className='flex flex-col ml-3 flex-1'>
         <Text className='text-[#0b0b0b]' style={{ fontFamily: "semibold" }}>{cartItem.name}</Text>
@@ -133,7 +137,7 @@ const Page = () => {
       <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
         <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
           <View className='flex flex-row items-center'>
-            <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
+            <ShoppingCart variant='Bulk' size={22} color={Colors.dark} />
             <Text className='text-xl ml-1' style={{ fontFamily: "semibold" }}>Корпа</Text>
           </View>
           <TouchableOpacity onPress={() => router.push('/(order)/orders')} className='px-4 bg-[#fafafa]/90 rounded-2xl py-3'>
@@ -151,7 +155,6 @@ const Page = () => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
-
 
           <View className='w-full h-1 bg-[#757780]/10'></View>
           <View className='px-6'>

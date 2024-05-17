@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { Store } from './models'
 
+interface fetchStoresByCategoryPayload {
+    id: string | null;
+    accessToken: string | null
+}
+
 export const fetchStores = createAsyncThunk("fetchStores", async (accessToken: string | null) => {
     try {
         const data = await fetch('http://172.20.10.2:8080/store', {
@@ -15,9 +20,27 @@ export const fetchStores = createAsyncThunk("fetchStores", async (accessToken: s
     }
 })
 
+export const fetchStoresByCategory = createAsyncThunk("fetchStoresByCategory", async (payload: fetchStoresByCategoryPayload) => {
+    const { id, accessToken } = payload;
+    
+    try {
+        const data = await fetch(`http://172.20.10.2:8080/store?itemCategoryId=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        return data.json()
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 const initialState = {
-    stores: <Store[]>[]
+    stores: <Store[]>[],
+    storesByCategory: <Store[]>[]
 }
+
 
 const storeSlice = createSlice({
     name: 'store',
@@ -29,6 +52,9 @@ const storeSlice = createSlice({
         builder.addCase(fetchStores.fulfilled, (state, action) => {
             state.stores = action.payload
         })
+        builder.addCase(fetchStoresByCategory.fulfilled, (state, action) => {
+            state.storesByCategory = action.payload;
+        });
     }
 
 
