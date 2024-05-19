@@ -11,7 +11,6 @@ import { fetchStores } from '../reduxStore/storeSlice';
 import StoreCard from '../../components/storeCard';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics'
-import SkeletonLoader from '../../components/skeletonLoader';
 
 const Page = () => {
 
@@ -33,7 +32,6 @@ const Page = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const numberOfCartItems = useSelector((state: RootState) => state.cart.items.length);
   const [selectedType, setselectedType] = useState<string>('Сите')
-  const [isLoading, setisLoading] = useState(false)
 
   useEffect(() => {
     if (search.trim() === '') {
@@ -99,10 +97,8 @@ const Page = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    setisLoading(true)
     dispatch(fetchStores(accessToken))
     setTimeout(() => {
-      setisLoading(false)
       setRefreshing(false);
     });
   };
@@ -124,12 +120,10 @@ const Page = () => {
 
   useEffect(() => {
     filterStores();
-    setisLoading(false);
   }, [stores, selectedType]);
 
   const filterStores = () => {
     let filtered = stores;
-    setisLoading(true)
 
     if (selectedType === 'Храна') {
       filtered = filtered.filter(store => {
@@ -241,9 +235,6 @@ const Page = () => {
           <View className='h-full  mb-4'>
 
             <View className={cartItems?.length !== 0 ? 'pb-20 w-full' : 'w-full'}>
-              {isLoading ? (
-                <SkeletonLoader />
-              ) : (
                 <FlatList
                   data={filteredStores}
                   scrollEnabled={false}
@@ -256,7 +247,6 @@ const Page = () => {
                     backgroundColor: '#FFFFFC',
                   }}
                 />
-              )}
             </View>
           </View>
         </ScrollView>

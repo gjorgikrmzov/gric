@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView, Animated, FlatList, StyleSheet, Platform } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, Animated, FlatList, StyleSheet, Platform, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Heart, Location, ShoppingCart } from 'iconsax-react-native'
 import { Link, router, useLocalSearchParams } from 'expo-router'
 import Colors from '../../constants/Colors'
@@ -14,17 +14,54 @@ import { Image } from 'expo-image'
 
 const Page = () => {
 
+
     const dispatch = useDispatch<any>();
 
     const { address, id, name, storeTypeName, isOpen, imageUrl } = useLocalSearchParams<{ address: any, id: any, name: string, storeTypeName: string, isOpen: string, imageUrl: string }>();
     const { accessToken } = useSelector((state: RootState) => state.accessToken);
     const { storeItems } = useSelector((state: RootState) => state.storeItem);
     const cartItems = useSelector((state: RootState) => state.cart.items);
+    const {categories}  = useSelector((state: RootState) => state.category)
 
     const [loadingItems, setLoadingItems] = useState(true);
     const isStoreOpen = isOpen === 'true';
     const storeAddress = JSON.parse(address)
     const memoizedStoreItems = useMemo(() => storeItems.filter((item) => item.storeId === id), [storeItems, id]);
+    const [isScrolled, setisScrolled] = useState(false)
+    const scrollTreshold = 80
+
+    const scrollY = useRef(new Animated.Value(0)).current;
+    const textOpacity = scrollY.interpolate({
+        inputRange: [0, scrollTreshold],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+    });
+
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollPosition = event.nativeEvent.contentOffset.y;
+        if (scrollPosition > scrollTreshold && !isScrolled) {
+            setisScrolled(true);
+        } else if (scrollPosition <= scrollTreshold && isScrolled) {
+            setisScrolled(false);
+        }
+        scrollY.setValue(scrollPosition);
+    };
+
+    const headerBackgroundColor = scrollY.interpolate({
+        inputRange: [0, scrollTreshold],
+        outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 255)'],
+        extrapolate: 'clamp',
+    });
+
+    useEffect(() => {
+        if (accessToken && memoizedStoreItems.length === 0) {
+            setLoadingItems(true);
+            dispatch(fetchStoreItems({ id, accessToken })).finally(() => setLoadingItems(false));
+        } else {
+            setLoadingItems(false);
+        }
+    }, [accessToken, id, dispatch, memoizedStoreItems.length]);
+
 
     useEffect(() => {
         if (accessToken && memoizedStoreItems.length === 0) {
@@ -38,46 +75,84 @@ const Page = () => {
 
     return (
         <GestureHandlerRootView>
-            <View className='flex-1 pb-6 bg-[#fffffc]'>
+            <View className='flex-1  bg-[#fffffc]'>
 
                 <StatusBar style='light' />
-                <View style={styles.header} className='bg-[#0b0b0b] z-50 w-full h-72 px-6 '>
-                    <View className='w-screen absolute h-72 z-30 left-0 top-0 bg-[#0b0b0b]/80'></View>
-                    <Image source={imageUrl} className=' absolute left-0 z-20 h-72 top-0 w-screen' />
+                <Animated.View style={[styles.header, {backgroundColor: headerBackgroundColor}]} className= 'flex z-[999] pb-4  absolute top-0' >
+                    <View className='w-full px-6 flex-row items-center justify-between'>
+                        <TouchableOpacity onPress={() => router.back()} className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#0b0b0b]/5 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#fffffc]/10 rounded-full'} >
+                            <ArrowLeft variant='Broken' size={20} color={isScrolled ? Colors.dark : Colors.white} />
+                        </TouchableOpacity>
 
-                    <View className='z-[999]'>
-                        <View className='flex  flex-row items-center justify-between'>
-                            <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-                                <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-                            </TouchableOpacity>
+                        <Animated.Text className='text-[16px]' style={{ fontFamily: 'medium', opacity: textOpacity }}>{name}</Animated.Text>
 
-                            <TouchableOpacity className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-                                <Heart variant='Broken' size={20} color={Colors.white} />
-                            </TouchableOpacity>
-                        </View>
-
-                        <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
-
-                        <Text className=' text-3xl  text-[#FFFFFC]' style={{ fontFamily: "bold" }}>{name}</Text>
-
-                        {storeAddress?.street ? (
-
-                            <View className=' flex items-center mt-0.5 flex-row'>
-                                <Location variant='Bulk' size={16} color={Colors.primary} />
-                                <Text className='text-[#fafafa]/80 ml-1' style={{ fontFamily: "medium" }}>{storeAddress?.street} {storeAddress?.streetNumber}</Text>
-                            </View>
-                        ) : (
-                            null
-                        )
-                        }
-                        <View className={isStoreOpen ? ' bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : ' bg-[#fffffc]/20 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
-                            <Text className={isStoreOpen ? ' text-[#000]/80 text-xs' : " text-[#fff]/80 text-xs"} style={{ fontFamily: "semibold" }}>{isStoreOpen ? 'Отворено' : 'Затворено'}</Text>
-                        </View>
-
+                        <TouchableOpacity className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#0b0b0b]/5 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#fffffc]/10 rounded-full'} >
+                            <Heart variant='Broken' size={20} color={isScrolled ? Colors.dark : Colors.white} />
+                        </TouchableOpacity>
                     </View>
-                </View>
 
-                <ScrollView>
+                    {/* <Animated.View style={{ opacity: textOpacity }} className=''>
+                        <ScrollView removeClippedSubviews
+                            horizontal
+                            decelerationRate={'fast'}
+                            snapToAlignment='end'
+                            showsHorizontalScrollIndicator={false}
+
+                            className='h-min bg-[#FFFFFC] mt-4 '  >
+                            {categories.map((category, index) => (
+                                <TouchableOpacity
+                                    className="py-4 flex px-3 justify-center items-center"
+                                    key={index}
+                                    // onPress={() => handleCategoryChange(category as Category)}
+                                >
+                                    <Text style={{ fontFamily: 'medium' }}>{category.name}</Text>
+                                </TouchableOpacity>
+                            ))}
+
+                            <View className="w-full absolute left-0 bottom-0 h-1 bg-[#F0F1F3]">
+                                <Animated.View
+                                    className='self-start'
+                                    style={{
+                                        // width: categoryWidth,
+                                        height: 4,
+                                        backgroundColor: '#0b0b0b',
+                                        
+                                    }}
+                                />
+                            </View>
+                        </ScrollView>
+                    </Animated.View> */}
+                </Animated.View>
+
+                <ScrollView onScroll={handleScroll} bounces={false} showsVerticalScrollIndicator={false}>
+                    <View className='bg-[#0b0b0b] pb-6 z-50 w-full h-72 px-6 '>
+                        <View className='w-screen absolute h-72 z-30 left-0 top-0 bg-[#0b0b0b]/80'></View>
+                        <Image source={imageUrl} className=' absolute left-0 z-20 h-72 top-0 w-screen' />
+
+                        <View className='z-[50] flex-1 justify-end flex fixed'>
+
+
+                            <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
+
+                            <Text className=' text-3xl  text-[#FFFFFC]' style={{ fontFamily: "bold" }}>{name}</Text>
+
+                            {storeAddress?.street ? (
+
+                                <View className=' flex items-center mt-0.5 flex-row'>
+                                    <Location variant='Bulk' size={16} color={Colors.primary} />
+                                    <Text className='text-[#fafafa]/80 ml-1' style={{ fontFamily: "medium" }}>{storeAddress?.street} {storeAddress?.streetNumber}</Text>
+                                </View>
+                            ) : (
+                                null
+                            )
+                            }
+                            <View className={isStoreOpen ? ' bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : ' bg-[#fffffc]/20 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
+                                <Text className={isStoreOpen ? ' text-[#000]/80 text-xs' : " text-[#fff]/80 text-xs"} style={{ fontFamily: "semibold" }}>{isStoreOpen ? 'Отворено' : 'Затворено'}</Text>
+                            </View>
+
+                        </View>
+                    </View>
+
                     <View className='pb-20 mt-5'>
                         <Text className='text-xl px-6 text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Мени</Text>
                         {loadingItems ?
@@ -116,7 +191,7 @@ const Page = () => {
                         )}
                 </View>
             </View>
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
     )
 }
 
@@ -177,35 +252,7 @@ export default Page
 
 {/* <Animated.View className='flex-col bg-[#FFFFFC] absolute pt-16  top-0'>
 
-                <ScrollView removeClippedSubviews
-                    horizontal
-                    decelerationRate={'fast'}
-                    snapToAlignment='end'
-                    showsHorizontalScrollIndicator={false}
-
-                    className='h-min bg-[#FFFFFC] mt-4'  >
-                    {categories.map((category, index) => (
-                        <TouchableOpacity
-                            className="w-24 py-5 justify-center items-center"
-                            key={category}
-                            onPress={() => handleCategoryChange(category as Category)}
-                        >
-                            <Text style={{ fontFamily: 'medium' }}>{category}</Text>
-                        </TouchableOpacity>
-                    ))}
-
-                    <View className="w-full absolute left-0 bottom-0 h-1 bg-[#F0F1F3]">
-                        <Animated.View
-                            className='self-start'
-                            style={{
-                                width: categoryWidth,
-                                height: 4,
-                                backgroundColor: '#0b0b0b',
-                                transform: [{ translateX: highlightPosition }],
-                            }}
-                        />
-                    </View>
-                </ScrollView>
+               
 
             </Animated.View> */}
 

@@ -7,6 +7,7 @@ import Colors from '../../constants/Colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem, clearCart } from '../reduxStore/cartSlice'
 import { RootState } from '../reduxStore'
+import { Image } from 'expo-image'
 
 const Page = () => {
 

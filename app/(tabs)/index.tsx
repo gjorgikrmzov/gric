@@ -13,7 +13,6 @@ import { RootState } from '../reduxStore'
 import { fetchCategories } from '../reduxStore/categorySlice'
 import { fetchAddress } from '../reduxStore/addressSlice'
 import StoreCard from '../../components/storeCard'
-import SkeletonLoader from '../../components/skeletonLoader'
 
 const Page = () => {
 
@@ -28,7 +27,6 @@ const Page = () => {
     const personId = useSelector((state: RootState) => state.user.id)
 
     const [refreshing, setRefreshing] = useState(false);
-    const [isLoading, setIsLoading] = useState(true)
 
     const [savedAddress, setSavedAddress] = useState<string>('');
     const [isFocused, setIsFocused] = useState(false);
@@ -43,17 +41,14 @@ const Page = () => {
 
     useEffect(() => {
         if (accessToken) {
-            setIsLoading(true);
             Promise.all([
                 dispatch(fetchStores(accessToken)),
                 dispatch(fetchStoresTypes(accessToken)),
                 dispatch(fetchCategories(accessToken)),
                 dispatch(fetchAddress({ personId, accessToken })),
             ]).then(() => {
-                setIsLoading(false);
             }).catch((error) => {
                 console.error(error);
-                setIsLoading(false);
             });
         }
     }, [personId, accessToken, dispatch]);
@@ -117,12 +112,11 @@ const Page = () => {
 
     const onRefresh = () => {
         setRefreshing(true);
-        setIsLoading(true)
         dispatch(fetchStores(accessToken))
         dispatch(fetchStoresTypes(accessToken))
-            .finally(() => { 
-                setIsLoading(false)
-                setRefreshing(false) });
+            .finally(() => {
+                setRefreshing(false)
+            });
     };
 
 
@@ -145,23 +139,23 @@ const Page = () => {
     const renderCategoryIcon = (categoryName: string) => {
         switch (categoryName) {
             case 'Бургер':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/burger.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/burger.svg')} />)
             case 'Пица':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pizza.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pizza.svg')} />)
             case 'Кафе':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/coffe.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/coffe.svg')} />)
             case 'Десерт':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/donut.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/donut.svg')} />)
             case 'Паста':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pasta.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/pasta.svg')} />)
             case 'Месо':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/meet.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/meet.svg')} />)
 
             case 'Тако':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/cake.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/cake.svg')} />)
 
             case 'Сендвич':
-                return (<Image style={{ tintColor: '#0b0b0b' }} className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/bread.svg')} />)
+                return (<Image className='w-10 h-10 z-10 top-4 self-center' source={require('../../assets/images/bread.svg')} />)
         }
     };
 
@@ -342,22 +336,18 @@ const Page = () => {
                     </Animated.View> */}
 
                     <View className='mt-3'>
-                        {isLoading ? (
-                            <SkeletonLoader />
-                        ) : (
-                            <FlatList
-                                data={stores}
-                                scrollEnabled={false}
-                                className='px-6 pb-4'
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={({ item }) => <StoreCard item={item} />}
-                                showsVerticalScrollIndicator={false}
-                                contentContainerStyle={{
-                                    paddingBottom: 6,
-                                    backgroundColor: '#FFFFFC',
-                                }}
-                            />
-                        )}
+                        <FlatList
+                            data={stores}
+                            scrollEnabled={false}
+                            className='px-6 pb-4'
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => <StoreCard item={item} />}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                                paddingBottom: 6,
+                                backgroundColor: '#FFFFFC',
+                            }}
+                        />
                     </View>
 
                 </ScrollView>

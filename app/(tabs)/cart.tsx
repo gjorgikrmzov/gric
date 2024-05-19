@@ -195,7 +195,7 @@ const Page = () => {
 
         <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
           <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-            <ShoppingCart size={56} variant='Bulk' color={Colors.primary} />
+            <ShoppingCart size={56} variant='Bulk' color={Colors.dark} />
           </View>
 
           <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: 'medium' }}>Вашата корпа {'\n'} е празна</Text>

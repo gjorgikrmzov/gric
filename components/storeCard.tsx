@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Heart } from 'iconsax-react-native'
 import Colors from '../constants/Colors'
@@ -12,6 +12,8 @@ const StoreCard = ({ item }: { item: any }) => {
 
     const router = useRouter();
     const { storeTypes } = useSelector((state: RootState) => state.storeType);
+    const storesStatus = useSelector((state: RootState) => state.store.status)
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const getStoreTypeName = (storeTypeId: string) => {
         const storeType = storeTypes?.find((type) => type.id === storeTypeId);
@@ -33,34 +35,44 @@ const StoreCard = ({ item }: { item: any }) => {
         } as any);
     };
 
+    useEffect(() => { }, [storesStatus]);
+
+
     return (
-        <TouchableOpacity className='mt-3 pb-1' onPress={() => handleRouteStoreDetails(item)}>
-            <View className='flex overflow-hidden relative'>
-                <Image source={item.imageUrl}
-                    className='absolute h-full z-[999] left-0 rounded-2xl top-0  w-full ' />
-                <View className='w-full h-40 p-5 bg-[#fafafa] relative overflow-hidden'>
-                    <View className='flex flex-row items-center justify-end w-full'>
-                        <TouchableOpacity className='flex flex-row items-center'>
-                            <Heart color={Colors.dark} size={20} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+        <>
 
-            <View className='ml-1 mt-2'>
-                <View className='flex flex-row w-full justify-between items-start'>
-
-                    <View className='flex '>
-                        <Text className='text-lg  -mb-1' style={{ fontFamily: 'semibold' }}>{item.name}</Text>
-                        <Text className='text-[#0b0b0b]/60 text-sm ' style={{ fontFamily: 'medium' }}>{getStoreTypeName(item.storeTypeId)}</Text>
+                <TouchableOpacity className='mt-3 pb-1' onPress={() => handleRouteStoreDetails(item)}>
+                    <View className='flex overflow-hidden relative'>
+                        {!imageLoaded && (
+                            <View className='absolute h-full  left-0 rounded-2xl top-0  w-full bg-[#fafafa]/80'>
+                            </View>
+                        )}
+                        <Image onLoad={() => setImageLoaded(true)} source={item.imageUrl}
+                            className='absolute h-full  left-0 rounded-2xl top-0  w-full ' />
+                        <View className='w-full h-40 p-5 relative overflow-hidden'>
+                            <View className='flex flex-row items-center justify-end w-full'>
+                                <TouchableOpacity className='z-[999] flex flex-row items-center'>
+                                    <Heart color={Colors.white} size={20} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
 
-                    <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-xl' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-xl'}>
-                        <Text style={{ fontFamily: 'medium' }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                    <View className='ml-1 mt-2'>
+                        <View className='flex flex-row w-full justify-between items-start'>
+
+                            <View className='flex '>
+                                <Text className='text-lg  -mb-1' style={{ fontFamily: 'semibold' }}>{item.name}</Text>
+                                <Text className='text-[#0b0b0b]/60 text-sm ' style={{ fontFamily: 'medium' }}>{getStoreTypeName(item.storeTypeId)}</Text>
+                            </View>
+
+                            <View className={item.isOpen ? 'px-2.5 py-1.5 bg-[#0b0b0b] flex items-center justify-center rounded-xl' : 'px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-xl'}>
+                                <Text style={{ fontFamily: 'medium' }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                            </View>
+                        </View>
                     </View>
-                </View>
-            </View>
-        </TouchableOpacity>
+                </TouchableOpacity >
+        </>
     )
 }
 

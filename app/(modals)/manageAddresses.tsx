@@ -65,7 +65,7 @@ const Page = () => {
         {addresses?.length === 0 ? (
           <View className='flex-1 justify-center items-center'>
             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-              <Location size={56} variant='Bulk' color={Colors.primary} />
+              <Location size={56} variant='Bulk' color={Colors.dark} />
             </View>
 
             <Text className='text-[#0b0b0b]/80 text-[16px] mt-4 text-center' style={{ fontFamily: 'medium' }}>Во моментов немате внесено {'\n'} адреса на достава</Text>

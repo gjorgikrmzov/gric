@@ -70,7 +70,7 @@ const Page = () => {
 
     const handleRegionChangeComplete = async (newRegion: any) => {
         if (!isWithinStrumitsaBounds(newRegion.latitude, newRegion.longitude)) {
-            setstreet('Одбери адреса во опсег на градот')
+            setstreet('Одбери адреса во опсег на градот Струмица')
             setstreetNumber(null)
             return;
         }
@@ -139,7 +139,7 @@ const Page = () => {
             } else if (!isWithinStrumitsaBounds(mapRegion.latitude, mapRegion.longitude)) {
                 Alert.alert(
                     "Адреса на достава",
-                    "Одбери адреса во опсег на градот",
+                    "Одбери адреса во опсег на градот Струмица",
                     [
                         { text: "Во ред", style: "cancel" },
                     ]

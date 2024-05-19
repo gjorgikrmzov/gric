@@ -128,40 +128,6 @@ const Page = () => {
   }, [search, stores]);
 
 
-  useEffect(() => {
-    filterStores();
-  }, [stores, selectedType]);
-
-  const filterStores = () => {
-    let filtered = stores;
-
-    if (selectedType === 'Храна') {
-      filtered = filtered.filter(store => {
-        const storeTypeName = getStoreTypeName(store.storeTypeId);
-        return storeTypeName !== 'Кафе' && storeTypeName !== 'Тобако';
-      });
-    } else if (selectedType === 'Сите') {
-      setfilteredStores(stores)
-    } else if (selectedType) {
-      filtered = filtered.filter(store => getStoreTypeName(store.storeTypeId) === selectedType);
-    }
-
-    if (search.trim() !== '') {
-      const lowercasedQuery = search.toLowerCase();
-      filtered = filtered.filter(store => store.name.toLowerCase().includes(lowercasedQuery));
-    }
-
-
-    setfilteredStores(filtered);
-  };
-
-
-  const handleTypeFilter = (type: string) => {
-    Haptics.selectionAsync()
-    setselectedType(type);
-    setSearch('');
-  };
-
 
   return (
     <GestureHandlerRootView>
@@ -211,38 +177,6 @@ const Page = () => {
             <View className='absolute left-0 top-0 z-0 bg-[#fffffc] w-screen h-screen'></View>
           }
 
-          {isFocused ? null : (
-
-            <View className='px-4'>
-            <View className='mt-2 z-[999] flex-row justify-evenly items-center'>
-              <Pressable onPress={() => handleTypeFilter('Сите')} className={selectedType === 'Сите' ? 'rounded-xl  flex-row px-3 py-2.5  flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-3 py-2.5  flex justify-center items-center bg-[#fafafa]/90'}>
-                <Element4 variant='Bold' size={16} color={selectedType === 'Сите' ? Colors.white : Colors.dark} />
-                <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Сите' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Сите</Text>
-              </Pressable>
-
-              <Pressable onPress={() => handleTypeFilter('Храна')} className={selectedType === 'Храна' ? 'rounded-xl  flex-row px-3 py-2.5  flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-3 py-2.5  flex justify-center items-center bg-[#fafafa]/90'}>
-                <Bag2 variant='Bold' size={16} color={selectedType === 'Храна' ? Colors.white : Colors.dark} />
-                <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Храна' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Храна</Text>
-              </Pressable>
-
-
-              <Pressable onPress={() => handleTypeFilter('Кафе')} className={selectedType === 'Кафе' ? 'rounded-xl  flex-row px-3 py-2.5  flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-3 py-2.5  flex justify-center items-center bg-[#fafafa]/90'}>
-                <Coffee variant='Bold' size={16} color={selectedType === 'Кафе' ? Colors.white : Colors.dark} />
-                <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Кафе' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Кафе</Text>
-              </Pressable>
-
-              <Pressable onPress={() => handleTypeFilter('Тобако')} className={selectedType === 'Тобако' ? 'rounded-xl  flex-row px-3 py-2.5  flex justify-center items-center bg-[#0b0b0b]' : 'rounded-xl flex-row px-3 py-2.5  flex justify-center items-center bg-[#fafafa]/90'}>
-                <HomeHashtag variant='Bold' size={16} color={selectedType === 'Тобако' ? Colors.white : Colors.dark} />
-                <Text style={{ fontFamily: 'medium' }} className={selectedType === 'Тобако' ? 'ml-1.5 text-xs text-white' : 'ml-1.5 text-xs'} >Тобако</Text>
-              </Pressable>
-
-
-            </View>
-
-          </View>
-          )}
-
-
           <Animated.View style={{ transform: [{ translateY: searchBarResult }] }} className={isFocused ? 'flex h-full mt-10 px-6 relative' : 'hidden'}>
 
             <ScrollView keyboardShouldPersistTaps="always"
@@ -276,10 +210,10 @@ const Page = () => {
           <MapView ref={mapRef}
             className='w-full flex-1' showsCompass={false} focusable initialRegion={INITIAL_REGION} provider={PROVIDER_DEFAULT} customMapStyle={customMapStyle} >
             {filteredStores?.map(store => (
-              <Marker key={store.id} coordinate={{ latitude: store.address?.latitude, longitude: store.address?.longitude } as any}>
+              <Marker key={store.id} onPress={() => handleMarkerPress(store)} coordinate={{ latitude: store.address?.latitude, longitude: store.address?.longitude } as any}>
                 <View className='flex items-center flex-1'>
                   {selectedStoreId === store.id && (
-                    <TouchableOpacity onPress={() => handleRouteStoreDetails(store)} className='opacity-100 border-2 border-[#0b0b0b]/40 w-32  relative flex-1 flex justify-center items-start bg-[#fffffc] mb-2 rounded-2xl'>
+                    <TouchableOpacity onPress={() => handleRouteStoreDetails(store)} className='w-32 relative flex-1 flex justify-center items-start bg-[#fffffc] mb-2 rounded-2xl'>
                       <View className='w-full h-16 bg-[#0b0b0b]/5 rounded-xl mb-2'>
                         <Image source={store.imageUrl} className='w-full z-0 h-full absolute left-0 top-0 rounded-xl rounded-bl-none rounded-br-none' />
                       </View>
@@ -291,7 +225,7 @@ const Page = () => {
                       <Text style={{ fontFamily: 'medium' }} className='ml-2.5 mr-2.5 mb-2.5'>{store.name}</Text>
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity className={selectedStoreId === store.id ? '-z-0 p-2 justify-center items-center flex rounded-xl bg-[#0b0b0b]' : '-z-0 p-2 justify-center items-center flex rounded-2xl bg-[#fafafa]'} onPress={() => handleMarkerPress(store)}>
+                  <TouchableOpacity className={selectedStoreId === store.id ? '-z-0 p-2 justify-center items-center flex rounded-xl bg-[#0b0b0b]' : '-z-0 p-2 justify-center items-center flex rounded-2xl bg-[#fafafa]'} >
                     <Shop size={19} variant='Bulk' color={selectedStoreId === store.id ? Colors.white : Colors.dark} />
                   </TouchableOpacity>
                 </View>
