@@ -115,7 +115,6 @@ function NavigationStack() {
       <Stack.Screen name="(auth)/signIn" />
       <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
       <Stack.Screen name="store/[id]" />
-      <Stack.Screen name="category" />
       <Stack.Screen name="storeItem/[id]" options={{ presentation: "modal" }} />
       <Stack.Screen name="(order)/orders" />
       <Stack.Screen name="(order)/checkout" />

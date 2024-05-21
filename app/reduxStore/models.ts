@@ -36,7 +36,8 @@ export type Address = {
     flat: number,
     apartment: number,
     longitude: number,
-    latitude: number
+    latitude: number,
+    isSelected: boolean
 }
 
 

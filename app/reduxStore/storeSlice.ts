@@ -15,6 +15,7 @@ export const fetchStores = createAsyncThunk("fetchStores", async (accessToken: s
             }
         })
         return data.json()
+        
     } catch (error) {
         console.log(error)
     }
@@ -39,7 +40,6 @@ export const fetchStoresByCategory = createAsyncThunk("fetchStoresByCategory", a
 const initialState = {
     stores: <Store[]>[],
     storesByCategory: <Store[]>[],
-    status: 'idl',
 }
 
 
@@ -50,13 +50,10 @@ const storeSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchStores.pending, (state) => {
-            state.status = 'loading';
-        })
+    
 
         builder.addCase(fetchStores.fulfilled, (state, action) => {
             state.stores = action.payload
-            state.status = 'succeeded'
         })
         builder.addCase(fetchStoresByCategory.fulfilled, (state, action) => {
             state.storesByCategory = action.payload;

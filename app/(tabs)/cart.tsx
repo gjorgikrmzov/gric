@@ -137,8 +137,7 @@ const Page = () => {
       <View className='flex-1 flex flex-col  bg-[#FFFFFC]'>
         <View style={styles.header} className='full px-6 flex flex-row justify-between items-center'>
           <View className='flex flex-row items-center'>
-            <ShoppingCart variant='Bulk' size={22} color={Colors.dark} />
-            <Text className='text-xl ml-1' style={{ fontFamily: "semibold" }}>Корпа</Text>
+            <Text className='text-xl' style={{ fontFamily: "semibold" }}>Корпа</Text>
           </View>
           <TouchableOpacity onPress={() => router.push('/(order)/orders')} className='px-4 bg-[#fafafa]/90 rounded-2xl py-3'>
             <Text style={{ fontFamily: "semibold" }}>Нарачки</Text>
@@ -195,7 +194,7 @@ const Page = () => {
 
         <View className={cartItems.length == 0 ? 'flex-1 justify-center items-center' : 'hidden'}>
           <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-            <ShoppingCart size={56} variant='Bulk' color={Colors.dark} />
+            <ShoppingCart size={56} variant='Bulk' color={Colors.primary} />
           </View>
 
           <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: 'medium' }}>Вашата корпа {'\n'} е празна</Text>

@@ -9,7 +9,7 @@ import { RootState } from '../reduxStore'
 import { fetchStoreItems } from '../reduxStore/storeItemSlice'
 import { ActivityIndicator } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import StoreItemCard from '../../components/storeItemCard'
+import StoreItemCard from '../../components/Cards/storeItemCard'
 import { Image } from 'expo-image'
 
 const Page = () => {
@@ -52,16 +52,6 @@ const Page = () => {
         outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 255)'],
         extrapolate: 'clamp',
     });
-
-    useEffect(() => {
-        if (accessToken && memoizedStoreItems.length === 0) {
-            setLoadingItems(true);
-            dispatch(fetchStoreItems({ id, accessToken })).finally(() => setLoadingItems(false));
-        } else {
-            setLoadingItems(false);
-        }
-    }, [accessToken, id, dispatch, memoizedStoreItems.length]);
-
 
     useEffect(() => {
         if (accessToken && memoizedStoreItems.length === 0) {

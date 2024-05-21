@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { Address, Store } from './models'
 
-interface FetchStoreItemsPayload {
+interface FetchAddressPaylaod {
     personId: string | null;
     accessToken: string | null
 }
 
-
-export const fetchAddress = createAsyncThunk("fetchAddress", async (payload: FetchStoreItemsPayload) => {
+export const fetchAddress = createAsyncThunk("fetchAddress", async (payload: FetchAddressPaylaod) => {
     const { personId, accessToken } = payload;
 
     try {
@@ -25,36 +24,25 @@ export const fetchAddress = createAsyncThunk("fetchAddress", async (payload: Fet
 })
 
 
-
 const initialState = {
     addresses: <Address[]>[],
-    selectedAddressId: ''
 }
 
 const addressSlice = createSlice({
     name: 'address',
     initialState: initialState,
     reducers: {
-        selectAddress: (state, action) => {
-            state.selectedAddressId = action.payload
-        }, 
         deleteAddress: (state, action) => {
             const deletedId = action.payload;
             const index = state.addresses.findIndex(address => address.id === deletedId);
             if (index !== -1) {
-                state.addresses.splice(index, 1);
-                if (state.selectedAddressId === deletedId && state.addresses.length > 0) {
-                    state.selectedAddressId = state.addresses[0].id;
-                }
+                state.addresses.splice(index, 1);   
             }
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAddress.fulfilled, (state, action) => {
             state.addresses = action.payload
-            if (state.addresses.length === 1) {
-                state.selectedAddressId = state.addresses[0].id;
-            }
         })
 
     }
@@ -64,4 +52,4 @@ const addressSlice = createSlice({
 })
 
 export default addressSlice
-export const { selectAddress, deleteAddress } = addressSlice.actions
+export const { deleteAddress } = addressSlice.actions

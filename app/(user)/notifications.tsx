@@ -29,7 +29,7 @@ const Page = () => {
 
           <View className='flex justify-center items-center flex-col'>
             <View className='flex justify-center items-center w-28 h-28 rounded-3xl bg-[#fafafa]/90'>
-              <Notification size={56} variant='Bulk' color={Colors.dark} />
+              <Notification size={56} variant='Bulk' color={Colors.primary} />
             </View>
             <Text className='text-[#0b0b0b] text-xl mt-4 text-center' style={{ fontFamily: "medium" }}>Немате известувања {'\n'} во моментов</Text>
           </View>

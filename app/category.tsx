@@ -1,94 +1,119 @@
-import { View, Text, Platform, StyleSheet, FlatList, ScrollView, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Text, Platform, ScrollView, NativeSyntheticEvent } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler'
-import { ArrowLeft } from 'iconsax-react-native'
-import { router, useLocalSearchParams } from 'expo-router'
+import { ArrowLeft, Heart } from 'iconsax-react-native'
+import { StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
-import { StatusBar } from 'expo-status-bar'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchStoresByCategory } from './reduxStore/storeSlice'
-import StoreCard from '../components/storeCard'
 import { RootState } from './reduxStore'
+import { fetchStoresByCategory } from './reduxStore/storeSlice'
+import { NativeScrollEvent } from 'react-native'
+import { Image } from 'expo-image'
+import StoresByCategoryList from '../components/List/storesByCategoryList'
+import SkeletonList from '../components/List/skeletonList'
+import { StatusBar } from 'expo-status-bar'
 
 const Page = () => {
 
-  const { name, id } = useLocalSearchParams<{ name: string, id: any }>()
-  const { accessToken } = useSelector((state: RootState) => state.accessToken)
-  const storesByCategory = useSelector((state: RootState) => state.store.storesByCategory);
-  const dispatch = useDispatch<any>()
+    const { name, id } = useLocalSearchParams<{ name: string, id: any }>()
+    const { accessToken } = useSelector((state: RootState) => state.accessToken)
+    const storesByCategory = useSelector((state: RootState) => state.store.storesByCategory);
+    const dispatch = useDispatch<any>()
+    const [loadingStores, setloadingStores] = useState(true)
+    const router = useRouter()
+    const scrollTreshold = 80
+    const [isScrolled, setisScrolled] = useState(false)
 
-  const [isLoading, setisLoading] = useState(true)
+    useEffect(() => {
+        const fetchData = async () => {
+            setloadingStores(true);
+            await dispatch(fetchStoresByCategory({ id, accessToken }));
+            setloadingStores(false);
+        };
 
+        fetchData();
+    }, [])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setisLoading(true);
-      await dispatch(fetchStoresByCategory({ id, accessToken }));
-      setisLoading(false);
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollPosition = event.nativeEvent.contentOffset.y;
+        if (scrollPosition > scrollTreshold && !isScrolled) {
+            setisScrolled(true);
+        } else if (scrollPosition <= scrollTreshold && isScrolled) {
+            setisScrolled(false);
+        }
     };
 
-    fetchData();
-  }, [])
+    const renderCategoryIcon = (name: any) => {
+        switch (name) {
+            case 'Бургер':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/burger.svg')} />)
+            case 'Пица':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/pizza.svg')} />)
+            case 'Кафе':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/coffe.svg')} />)
+            case 'Десерт':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/donut.svg')} />)
+            case 'Паста':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/pasta.svg')} />)
+            case 'Месо':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/meet.svg')} />)
+
+            case 'Тако':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/cake.svg')} />)
+
+            case 'Сендвич':
+                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/bread.svg')} />)
+        }
+    };
+    return (
+        <GestureHandlerRootView>
+            <StatusBar style='light' />
+            <View className='bg-[#0b0b0b] flex-1'>
+                <View style={styles.header} className='bg-[#131313]/10 border-b border-[#0b0b0b]/5 py-4  flex '>
+                    <View className='flex z-[999] top-0' >
+                        <View className='w-full px-6 flex-row items-center justify-between'>
+                            <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
+                                <ArrowLeft variant='Broken' size={20} color={Colors.white} />
+                            </TouchableOpacity>
+
+                            {isScrolled && (
+                                <Text style={{ fontFamily: 'medium' }} className='text-lg text-white'>{name}</Text>
+                            )}
+
+                            <View className='w-14'>
+                            </View>
+                        </View>
+                    </View>
 
 
-  return (
-    <GestureHandlerRootView>
-      <SafeAreaView className='bg-[#0b0b0b]'>
 
-        <StatusBar style='light' />
+                    <View className={isScrolled ? 'hidden px-6 mt-6' : 'flex px-6 flex-row mt-6 w-full justify-between items-center'}>
+                        <Text style={{ fontFamily: 'medium' }} className='text-2xl text-white'>{name}</Text>
+                    </View>
+                </View>
 
-        <View className='flex w-full flex-col px-6 bg-[#0b0b0b]' style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-            <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-          </TouchableOpacity>
 
-          <View className='mt-6'>
-            <Text className='text-2xl text-white' style={{ fontFamily: "medium" }}>{name}</Text>
-          </View>
-        </View>
-      </SafeAreaView>
+                <ScrollView onScroll={handleScroll} className='bg-[#fffffc] flex-1'>
 
-      {isLoading ? (
-        <View className='flex-1 flex bg-[#fffffc] justify-center items-center'>
-          <ActivityIndicator className='' color={Colors.dark} />
-        </View>
-      ) : (
-        <View className='flex-1 bg-[#fffffc]'>
+                    {loadingStores ? (
+                        <SkeletonList />
+                    ) : (
+                        <StoresByCategoryList />
+                    )
+                    }
+                </ScrollView>
+            </View>
+        </GestureHandlerRootView>
 
-          {
-            storesByCategory?.length === 0 ? (
-              <View className='flex-1 flex justify-center items-center'>
-                <Text style={{ fontFamily: "medium" }}>Нема пронајдено резултати</Text>
-              </View>
-            ) : (
-              <FlatList
-                data={storesByCategory}
-                className='px-6'
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <StoreCard item={item} />}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingBottom: 20,
-                  paddingTop: 20,
-                  backgroundColor: '#FFFFFC',
-                }}
-              />
-            )}
-        </View>
-      )}
-    </GestureHandlerRootView>
-  )
+    )
 }
 
 export default Page
 
+
 const styles = StyleSheet.create({
-  header: {
-    paddingTop: (Platform.OS === 'android') ? 20 : 16
-  },
-  input: {
-    paddingVertical: (Platform.OS === 'android') ? 16 : 22,
-    fontFamily: 'medium',
-  }
+    header: {
+        paddingTop: (Platform.OS === 'android') ? 40 : 50,
+    }
 });

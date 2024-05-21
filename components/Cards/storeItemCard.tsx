@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
 import { Image } from 'expo-image'
 import { useSelector } from 'react-redux'
-import { RootState } from '../app/reduxStore'
+import { RootState } from '../../app/reduxStore'
 
 const StoreItemCard = ({ item, storeId, isOpen }: { item: any, storeId: string, isOpen:any }) => {
 
@@ -24,8 +24,8 @@ const StoreItemCard = ({ item, storeId, isOpen }: { item: any, storeId: string, 
                 <Text className='text-[#0b0b0b] text-md' style={{ fontFamily: "semibold", marginTop: 4 }}>{item.price} <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
                 <Text style={{ color: '#0b0b0b90', marginTop: 8, fontFamily: "medium" }}>{item.description}</Text>
             </View>
-
             <Image source={item.imageUrl} contentFit='contain' className='flex justify-center items-center bg-[#7577804C]/10 rounded-2xl overflow-hidden w-24 h-24' />
+
         </TouchableOpacity>
     )
 }
