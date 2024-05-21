@@ -32,7 +32,7 @@ const CardSkeleton = () => {
         <Animated.View style={{opacity: pulseValue}} className='mt-3 pb-1'>
             <View className='flex overflow-hidden relative'>
 
-                <View className='w-full h-40 p-5 bg-[#F7F7F7] rounded-2xl relative overflow-hidden'>
+                <View className='w-full h-40 p-5 bg-[#121212]/90 rounded-2xl relative overflow-hidden'>
                     <View className='flex flex-row items-center justify-end w-full'>
 
                     </View>
@@ -42,11 +42,11 @@ const CardSkeleton = () => {
             <View className='ml-1 mt-2'>
                 <View className='flex flex-row w-full justify-between items-start'>
                     <View className='flex '>
-                        <View className=' bg-[#F7F7F7] h-4 rounded-xl  w-24 mb-1'></View>
-                        <View className='bg-[#F7F7F7] h-4 rounded-xl w-36'></View>
+                        <View className=' bg-[#121212]/90 h-4 rounded-xl  w-24 mb-1'></View>
+                        <View className='bg-[#121212]/90 h-4 rounded-xl w-36'></View>
                     </View>
 
-                    <View className='py-3 w-20 bg-[#F7F7F7] flex items-center justify-center rounded-xl' >
+                    <View className='py-3 w-20 bg-[#121212]/90 flex items-center justify-center rounded-xl' >
                     </View>
                 </View>
             </View>

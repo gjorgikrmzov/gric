@@ -179,19 +179,19 @@ const Page = () => {
   };
 
   return (
-    <View style={styles.header} className="bg-[#FFFFFC] px-6 flex-1">
+    <View style={styles.header} className="bg-[#0b0b0b] px-6 flex-1">
       <StatusBar style="light" />
 
       <View className="flex flex-row items-center justify-between">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full"
+          className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
         >
-          <ArrowDown variant="Broken" size={20} color={Colors.dark} />
+          <ArrowDown variant="Broken" size={20} color={Colors.white} />
         </TouchableOpacity>
 
         <Text
-          className="text-lg text-[#0b0b0b]"
+          className="text-lg text-[#fffffc]"
           style={{ fontFamily: "medium" }}
         >
           Додај адреса
@@ -206,10 +206,10 @@ const Page = () => {
 
       <View className="mt-5 flex-1">
         <View className="flex  flex-row items-center ml-1">
-          <Location variant="Bold" color={Colors.dark} size={18} />
+          <Location variant="Bulk" color={Colors.primary} size={18} />
           <Text
             style={{ fontFamily: "medium" }}
-            className="ml-1 text-[15px] text-[#0b0b0b]"
+            className="ml-1 text-[15px] text-[#fffffc]"
           >
             Податоци на адреса
           </Text>
@@ -220,9 +220,9 @@ const Page = () => {
             onChangeText={(text) => setstreet(text)}
             value={street !== null ? street : ""}
             style={{ fontFamily: "medium" }}
-            className="px-5 flex-1  py-5 border-2 border-[#fafafa]/80 rounded-2xl bg-[#fafafa]/80 "
+            className="px-5 flex-1  py-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80 "
             placeholder="Име на улица"
-            placeholderTextColor="#0b0b0b97"
+            placeholderTextColor="#fafafa97"
           />
           <TextInput
             onChange={geocodeAddress}
@@ -230,9 +230,9 @@ const Page = () => {
             value={streetNumber}
             maxLength={5}
             style={{ fontFamily: "medium" }}
-            className="p-5 border-2 border-[#fafafa]/80 rounded-2xl bg-[#fafafa]/80 "
+            className="p-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80 "
             placeholder="Број"
-            placeholderTextColor="#0b0b0b97"
+            placeholderTextColor="#fafafa97"
           />
         </View>
 
@@ -242,9 +242,9 @@ const Page = () => {
             selectionColor={Colors.primary}
             onChangeText={(text) => setaddressDescription(text)}
             style={{ fontFamily: "medium" }}
-            className=" px-5 py-5 border-2 border-[#fafafa]/80 rounded-2xl bg-[#fafafa]/80"
+            className=" px-5 py-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80"
             placeholder="Зачувај како:  Дома/Работа.."
-            placeholderTextColor="#0b0b0b97"
+            placeholderTextColor="#fafafa97"
           />
         </View>
 
@@ -255,18 +255,18 @@ const Page = () => {
               value={flat}
               style={{ fontFamily: "medium" }}
               selectionColor={Colors.primary}
-              className="flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2  rounded-2xl bg-[#fafafa]/80 "
+              className="flex-1 px-5 py-5 border-2 border-[#121212]/80 text-white focus:border-2  rounded-2xl bg-[#121212]/80 "
               placeholder="Број на кат"
-              placeholderTextColor="#0b0b0b97"
+              placeholderTextColor="#fafafa97"
             />
             <TextInput
               onChangeText={(text) => setApartment(text)}
               value={apartment}
               style={{ fontFamily: "medium" }}
               selectionColor={Colors.primary}
-              className="flex-1 px-5 py-5 border-2 border-[#fafafa]/80 focus:border-2  rounded-2xl bg-[#fafafa]/80"
+              className="flex-1 px-5 py-5 border-2 border-[#121212]/80 text-white focus:border-2  rounded-2xl bg-[#121212]/80"
               placeholder="Број на стан"
-              placeholderTextColor="#0b0b0b97"
+              placeholderTextColor="#fafafa97"
             />
           </View>
         </View>
@@ -288,7 +288,7 @@ const Page = () => {
 
       <TouchableOpacity
         onPress={addAddress}
-        className="bg-[#0b0b0b] mb-2 py-6 flex justify-center flex-row  items-center rounded-2xl"
+        className="bg-[#121212]/90 mb-2 py-6 flex justify-center flex-row  items-center rounded-2xl"
       >
         <SaveAdd variant="Bulk" color={Colors.primary} size={22} />
         <Text style={{ fontFamily: "medium" }} className="text-[#FFFFFC] ml-2">

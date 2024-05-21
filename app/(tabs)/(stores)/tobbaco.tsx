@@ -28,11 +28,11 @@ const Page = () => {
 
   return (
     <GestureHandlerRootView>
-      <View className="flex-1 px-4 bg-[#fffffc]">
+      <View className="flex-1 px-4 bg-[#0b0b0b]">
         <ScrollView
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
-          className="h-full bg-[#FFFFFC]"
+          className="h-full bg-[#0b0b0b]"
         >
           <View className="w-full">
             <FlatList

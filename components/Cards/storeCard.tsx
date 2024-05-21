@@ -55,7 +55,7 @@ const StoreCard = ({ item }: { item: any }) => {
           )}
 
           {!loaded && (
-            <View className="absolute h-full bg-[#fafafa] left-0 rounded-2xl top-0 w-full"></View>
+            <View className="absolute h-full bg-[#121212]/90 left-0 rounded-2xl top-0 w-full"></View>
           )}
 
           <Image
@@ -76,11 +76,11 @@ const StoreCard = ({ item }: { item: any }) => {
         <View className="ml-1 mt-2">
           <View className="flex flex-row w-full justify-between items-start">
             <View className="flex ">
-              <Text className="text-[16px]" style={{ fontFamily: "semibold" }}>
+              <Text className="text-[16px] text-white" style={{ fontFamily: "semibold" }}>
                 {item.name}
               </Text>
               <Text
-                className="text-[#0b0b0b]/60 text-xs"
+                className="text-[#ffffff]/60 text-xs"
                 style={{ fontFamily: "medium" }}
               >
                 {getStoreTypeName(item.storeTypeId)}
@@ -97,7 +97,7 @@ const StoreCard = ({ item }: { item: any }) => {
               <Text
                 style={{ fontFamily: "medium" }}
                 className={
-                  item.isOpen ? "text-white text-xs" : "text-xs text-black"
+                  item.isOpen ? "text-black text-xs" : "text-xs text-black"
                 }
               >
                 {item.isOpen ? "Отворено" : "Затворено"}

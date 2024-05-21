@@ -87,34 +87,34 @@ const Page = () => {
 
             </View>
 
-            <View className='flex-1 bg-[#FFFFFC]'>
+            <View className='flex-1 bg-[#121212]/90'>
                 <View className='mt-6 px-6'>
                     <View className='flex items-center flex-row'>
                         <Archive variant='Bulk' size={18} color={Colors.primary} />
-                        <Text className='text-[#0b0b0b]/60 uppercase ml-1' style={{ fontFamily: "bold" }}>{category}</Text>
+                        <Text className='text-[#fffffc]/60 uppercase ml-1' style={{ fontFamily: "bold" }}>{category}</Text>
                     </View>
-                    <Text className='text-2xl text-[#0b0b0b] mt-1' style={{ fontFamily: "semibold" }}>{name}</Text>
-                    <Text className='text-[#0b0b0b]/80' style={{ fontFamily: "medium" }}>{description}</Text>
-                    <Text className='text-[#0b0b0b] text-lg mt-3' style={{ fontFamily: "semibold" }}>{price} <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
+                    <Text className='text-2xl text-[#fffffc] mt-1' style={{ fontFamily: "semibold" }}>{name}</Text>
+                    <Text className='text-[#fffffc]/80' style={{ fontFamily: "medium" }}>{description}</Text>
+                    <Text className='text-[#fffffc] text-lg mt-3' style={{ fontFamily: "semibold" }}>{price} <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
                 </View>
 
 
                 <View className='absolute flex bottom-10 flex-row items-center px-6 gap-x-3'>
-                    <View className=' bg-[#F0F1F3] p-1 flex-row items-center rounded-2xl justify-between '>
+                    <View className=' bg-[#0b0b0b] p-1 flex-row items-center rounded-2xl justify-between '>
                         <TouchableOpacity onPress={decreaseQuantity} className='flex justify-center items-center w-12 h-10 rounded-xl '>
                             <Minus
                                 size={20}
-                                color={Colors.dark}
+                                color={Colors.white}
                                 variant='Linear'
                             />
                         </TouchableOpacity>
 
-                        <Text className='text-[16px] text-[#0b0b0b]'>{itemQuantity}</Text>
+                        <Text className='text-[16px] text-[#fafafa]'>{itemQuantity}</Text>
 
                         <TouchableOpacity onPress={increaseQuantity} className='flex justify-center items-center w-12 h-10 rounded-xl ' >
                             <Add
                                 size={20}
-                                color={Colors.dark}
+                                color={Colors.white}
                                 variant='Linear'
                             />
                         </TouchableOpacity>

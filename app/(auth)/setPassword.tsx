@@ -123,11 +123,11 @@ const Page = () => {
 
 
     return (
-        <Animated.View className='flex-1 pt-4 bg-[#FFFFFC]' entering={FadeIn.springify().delay(150).duration(200)}>
-            <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
+        <Animated.View className='flex-1 pt-4 bg-[#0b0b0b]' entering={FadeIn.springify().delay(150).duration(200)}>
+            <SafeAreaView className='flex-1 bg-[#0b0b0b]'>
 
                 <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
-                    <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+                    <TouchableOpacity className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
                         <ArrowLeft variant='Broken' size={20} color={Colors.white} />
                         <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
                     </TouchableOpacity>
@@ -137,22 +137,22 @@ const Page = () => {
 
                 <View className='py-6 px-6 pt-6'>
 
-                    <Text className='text-lg text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Последен чекор..</Text>
-                    <Text className='text-3xl text-[#0b0b0b]/90 mt-1' style={{ fontFamily: "bold" }}>Поставете лозинка.</Text>
+                    <Text className='text-lg text-[#fffffc]/60' style={{ fontFamily: "medium" }}>Последен чекор..</Text>
+                    <Text className='text-3xl text-[#fffffc]/90 mt-1' style={{ fontFamily: "bold" }}>Поставете лозинка.</Text>
                 </View>
 
                 <View className='flex px-6 h-min flex-col gap-y-3'>
 
-                    <View className='w-full flex items-center flex-row bg-[#fafafa]/90 border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
+                    <View className='w-full flex items-center flex-row bg-[#121212]/90  text-white border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
                         <TextInput value={password}
-                            onChangeText={handlePasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
+                            onChangeText={handlePasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
 
-                        {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
+                        {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />)}
                     </View>
 
-                    <View className='w-full flex items-center flex-row bg-[#fafafa]/90 border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
+                    <View className='w-full flex items-center flex-row bg-[#121212]/90  text-white border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
                         <TextInput value={confirmPassword}
-                            onChangeText={handleConfirmPasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
+                            onChangeText={handleConfirmPasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
                     </View>
 
                     {errorMessage ? <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text> : null}
@@ -160,7 +160,7 @@ const Page = () => {
 
                 <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
                     <View className='px-6 pb-6  justify-end'>
-                        <TouchableOpacity onPress={handleCreateAccount} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
+                        <TouchableOpacity onPress={handleCreateAccount} className='bg-[#121212]/90 flex flex-row items-center justify-center py-6 rounded-2xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Креирај профил</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>

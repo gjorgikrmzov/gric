@@ -49,7 +49,7 @@ const Page = () => {
 
     const headerBackgroundColor = scrollY.interpolate({
         inputRange: [0, scrollTreshold],
-        outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 255)'],
+        outputRange: ['rgba(000, 000, 000, 0)', '#0b0b0b'],
         extrapolate: 'clamp',
     });
 
@@ -65,19 +65,19 @@ const Page = () => {
 
     return (
         <GestureHandlerRootView>
-            <View className='flex-1  bg-[#fffffc]'>
+            <View className='flex-1  bg-[#0b0b0b]'>
 
                 <StatusBar style='light' />
                 <Animated.View style={[styles.header, {backgroundColor: headerBackgroundColor}]} className= 'flex z-[999] pb-4  absolute top-0' >
                     <View className='w-full px-6 flex-row items-center justify-between'>
-                        <TouchableOpacity onPress={() => router.back()} className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#0b0b0b]/5 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#fffffc]/10 rounded-full'} >
-                            <ArrowLeft variant='Broken' size={20} color={isScrolled ? Colors.dark : Colors.white} />
+                        <TouchableOpacity onPress={() => router.back()} className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
+                            <ArrowLeft variant='Broken' size={20} color={Colors.white} />
                         </TouchableOpacity>
 
-                        <Animated.Text className='text-[16px]' style={{ fontFamily: 'medium', opacity: textOpacity }}>{name}</Animated.Text>
+                        <Animated.Text className='text-[16px] text-white'  style={{ fontFamily: 'medium', opacity: textOpacity }}>{name}</Animated.Text>
 
-                        <TouchableOpacity className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#0b0b0b]/5 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#fffffc]/10 rounded-full'} >
-                            <Heart variant='Broken' size={20} color={isScrolled ? Colors.dark : Colors.white} />
+                        <TouchableOpacity className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
+                            <Heart variant='Broken' size={20} color={Colors.white} />
                         </TouchableOpacity>
                     </View>
 
@@ -144,7 +144,7 @@ const Page = () => {
                     </View>
 
                     <View className='pb-20 mt-5'>
-                        <Text className='text-xl px-6 text-[#0b0b0b]' style={{ fontFamily: "bold" }}>Мени</Text>
+                        <Text className='text-xl px-6 text-[#fffffc]' style={{ fontFamily: "bold" }}>Мени</Text>
                         {loadingItems ?
                             (
                                 <ActivityIndicator />
@@ -172,9 +172,9 @@ const Page = () => {
                         cartItems?.length !== 0 && (
                             <Animated.View>
                                 <Link href={'/cart'} asChild>
-                                    <TouchableOpacity className='w-full flex-row py-6 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
-                                        <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
-                                        <Text style={{ fontFamily: "medium" }} className=' text-[#FFFFFC] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
+                                    <TouchableOpacity className='w-full flex-row py-6 bg-[#1BD868] flex justify-center items-center rounded-2xl'>
+                                        <ShoppingCart variant='Bulk' size={22} color={Colors.dark} />
+                                        <Text style={{ fontFamily: "medium" }} className=' text-[#0b0b0b] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
                                     </TouchableOpacity>
                                 </Link>
                             </Animated.View>

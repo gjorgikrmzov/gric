@@ -20,7 +20,7 @@ const SkeletonList = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
                 paddingBottom: 6,
-                backgroundColor: '#FFFFFC',
+                backgroundColor: '#0b0b0b',
             }}
         />
     )

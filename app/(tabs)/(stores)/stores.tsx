@@ -146,7 +146,7 @@ const Page = () => {
 
   return (
     <GestureHandlerRootView>
-      <View className="bg-[#fffffc] flex-1">
+      <View className="bg-[#0b0b0b] flex-1">
         {/* <Animated.View className="px-6 flex flex-row items-center mt-4 mb-2 ">
           <View className=" bg-[#fafafa]/90 flex-1 items-center flex-row px-5 rounded-3xl">
             {isFocused ? (
@@ -234,7 +234,7 @@ const Page = () => {
         <ScrollView
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
-          className="h-full bg-[#FFFFFC] px-4"
+          className="h-full bg-[#0b0b0b] px-4"
         >
           <View className="w-full">
             <FlatList

@@ -95,6 +95,7 @@ const Page = () => {
 
   const handleFocus = () => {
     setIsFocused(true);
+    inputRef.current?.focus()
     Animated.parallel([
       Animated.spring(searchBarResult, {
         toValue: -40,
@@ -136,7 +137,7 @@ const Page = () => {
 
   return (
     <GestureHandlerRootView>
-      <View className="bg-[#fffffc] flex-1">
+      <View className="bg-[#0b0b0b] flex-1">
         <View className="flex absolute left-0 z-20  w-full ">
           <View
             style={styles.header}
@@ -145,25 +146,25 @@ const Page = () => {
             {isFocused ? null : (
               <TouchableOpacity
                 onPress={() => router.back()}
-                className="w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full"
+                className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
               >
-                <ArrowLeft variant="Broken" size={20} color={Colors.dark} />
+                <ArrowLeft variant="Broken" size={20} color={Colors.white} />
               </TouchableOpacity>
             )}
 
             <Animated.View className=" mx-2 flex flex-row flex-1 items-center  ">
-              <View className=" bg-[#fafafa]/90  py-5 flex-1 items-center flex-row px-4  rounded-full">
+              <View className=" bg-[#121212]/90  py-5 flex-1 items-center flex-row px-5  rounded-full">
                 {isFocused ? (
                   <TouchableOpacity
                     onPress={handleBlur}
                     className=" flex justify-center items-center"
                   >
-                    <ArrowLeft size={18} color={Colors.dark} variant="Broken" />
+                    <ArrowLeft size={18} color={Colors.white} variant="Broken" />
                   </TouchableOpacity>
                 ) : (
                   <SearchNormal1
                     size={18}
-                    color="#0b0b0b97"
+                    color="#fffffc97"
                     className="flex justify-center items-center"
                     variant="Broken"
                   />
@@ -176,9 +177,9 @@ const Page = () => {
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   value={search}
-                  className="text-[#0b0b0b] px-3 text-md flex-1 "
+                  className="text-[#fffffc] px-3 text-md flex-1 "
                   placeholder="Пребарај"
-                  placeholderTextColor="#0b0b0b97"
+                  placeholderTextColor="#fafafa97"
                 />
               </View>
             </Animated.View>
@@ -186,15 +187,15 @@ const Page = () => {
             {selectedStoreId !== null ? (
               <TouchableOpacity
                 onPress={() => setSelectedStoreId(null)}
-                className="w-14 h-14 flex justify-center items-center bg-[#fafafa]/90 rounded-full"
+                className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
               >
-                <CloseCircle variant="Broken" size={20} color={Colors.dark} />
+                <CloseCircle variant="Broken" size={20} color={Colors.white} />
               </TouchableOpacity>
             ) : null}
           </View>
 
           {isFocused && (
-            <View className="absolute left-0 top-0 z-0 bg-[#fffffc] w-screen h-screen"></View>
+            <View className="absolute left-0 top-0 z-0 bg-[#0b0b0b] w-screen h-screen"></View>
           )}
 
           <Animated.View
@@ -216,9 +217,9 @@ const Page = () => {
                     >
                       <View className="flex items-center flex-row gap-x-4">
                         <Shop color="#757780" size={25} variant="Broken" />
-                        <View className="py-6 border-b border-[#0b0b0b]/10  w-full">
+                        <View className="py-6 border-b border-[#fffffc]/10  w-full">
                           <Text
-                            className="text-[#0b0b0b] text-[16px] "
+                            className="text-[#fffffc] text-[16px] "
                             style={{ fontFamily: "medium" }}
                           >
                             {store.name}
@@ -231,15 +232,15 @@ const Page = () => {
 
               {stores.length === 0 ? (
                 <View className="flex-1 mt-6 justify-center items-center flex ">
-                  <View className="w-14 h-14 bg-[#fafafa]/80 flex justify-center items-center rounded-lg">
+                  <View className="w-14 h-14 bg-[#121212]/90 flex justify-center items-center rounded-lg">
                     <MessageQuestion
                       size={26}
-                      color={Colors.dark}
+                      color={Colors.white}
                       variant="Bulk"
                     />
                   </View>
                   <Text
-                    className="text-center mt-2 text-[#0b0b0b]/60 text-[16px]"
+                    className="text-center mt-2 text-[#fafafa]/60 text-[16px]"
                     style={{ fontFamily: "medium" }}
                   >
                     Нема пронајдено {"\n"} резултати
@@ -325,21 +326,21 @@ const Page = () => {
         <BottomSheet
           ref={bottomSheetRef}
           index={0}
-          backgroundStyle={{ backgroundColor: Colors.white }}
-          handleIndicatorStyle={{ backgroundColor: Colors.dark }}
+          backgroundStyle={{ backgroundColor: Colors.dark }}
+          handleIndicatorStyle={{ backgroundColor: Colors.white }}
           snapPoints={snapPoints}
         >
           <View className="flex px-6 py-3 flex-row items-center justify-between">
             <View>
               <Text
                 style={{ fontFamily: "heavy" }}
-                className="text-[#0b0b0b]/80"
+                className="text-[#fafafa]/80"
               >
                 МАПА
               </Text>
               <Text
                 style={{ fontFamily: "medium" }}
-                className="text-[#0b0b0b] mt-1"
+                className="text-[#fafafa] mt-1"
               >
                 Пребарај Ресторани
               </Text>
@@ -347,10 +348,10 @@ const Page = () => {
 
             <View className="flex-row items-center gap-x-2">
               <TouchableOpacity
-                onPress={() => router.push("/stores")}
-                className="w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5"
+                onPress={handleFocus}
+                className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fafafa]/5"
               >
-                <SearchNormal1 color={Colors.dark} size={20} variant="Broken" />
+                <SearchNormal1 color={Colors.white} size={20} variant="Broken" />
               </TouchableOpacity>
             </View>
           </View>

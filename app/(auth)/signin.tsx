@@ -54,12 +54,12 @@ const Page = () => {
 };
 
   return (
-    <Animated.View className='flex-1 pt-4' entering={FadeIn.springify().delay(150).duration(200)}>
-      <SafeAreaView className='flex-1 bg-[#FFFFFC]'>
+    <Animated.View className='flex-1 pt-4 bg-[#0b0b0b]' entering={FadeIn.springify().delay(150).duration(200)}>
+      <SafeAreaView className='flex-1 bg-[#0b0b0b]'>
         <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
           <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
-            <TouchableOpacity className='bg-[#0b0b0b] px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+            <TouchableOpacity className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
               <ArrowLeft variant='Broken' size={20} color={Colors.white} />
               <Text style={{ fontFamily: 'medium' }} className='text-[#FFFFFC] ml-1'>Назад</Text>
             </TouchableOpacity>
@@ -69,17 +69,17 @@ const Page = () => {
 
           <View className='py-6 px-6 pt-10'>
 
-            <Text className='text-lg text-[#0b0b0b]/60' style={{ fontFamily: "medium" }}>Добредојде назад</Text>
-            <Text className='text-3xl text-[#0b0b0b]/90 mt-1' style={{ fontFamily: "bold" }}>Најавете се на вашиот профил.</Text>
+            <Text className='text-lg text-[#fffffc]/60' style={{ fontFamily: "medium" }}>Добредојде назад</Text>
+            <Text className='text-3xl text-[#fffffc]/90 mt-1' style={{ fontFamily: "bold" }}>Најавете се на вашиот профил.</Text>
           </View>
 
           <View className='flex px-6 h-min flex-col gap-y-3'>
-            <TextInput value={email} onChangeText={setEmail} className='px-5 bg-[#fafafa]/90 rounded-2xl text-[#0b0b0b] border-2 border-[#fafafa]/0  focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#0b0b0b97' />
+            <TextInput value={email} onChangeText={setEmail} className='px-5 bg-[#121212]/90 rounded-2xl text-[#fffffc] border-2 border-[#fafafa]/0  focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='Е-маил' placeholderTextColor='#fffffc97' />
 
-            <View className='w-full flex items-center flex-row bg-[#fafafa]/90 border-2 border-[#fafafa]/0 rounded-2xl  focus:border-[#1BD868]'>
-              <TextInput value={password} onChangeText={setPassword} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#0b0b0b97' />
+            <View className='w-full flex items-center flex-row bg-[#121212]/90 border-2 border-[#fafafa]/0 rounded-2xl  focus:border-[#1BD868]'>
+              <TextInput value={password} onChangeText={setPassword} className='px-5 w-[90%] text-white' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#fffffc97' />
 
-              {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.dark} variant='Broken' size={22} className='absolute right-5' />)}
+              {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />)}
             </View>
           </View>
 
@@ -90,8 +90,8 @@ const Page = () => {
             }
 
           <View className='px-6 pb-4 flex-1 justify-end'>
-            <TouchableOpacity onPress={signIn} className='bg-[#0b0b0b] flex flex-row items-center justify-center py-6 rounded-2xl'>
-              <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Најави се</Text>
+            <TouchableOpacity onPress={signIn} className='bg-[#121212]/90 flex flex-row items-center justify-center py-6 rounded-2xl'>
+              <Text className='text-lg text-[#fffffc] ' style={{ fontFamily: "medium" }}>Најави се</Text>
               <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
             </TouchableOpacity>
           </View>

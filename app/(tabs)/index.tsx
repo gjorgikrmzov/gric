@@ -166,18 +166,19 @@ const Page = () => {
         isOpen: store.isOpen,
         storeTypeName,
         address: JSON.stringify(store.address),
+        imageUrl: store.imageUrl,
       },
     } as any);
   };
 
-  const selectedAddres = addresses.find((address) => address.id);
+  const selectedAddres = addresses.find((address) => address.isSelected === true);
 
   const renderCategoryIcon = (categoryName: string) => {
     switch (categoryName) {
       case "Бургер":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/burger.svg")}
           />
@@ -185,7 +186,7 @@ const Page = () => {
       case "Пица":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/pizza.svg")}
           />
@@ -193,7 +194,7 @@ const Page = () => {
       case "Кафе":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/coffe.svg")}
           />
@@ -201,7 +202,7 @@ const Page = () => {
       case "Десерт":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/donut.svg")}
           />
@@ -209,7 +210,7 @@ const Page = () => {
       case "Паста":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/pasta.svg")}
           />
@@ -217,7 +218,7 @@ const Page = () => {
       case "Месо":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/meet.svg")}
           />
@@ -226,7 +227,7 @@ const Page = () => {
       case "Тако":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/cake.svg")}
           />
@@ -235,7 +236,7 @@ const Page = () => {
       case "Сендвич":
         return (
           <Image
-            tintColor={Colors.dark}
+            tintColor={Colors.white}
             className="w-10 top-5 h-10 z-10 self-center"
             source={require("../../assets/images/bread.svg")}
           />
@@ -245,19 +246,19 @@ const Page = () => {
 
   return (
     <>
-      <View className="w-screen  h-screen absolute z-0 left-0 top-0 bg-[#FFFFFC]"></View>
+      <View className="w-screen  h-screen absolute z-0 left-0 top-0 bg-[#0b0b0b]"></View>
 
       <SafeAreaView className="flex-1" style={styles.header}>
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
 
-        <View className="bg-[#FFFFFC] z-0 border-b  border-[#757780]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row ">
+        <View className="bg-[#0b0b0b] z-0 border-b  border-[#757780]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row ">
           <TouchableOpacity
             onPress={() => router.push("/(modals)/manageAddresses")}
           >
             <View className="flex items-center flex-row ml-1">
               <Location size={14} color={Colors.primary} variant="Bulk" />
               <Text
-                className="text-[#0b0b0b]/60 ml-1 text-xs"
+                className="text-[#fffffc]/60 ml-1 text-xs"
                 style={{ fontFamily: "medium" }}
               >
                 Достави на
@@ -265,21 +266,21 @@ const Page = () => {
               <ArrowDown2
                 className="ml-0.5"
                 size={12}
-                color={Colors.dark}
+                color={'#fafafa80'}
                 variant="Linear"
               />
             </View>
-            <View className="rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#fafafa]/90">
+            <View className="rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#121212]/90">
               {selectedAddres?.street ? (
                 <Text
-                  className="text-[#0b0b0b]"
+                  className="text-[#fffffc]"
                   style={{ fontFamily: "medium" }}
                 >
-                  {selectedAddres?.street}
+                  {selectedAddres?.street.substring(0, 12) + "..."}
                 </Text>
               ) : (
                 <Text
-                  className="text-[#0b0b0b]"
+                  className="text-[#fffffc]"
                   style={{ fontFamily: "medium" }}
                 >
                   Внесете адреса
@@ -291,16 +292,16 @@ const Page = () => {
           <View className="flex flex-row items-center gap-x-2">
             <TouchableOpacity
               onPress={() => router.push("/(user)/notifications")}
-              className="w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5"
+              className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fffffc]/5"
             >
-              <Notification1 color={Colors.dark} size={20} variant="Broken" />
+              <Notification1 color={Colors.white} size={20} variant="Broken" />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => router.push("/(user)/profile")}
-              className="w-14 h-14 flex justify-center items-center rounded-full border border-[#0b0b0b]/5"
+              className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fffffc]/5"
             >
-              <User color={Colors.dark} size={20} variant="Broken" />
+              <User color={Colors.white} size={20} variant="Broken" />
             </TouchableOpacity>
           </View>
         </View>
@@ -311,7 +312,7 @@ const Page = () => {
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
-              tintColor={Colors.dark}
+              tintColor={Colors.white}
               refreshing={refreshing}
               onRefresh={onRefresh}
             />
@@ -328,7 +329,7 @@ const Page = () => {
               </Animated.Text>
               <Animated.Text
                 entering={FadeInDown.springify().duration(1000).delay(200)}
-                className="mt-[-3px] text-[#0b0b0b]/80"
+                className="mt-[-3px] text-[#fffffc]/80"
                 style={{ fontFamily: "heavy" }}
               >
                 DELIVERY
@@ -338,18 +339,18 @@ const Page = () => {
 
           <View>
             <Animated.View className="mt-3" style={animatedInputStyle}>
-              <View className="mx-6 z-[999] items-center bg-[#fafafa]/90 flex-row px-5 rounded-3xl">
+              <View className="mx-6 z-[999] items-center bg-[#121212]/90 flex-row px-5 rounded-3xl">
                 {isFocused ? (
                   <TouchableOpacity
                     onPress={onBlur}
                     className=" flex justify-center items-center"
                   >
-                    <ArrowLeft size={20} color={Colors.dark} variant="Broken" />
+                    <ArrowLeft size={20} color={Colors.white} variant="Broken" />
                   </TouchableOpacity>
                 ) : (
                   <SearchNormal1
                     size={20}
-                    color="#0b0b0b97"
+                    color="#fafafa80"
                     className="flex justify-center items-center"
                     variant="Broken"
                   />
@@ -360,9 +361,9 @@ const Page = () => {
                   onChangeText={handleSearchChange}
                   onFocus={onFocus}
                   onBlur={onBlur}
-                  className="text-[#0b0b0b] px-3 flex-1 "
+                  className="text-[#fffffc] px-3 flex-1 "
                   placeholder="Пребарај"
-                  placeholderTextColor="#0b0b0b97"
+                  placeholderTextColor="#fafafa80"
                 />
               </View>
 
@@ -376,14 +377,12 @@ const Page = () => {
                   showsVerticalScrollIndicator={false}
                   className="flex flex-col"
                 >
-                  {stores.length === 0 ? null : (
                     <Text
-                      className={search === '' ? "text-[#0b0b0b]/60 mt-5 hidden" : "text-[#0b0b0b]/60 mt-5"}
+                      className={search !== '' ? "text-[#fffffc]/60 mt-5 hidden" : "text-[#fffffc]/60 mt-5"}
                       style={{ fontFamily: "semibold" }}
                     >
                       Препорачани
                     </Text>
-                  )}
                   {filteredStores.map(
                     (store, index) =>
                       index < 5 && (
@@ -393,10 +392,10 @@ const Page = () => {
                           className="w-full flex-row  flex items-center justify-between"
                         >
                           <View className="flex items-center flex-row gap-x-4">
-                            <Shop color="#757780" size={25} variant="Broken" />
-                            <View className="py-6 border-b border-[#0b0b0b]/10  w-full">
+                            <Shop color={Colors.primary} size={25} variant="Broken" />
+                            <View className="py-6 border-b border-[#fffffc]/10  w-full">
                               <Text
-                                className="text-[#0b0b0b] text-[16px] "
+                                className="text-[#fffffc] text-[16px] "
                                 style={{ fontFamily: "medium" }}
                               >
                                 {store.name}
@@ -409,15 +408,15 @@ const Page = () => {
 
                   {filteredStores.length === 0 ? (
                     <View className="flex-1 mt-6 justify-center items-center flex ">
-                      <View className="w-14 h-14 bg-[#fafafa] flex justify-center items-center rounded-lg">
+                      <View className="w-14 h-14 bg-[#121212]/90 flex justify-center items-center rounded-lg">
                         <MessageQuestion
                           size={26}
-                          color={Colors.dark}
+                          color={Colors.white}
                           variant="Bulk"
                         />
                       </View>
                       <Text
-                        className="text-center mt-2 text-[#0b0b0b]/60 "
+                        className="text-center mt-2 text-[#fffffc]/60 "
                         style={{ fontFamily: "medium" }}
                       >
                         Нема пронајдено {"\n"} резултати
@@ -443,7 +442,7 @@ const Page = () => {
             >
               <Animated.View
                 entering={FadeIn.springify().duration(300).delay(100)}
-                className="flex flex-row items-center px-7 gap-x-2"
+                className="flex flex-row items-center mt-2 px-7 gap-x-2"
               >
                 {categories &&
                   categories.map(
@@ -460,9 +459,9 @@ const Page = () => {
                           className="flex justify-center"
                         >
                           {renderCategoryIcon(category.name)}
-                          <View className="w-20 bg-[#fafafa]/90 py-3 rounded-2xl flex justify-center items-center">
+                          <View className="w-20 bg-[#121212]/90 py-3 rounded-2xl flex justify-center items-center">
                             <Text
-                              className="text-xs mt-4 text-[#0b0b0b]"
+                              className="text-xs mt-4 text-[#fffffc]"
                               style={{ fontFamily: "semibold" }}
                             >
                               {category.name}
@@ -489,19 +488,19 @@ const Page = () => {
         >
           <TouchableOpacity
             onPress={() => router.push("/(order)/trackOrder")}
-            className="w-full p-4 rounded-2xl flex items-center justify-between flex-row bg-[#FFFFFC] shadow-md"
+            className="w-full p-4 rounded-2xl flex items-center justify-between flex-row bg-[#0b0b0b] shadow-md"
           >
             <View className="flex flex-row items-center  space-x-3">
               <View className=" flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden"></View>
               <View className="flex flex-col">
                 <Text
-                  className=" text-[#0b0b0b]/80 uppercase"
+                  className=" text-[#fffffc]/80 uppercase"
                   style={{ fontFamily: "semibold" }}
                 >
                   Бу Хаус
                 </Text>
                 <Text
-                  className=" mt-1 text-[#0b0b0b]"
+                  className=" mt-1 text-[#fffffc]"
                   style={{ fontFamily: "medium" }}
                 >
                   x1 Бонапарата

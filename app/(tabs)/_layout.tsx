@@ -8,11 +8,12 @@ import {
   Map,
   Map1,
   Profile,
+  SearchNormal1,
   Shop,
   ShoppingCart,
   User,
 } from "iconsax-react-native";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, TextInput, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxStore";
 
@@ -23,10 +24,10 @@ const Layout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.dark,
+        tabBarActiveTintColor: Colors.white,
         tabBarStyle: {
-          backgroundColor: Colors.white,
-          borderTopColor: "#0b0b0b2c",
+          backgroundColor: Colors.dark,
+          borderTopColor: "#fafafa10",
           height: Platform.OS === "android" ? 90 : 110,
           paddingTop: 10,
         },
@@ -64,17 +65,23 @@ const Layout = () => {
         options={{
           tabBarLabel: "Храна",
           headerLeft: () => (
-            <Pressable onPress={() => router.push('(user)/profile')} className="  relative ml-6 w-12 h-12 rounded-full border border-[#0b0b0b]/5 flex justify-center items-center">
+            <Pressable onPress={() => router.push('(user)/profile')} className="w-10 h-10 rounded-full border border-[#0b0b0b]/5 ml-4 flex justify-center items-center">
               <User size={20} variant="Broken" color={Colors.dark} />
             </Pressable>
           ),
           headerRight: () => (
-            <Pressable onPress={() => router.push('/cart')} className="relative   mr-6 w-12 h-12 rounded-full border border-[#0b0b0b]/5 flex justify-center items-center">
+            <Pressable onPress={() => router.push('/cart')} className="w-10 h-10 border rounded-full border-[#0b0b0b]/5 mr-4 flex justify-center items-center">
               <ShoppingCart size={20} variant="Broken" color={Colors.dark} />
             </Pressable>
           ),
-          title: "GRIC",
+          headerTitle: () => (
+            <View className="relative border border-[#0b0b0b]/5 px-4 rounded-2xl flex flex-row items-center ">
+              <SearchNormal1 size={16} variant="Broken"  color={'#0b0b0b60'}/>
+              <TextInput className=" py-4 text-black flex-1 text-xs ml-2 " style={{fontFamily: 'medium'}} placeholderTextColor='#0b0b0b60' placeholder="Пребарај" />
+            </View>
+          ),
           headerShown: false,
+          headerTitleContainerStyle: {width: '100%'},
           headerShadowVisible: false,
           headerTitleStyle: {
             fontFamily: "heavy",
@@ -122,7 +129,7 @@ const Layout = () => {
           tabBarBadge: cartItems.length,
           tabBarBadgeStyle: {
             display: cartItems.length === 0 ? "none" : "flex",
-            backgroundColor: Colors.dark,
+            backgroundColor: Colors.primary,
             fontFamily: "extrabold",
             fontSize: 10,
           },

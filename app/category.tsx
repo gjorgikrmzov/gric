@@ -1,119 +1,187 @@
-import { View, Text, Platform, ScrollView, NativeSyntheticEvent } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler'
-import { ArrowLeft, Heart } from 'iconsax-react-native'
-import { StyleSheet } from 'react-native'
-import Colors from '../constants/Colors'
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from './reduxStore'
-import { fetchStoresByCategory } from './reduxStore/storeSlice'
-import { NativeScrollEvent } from 'react-native'
-import { Image } from 'expo-image'
-import StoresByCategoryList from '../components/List/storesByCategoryList'
-import SkeletonList from '../components/List/skeletonList'
-import { StatusBar } from 'expo-status-bar'
+import {
+  View,
+  Text,
+  Platform,
+  ScrollView,
+  NativeSyntheticEvent,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  GestureHandlerRootView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import { ArrowLeft, Heart } from "iconsax-react-native";
+import { StyleSheet } from "react-native";
+import Colors from "../constants/Colors";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./reduxStore";
+import { fetchStoresByCategory } from "./reduxStore/storeSlice";
+import { NativeScrollEvent } from "react-native";
+import { Image } from "expo-image";
+import StoresByCategoryList from "../components/List/storesByCategoryList";
+import SkeletonList from "../components/List/skeletonList";
+import { StatusBar } from "expo-status-bar";
 
 const Page = () => {
+  const { name, id } = useLocalSearchParams<{ name: string; id: any }>();
+  const { accessToken } = useSelector((state: RootState) => state.accessToken);
+  const storesByCategory = useSelector(
+    (state: RootState) => state.store.storesByCategory
+  );
+  const dispatch = useDispatch<any>();
+  const [loadingStores, setloadingStores] = useState(true);
+  const router = useRouter();
+  const scrollTreshold = 80;
+  const [isScrolled, setisScrolled] = useState(false);
 
-    const { name, id } = useLocalSearchParams<{ name: string, id: any }>()
-    const { accessToken } = useSelector((state: RootState) => state.accessToken)
-    const storesByCategory = useSelector((state: RootState) => state.store.storesByCategory);
-    const dispatch = useDispatch<any>()
-    const [loadingStores, setloadingStores] = useState(true)
-    const router = useRouter()
-    const scrollTreshold = 80
-    const [isScrolled, setisScrolled] = useState(false)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setloadingStores(true);
-            await dispatch(fetchStoresByCategory({ id, accessToken }));
-            setloadingStores(false);
-        };
-
-        fetchData();
-    }, [])
-
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const scrollPosition = event.nativeEvent.contentOffset.y;
-        if (scrollPosition > scrollTreshold && !isScrolled) {
-            setisScrolled(true);
-        } else if (scrollPosition <= scrollTreshold && isScrolled) {
-            setisScrolled(false);
-        }
+  useEffect(() => {
+    const fetchData = async () => {
+      setloadingStores(true);
+      await dispatch(fetchStoresByCategory({ id, accessToken }));
+      setloadingStores(false);
     };
 
-    const renderCategoryIcon = (name: any) => {
-        switch (name) {
-            case 'Бургер':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/burger.svg')} />)
-            case 'Пица':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/pizza.svg')} />)
-            case 'Кафе':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/coffe.svg')} />)
-            case 'Десерт':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/donut.svg')} />)
-            case 'Паста':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/pasta.svg')} />)
-            case 'Месо':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/meet.svg')} />)
+    fetchData();
+  }, []);
 
-            case 'Тако':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/cake.svg')} />)
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    if (scrollPosition > scrollTreshold && !isScrolled) {
+      setisScrolled(true);
+    } else if (scrollPosition <= scrollTreshold && isScrolled) {
+      setisScrolled(false);
+    }
+  };
 
-            case 'Сендвич':
-                return (<Image tintColor={Colors.primary} className='w-12 h-12 rotate-[20deg]' source={require('../assets/images/bread.svg')} />)
-        }
-    };
-    return (
-        <GestureHandlerRootView>
-            <StatusBar style='light' />
-            <View className='bg-[#0b0b0b] flex-1'>
-                <View style={styles.header} className='bg-[#131313]/10 border-b border-[#0b0b0b]/5 py-4  flex '>
-                    <View className='flex z-[999] top-0' >
-                        <View className='w-full px-6 flex-row items-center justify-between'>
-                            <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
-                                <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-                            </TouchableOpacity>
+  const renderCategoryIcon = (name: any) => {
+    switch (name) {
+      case "Бургер":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/burger.svg")}
+          />
+        );
+      case "Пица":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/pizza.svg")}
+          />
+        );
+      case "Кафе":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/coffe.svg")}
+          />
+        );
+      case "Десерт":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/donut.svg")}
+          />
+        );
+      case "Паста":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/pasta.svg")}
+          />
+        );
+      case "Месо":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/meet.svg")}
+          />
+        );
 
-                            {isScrolled && (
-                                <Text style={{ fontFamily: 'medium' }} className='text-lg text-white'>{name}</Text>
-                            )}
+      case "Тако":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/cake.svg")}
+          />
+        );
 
-                            <View className='w-14'>
-                            </View>
-                        </View>
-                    </View>
+      case "Сендвич":
+        return (
+          <Image
+            tintColor={Colors.primary}
+            className="w-12 h-12 rotate-[20deg]"
+            source={require("../assets/images/bread.svg")}
+          />
+        );
+    }
+  };
+  return (
+    <GestureHandlerRootView>
+      <StatusBar style="light" />
+      <View className=" flex-1 bg-[#0b0b0b]">
+        <View
+          style={styles.header}
+          className="bg-[#121212]/90 border-b border-[#0b0b0b]/5 py-6  flex "
+        >
+          <View className="flex z-[999] top-0">
+            <View className="w-full px-6 flex-row items-center justify-between">
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="w-14 h-14 flex justify-center items-center border border-[#fafafa]/10 rounded-full"
+              >
+                <ArrowLeft variant="Broken" size={20} color={Colors.white} />
+              </TouchableOpacity>
 
+              {isScrolled && (
+                <Text
+                  style={{ fontFamily: "medium" }}
+                  className="text-lg text-white"
+                >
+                  {name}
+                </Text>
+              )}
 
-
-                    <View className={isScrolled ? 'hidden px-6 mt-6' : 'flex px-6 flex-row mt-6 w-full justify-between items-center'}>
-                        <Text style={{ fontFamily: 'medium' }} className='text-2xl text-white'>{name}</Text>
-                    </View>
-                </View>
-
-
-                <ScrollView onScroll={handleScroll} className='bg-[#fffffc] flex-1'>
-
-                    {loadingStores ? (
-                        <SkeletonList />
-                    ) : (
-                        <StoresByCategoryList />
-                    )
-                    }
-                </ScrollView>
+              <View className="w-14"></View>
             </View>
-        </GestureHandlerRootView>
+          </View>
 
-    )
-}
+          <View
+            className={
+              isScrolled
+                ? "hidden px-6 mt-6"
+                : "flex px-6 flex-row mt-6 w-full justify-between items-center"
+            }
+          >
+            <Text
+              style={{ fontFamily: "medium" }}
+              className="text-2xl text-white"
+            >
+              {name}
+            </Text>
+          </View>
+        </View>
 
-export default Page
+        <ScrollView onScroll={handleScroll} className="bg-[#0b0b0b] flex-1">
+          {loadingStores ? <SkeletonList /> : <StoresByCategoryList />}
+        </ScrollView>
+      </View>
+    </GestureHandlerRootView>
+  );
+};
 
+export default Page;
 
 const styles = StyleSheet.create({
-    header: {
-        paddingTop: (Platform.OS === 'android') ? 40 : 50,
-    }
+  header: {
+    paddingTop: Platform.OS === "android" ? 40 : 50,
+  },
 });

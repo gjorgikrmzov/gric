@@ -44,7 +44,7 @@ const MiniStoreCard = ({ item }: { item: any }) => {
                     {item.isOpen ? (
                         <></>
                     ) : (
-                        <View className='bg-[#0b0b0b]/80 rounded-2xl z-[999] flex justify-center items-center w-24 h-24 p-5 absolute overflow-hidden'>
+                        <View className='bg-[#fffffc]/80 rounded-2xl z-[999] flex justify-center items-center w-24 h-24 p-5 absolute overflow-hidden'>
                             <Text style={{ fontFamily: 'medium' }} className='text-white text-center text-xs'>Отвара {'\n'} во {openingTime}</Text>
                         </View>
                     )}
@@ -62,13 +62,13 @@ const MiniStoreCard = ({ item }: { item: any }) => {
                 <View className='ml-3'>
                     <View className='flex flex-col justify-between w-full items-start'>
                         <View className='flex '>
-                            <Text className='text-[16px]' style={{ fontFamily: 'semibold' }}>{item.name}</Text>
-                            <Text className='text-[#0b0b0b]/60 text-xs' style={{ fontFamily: 'medium' }}>{getStoreTypeName(item.storeTypeId)}</Text>
-                        </View>
+                            <Text className='text-[16px] text-white' style={{ fontFamily: 'semibold' }}>{item.name}</Text>
+                            <Text className='text-[#fffffc]/60 text-xs mt-0.5' style={{ fontFamily: 'medium' }}>{getStoreTypeName(item.storeTypeId)}・{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
+                        </View> 
 
-                        <View className={item.isOpen ? 'px-2.5 py-1.5 mt-1 bg-[#1BD868] flex items-center justify-center rounded-xl' : ' mt-1 px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-xl'}>
+                        {/* <View className={item.isOpen ? 'px-2.5 py-1.5 mt-1.5 bg-[#1BD868] flex items-center justify-center rounded-xl' : ' mt-1 px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-xl'}>
                             <Text style={{ fontFamily: 'medium' }} className={item.isOpen ? 'text-white text-xs' : "text-xs text-black"}>{item.isOpen ? 'Отворено' : 'Затворено'}</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             </TouchableOpacity>
