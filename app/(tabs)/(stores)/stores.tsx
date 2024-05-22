@@ -127,8 +127,8 @@ const Page = () => {
   return (
     <GestureHandlerRootView>
       <View className="bg-[#0b0b0b] flex-1">
-        <Animated.View className="px-4 flex flex-row items-center mt-6 ">
-          <View className=" bg-[#121212]/90 flex-1 items-center flex-row px-5 rounded-3xl">
+        <Animated.View className="px-4 flex flex-row items-center mt-6 pb-3">
+          <View className=" bg-[#121212]/90 flex-1 items-center flex-row px-5 rounded-2xl">
             {isFocused ? (
               <TouchableOpacity
                 onPress={handleBlur}
@@ -161,7 +161,7 @@ const Page = () => {
 
         <Animated.View
           style={{ transform: [{ translateY: searchBarResult }] }}
-          className={isFocused ? "flex h-full mt-12 px-6" : "hidden"}
+          className={isFocused ? "flex h-full mt-8 px-6" : "hidden"}
         >
           <ScrollView
             keyboardShouldPersistTaps="always"
@@ -220,7 +220,7 @@ const Page = () => {
             <FlatList
               data={foodShops}
               scrollEnabled={false}
-              className="py-2"
+              className=""
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => <StoreCard item={item} />}
               showsVerticalScrollIndicator={false}

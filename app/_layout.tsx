@@ -120,7 +120,7 @@ function NavigationStack() {
       <Stack.Screen name="storeItem/[id]" options={{ presentation: "modal" }} />
       <Stack.Screen name="(order)/orders" />
       <Stack.Screen name="(order)/checkout" />
-      <Stack.Screen name="(order)/orderPlaced" />
+      <Stack.Screen name="(order)/orderPlaced" options={{ gestureEnabled: false }} />
       <Stack.Screen name="(order)/trackOrder" />
       <Stack.Screen name="(user)/notifications" />
       <Stack.Screen name="(user)/profile" />

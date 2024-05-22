@@ -73,6 +73,11 @@ const Page = () => {
     }
   };
 
+
+  const sortedAddresses = [...addresses].sort((a, b) =>
+    a.isSelected === b.isSelected ? 0 : a.isSelected ? -1 : 1
+  );
+  
   return (
     <View style={styles.header} className="flex flex-1 bg-[#0b0b0b] ">
       <StatusBar style="light" />
@@ -99,7 +104,7 @@ const Page = () => {
           </Text>
         </View>
 
-        {addresses?.length === 0 ? (
+        {sortedAddresses?.length === 0 ? (
           <View className="flex-1 justify-center items-center">
             <View className="flex justify-center items-center w-28 h-28 rounded-3xl bg-[#121212]/90">
               <Location size={56} variant="Bulk" color={Colors.primary} />
@@ -131,7 +136,7 @@ const Page = () => {
 
             <ScrollView>
               <View className="mt-4 w-full flex-1">
-                {addresses?.map((address, index) => (
+                {sortedAddresses?.map((address, index) => (
                   <TouchableOpacity
                     onPress={() => selectAddress(address)}
                     key={index}

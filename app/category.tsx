@@ -29,6 +29,7 @@ const Page = () => {
   const storesByCategory = useSelector(
     (state: RootState) => state.store.storesByCategory
   );
+  
   const dispatch = useDispatch<any>();
   const [loadingStores, setloadingStores] = useState(true);
   const router = useRouter();
@@ -132,25 +133,24 @@ const Page = () => {
           style={styles.header}
           className="bg-[#121212]/90 border-b border-[#0b0b0b]/5 py-6  flex "
         >
-          <View className="flex z-[999] top-0">
-            <View className="w-full px-6 flex-row items-center justify-between">
+          <View className="flex z-[999] mt-4">
+            <View className="w-full px-6 flex-row items-center">
               <TouchableOpacity
                 onPress={() => router.back()}
-                className="w-14 h-14 flex justify-center items-center border border-[#fafafa]/10 rounded-full"
+                className="flex justify-center items-center  rounded-full"
               >
-                <ArrowLeft variant="Broken" size={20} color={Colors.white} />
+                <ArrowLeft variant="Broken" size={24} color={Colors.white} />
               </TouchableOpacity>
 
               {isScrolled && (
                 <Text
                   style={{ fontFamily: "medium" }}
-                  className="text-lg text-white"
+                  className="text-lg ml-5 text-white"
                 >
                   {name}
                 </Text>
               )}
 
-              <View className="w-14"></View>
             </View>
           </View>
 
@@ -170,7 +170,7 @@ const Page = () => {
           </View>
         </View>
 
-        <ScrollView onScroll={handleScroll} className="bg-[#0b0b0b] flex-1">
+        <ScrollView showsVerticalScrollIndicator={false} onScroll={handleScroll} className="bg-[#0b0b0b] flex-1">
           {loadingStores ? <SkeletonList /> : <StoresByCategoryList />}
         </ScrollView>
       </View>

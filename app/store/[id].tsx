@@ -136,7 +136,7 @@ const Page = () => {
                                 null
                             )
                             }
-                            <View className={isStoreOpen ? ' bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : ' bg-[#fffffc]/20 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
+                            <View className={isStoreOpen ? ' bg-[#1BD868] mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl' : ' bg-[#121212]/90 mt-4 self-start flex justify-center items-center flex-row px-3 py-1.5 rounded-xl'}>
                                 <Text className={isStoreOpen ? ' text-[#000]/80 text-xs' : " text-[#fff]/80 text-xs"} style={{ fontFamily: "semibold" }}>{isStoreOpen ? 'Отворено' : 'Затворено'}</Text>
                             </View>
 

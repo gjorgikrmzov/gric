@@ -44,7 +44,7 @@ const StoreCard = ({ item }: { item: any }) => {
       >
         <View className="flex overflow-hidden relative">
           {item.isOpen ? null : (
-            <View className="bg-[#0b0b0b]/80 rounded-2xl z-[999] flex justify-center items-center w-full h-40 p-5 absolute overflow-hidden">
+            <View className="bg-[#121212]/80 rounded-2xl z-[999] flex justify-center items-center w-full h-40 p-5 absolute overflow-hidden">
               <Text
                 style={{ fontFamily: "medium" }}
                 className="text-white text-center"
@@ -58,6 +58,9 @@ const StoreCard = ({ item }: { item: any }) => {
             <View className="absolute h-full bg-[#121212]/90 left-0 rounded-2xl top-0 w-full"></View>
           )}
 
+          {item.imageUrl === null ? (
+            <View className="absolute h-full bg-[#121212]/90 left-0 rounded-2xl top-0 w-full"></View>
+          ) : null}
           <Image
             onLoad={() => setLoaded(false)}
             source={{ uri: item.imageUrl }}
@@ -91,13 +94,13 @@ const StoreCard = ({ item }: { item: any }) => {
               className={
                 item.isOpen
                   ? "px-2.5 py-1.5 bg-[#1BD868] flex items-center justify-center rounded-xl"
-                  : "px-2.5 py-1.5 bg-[#fafafa] flex items-center justify-center rounded-xl"
+                  : "px-2.5 py-1.5 bg-[#fafafa]/5 flex items-center justify-center rounded-xl"
               }
             >
               <Text
                 style={{ fontFamily: "medium" }}
                 className={
-                  item.isOpen ? "text-black text-xs" : "text-xs text-black"
+                  item.isOpen ? "text-black text-xs" : "text-xs text-white/90"
                 }
               >
                 {item.isOpen ? "Отворено" : "Затворено"}

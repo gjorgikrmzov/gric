@@ -6,6 +6,7 @@ import MiniStoreCard from "../Cards/smallStoreCard";
 import { View } from "react-native";
 import { MessageQuestion } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
+import StoreCard from "../Cards/storeCard";
 
 const StoresByCategoryList = () => {
   const storesByCategory = useSelector(
@@ -30,7 +31,7 @@ const StoresByCategoryList = () => {
         <FlatList
           data={storesByCategory}
           scrollEnabled={false}
-          className="px-4 py-2"
+          className="px-4 py-2 pb-6"
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <MiniStoreCard item={item} />}
           showsVerticalScrollIndicator={false}

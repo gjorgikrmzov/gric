@@ -278,8 +278,8 @@ const Page = () => {
                   className="text-[#fffffc]"
                   style={{ fontFamily: "medium" }}
                 >
-                  {selectedAddress.street.length > 12
-                    ? `${selectedAddress.street.substring(0, 12)}...`
+                  {selectedAddress.street.length > 15
+                    ? `${selectedAddress.street.substring(0, 15)}...`
                     : selectedAddress.street}
                 </Text>
               ) : (

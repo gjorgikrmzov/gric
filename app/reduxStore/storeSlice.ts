@@ -50,7 +50,6 @@ const storeSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-    
 
         builder.addCase(fetchStores.fulfilled, (state, action) => {
             state.stores = action.payload

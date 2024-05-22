@@ -34,8 +34,9 @@ const Page = () => {
         }
     };
 
+
     const handleAddToCart = () => {
-        const differentStoreItemExists = cartItems.some(cartItem => storeId !== storeId);
+        const differentStoreItemExists = cartItems.some(cartItem => cartItem.storeId !== storeId);
 
         if (!isStoreOpen) {
             Alert.alert(
@@ -95,7 +96,7 @@ const Page = () => {
                     </View>
                     <Text className='text-2xl text-[#fffffc] mt-1' style={{ fontFamily: "semibold" }}>{name}</Text>
                     <Text className='text-[#fffffc]/80' style={{ fontFamily: "medium" }}>{description}</Text>
-                    <Text className='text-[#fffffc] text-lg mt-3' style={{ fontFamily: "semibold" }}>{price} <Text style={{ fontFamily: "medium" }} className='text-[#0b0b0b]/60 text-sm'>ден</Text></Text>
+                    <Text className='text-[#fffffc] text-lg mt-3' style={{ fontFamily: "semibold" }}>{price} <Text style={{ fontFamily: "medium" }} className='text-[#fffffc]/60 text-sm'>ден</Text></Text>
                 </View>
 
 

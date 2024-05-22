@@ -92,6 +92,7 @@ const Page = () => {
         console.log(error)
     }
   };
+  
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full flex flex-col justify-start bg-[#0b0b0b]">

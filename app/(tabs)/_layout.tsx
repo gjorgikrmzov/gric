@@ -129,7 +129,7 @@ const Layout = () => {
           tabBarBadge: cartItems.length,
           tabBarBadgeStyle: {
             display: cartItems.length === 0 ? "none" : "flex",
-            backgroundColor: Colors.primary,
+            backgroundColor: Colors.white,
             fontFamily: "extrabold",
             fontSize: 10,
           },

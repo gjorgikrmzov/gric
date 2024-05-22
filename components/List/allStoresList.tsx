@@ -1,27 +1,27 @@
-import React from 'react'
-import { FlatList } from 'react-native'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../app/reduxStore'
-import StoreCard from '../Cards/storeCard'
+import React, { useEffect, useState } from "react";
+import { FlatList, View } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/reduxStore";
+import StoreCard from "../Cards/storeCard";
 
 const StoresList = () => {
+  const { stores } = useSelector((state: RootState) => state.store);
+ 
 
-    const { stores } = useSelector((state: RootState) => state.store)
-    
-    return (
-        <FlatList
-            data={stores}
-            scrollEnabled={false}
-            className='px-6 pb-4'
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <StoreCard item={item} />}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-                paddingBottom: 6,
-                backgroundColor: '#0b0b0b',
-            }}
-        />
-    )
-}
+  return (
+    <FlatList
+      data={stores}
+      scrollEnabled={false}
+      className="px-6 pb-4"
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => <StoreCard item={item} />}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: 6,
+        backgroundColor: "#0b0b0b",
+      }}
+    />
+  );
+};
 
-export default StoresList
+export default StoresList;
