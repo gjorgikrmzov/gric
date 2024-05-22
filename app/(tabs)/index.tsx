@@ -171,7 +171,9 @@ const Page = () => {
     } as any);
   };
 
-  const selectedAddres = addresses.find((address) => address.isSelected === true);
+  const selectedAddress = addresses.find(
+    (address) => address.isSelected === true
+  );
 
   const renderCategoryIcon = (categoryName: string) => {
     switch (categoryName) {
@@ -266,17 +268,19 @@ const Page = () => {
               <ArrowDown2
                 className="ml-0.5"
                 size={12}
-                color={'#fafafa80'}
+                color={"#fafafa80"}
                 variant="Linear"
               />
             </View>
             <View className="rounded-2xl mt-1 px-6 py-2.5 flex items-center justify-center bg-[#121212]/90">
-              {selectedAddres?.street ? (
+              {selectedAddress?.street ? (
                 <Text
                   className="text-[#fffffc]"
                   style={{ fontFamily: "medium" }}
                 >
-                  {selectedAddres?.street.substring(0, 12) + "..."}
+                  {selectedAddress.street.length > 12
+                    ? `${selectedAddress.street.substring(0, 12)}...`
+                    : selectedAddress.street}
                 </Text>
               ) : (
                 <Text
@@ -345,7 +349,11 @@ const Page = () => {
                     onPress={onBlur}
                     className=" flex justify-center items-center"
                   >
-                    <ArrowLeft size={20} color={Colors.white} variant="Broken" />
+                    <ArrowLeft
+                      size={20}
+                      color={Colors.white}
+                      variant="Broken"
+                    />
                   </TouchableOpacity>
                 ) : (
                   <SearchNormal1
@@ -377,12 +385,16 @@ const Page = () => {
                   showsVerticalScrollIndicator={false}
                   className="flex flex-col"
                 >
-                    <Text
-                      className={search !== '' ? "text-[#fffffc]/60 mt-5 hidden" : "text-[#fffffc]/60 mt-5"}
-                      style={{ fontFamily: "semibold" }}
-                    >
-                      Препорачани
-                    </Text>
+                  <Text
+                    className={
+                      search !== ""
+                        ? "text-[#fffffc]/60 mt-5 hidden"
+                        : "text-[#fffffc]/60 mt-5"
+                    }
+                    style={{ fontFamily: "semibold" }}
+                  >
+                    Препорачани
+                  </Text>
                   {filteredStores.map(
                     (store, index) =>
                       index < 5 && (
@@ -392,7 +404,11 @@ const Page = () => {
                           className="w-full flex-row  flex items-center justify-between"
                         >
                           <View className="flex items-center flex-row gap-x-4">
-                            <Shop color={Colors.primary} size={25} variant="Broken" />
+                            <Shop
+                              color={Colors.primary}
+                              size={25}
+                              variant="Broken"
+                            />
                             <View className="py-6 border-b border-[#fffffc]/10  w-full">
                               <Text
                                 className="text-[#fffffc] text-[16px] "

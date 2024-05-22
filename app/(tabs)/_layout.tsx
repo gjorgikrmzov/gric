@@ -37,7 +37,7 @@ const Layout = () => {
           display: "flex",
           height: 60,
         },
-        tabBarLabelStyle: { fontFamily: "medium", fontSize: 12 },
+        tabBarLabelStyle: { fontFamily: "medium", fontSize: 11 },
         tabBarIconStyle: {
           position: "relative",
           backgroundColor: Colors.gray50,
@@ -63,31 +63,31 @@ const Layout = () => {
       <Tabs.Screen
         name="(stores)"
         options={{
-          tabBarLabel: "Храна",
-          headerLeft: () => (
-            <Pressable onPress={() => router.push('(user)/profile')} className="w-10 h-10 rounded-full border border-[#0b0b0b]/5 ml-4 flex justify-center items-center">
-              <User size={20} variant="Broken" color={Colors.dark} />
-            </Pressable>
-          ),
+          tabBarLabel: "Истражи",
+          
           headerRight: () => (
-            <Pressable onPress={() => router.push('/cart')} className="w-10 h-10 border rounded-full border-[#0b0b0b]/5 mr-4 flex justify-center items-center">
-              <ShoppingCart size={20} variant="Broken" color={Colors.dark} />
+            <Pressable onPress={() => router.push('/cart')} className="w-11 h-11 border rounded-2xl border-[#fffffc]/5 mr-4 flex justify-center items-center">
+              <ShoppingCart size={18} variant="Broken" color={Colors.white} />
             </Pressable>
           ),
           headerTitle: () => (
-            <View className="relative border border-[#0b0b0b]/5 px-4 rounded-2xl flex flex-row items-center ">
-              <SearchNormal1 size={16} variant="Broken"  color={'#0b0b0b60'}/>
-              <TextInput className=" py-4 text-black flex-1 text-xs ml-2 " style={{fontFamily: 'medium'}} placeholderTextColor='#0b0b0b60' placeholder="Пребарај" />
+            <View className="border-[#fffffc]/5 justify-center self-start border px-4 rounded-2xl flex flex-row items-center ">
+              <SearchNormal1 size={16} variant="Broken"  color={'#fffffc80'}/>
+              <TextInput className=" text-white flex-1 py-3.5 text-xs ml-2 " style={{fontFamily: 'medium'}} placeholderTextColor='#fffffc80' placeholder="Пребарај" />
             </View>
           ),
           headerShown: false,
-          headerTitleContainerStyle: {width: '100%'},
+          headerTitleContainerStyle: {width: '100%', position: 'relative', left: 0, bottom: 0},
           headerShadowVisible: false,
+          headerRightContainerStyle: {
+            position: 'relative', bottom: 0, right: 0
+          },
           headerTitleStyle: {
             fontFamily: "heavy",
             color: "#1BD868",
             fontSize: 26,
           },
+          headerStyle: {backgroundColor: '#0b0b0b', height: 100},
           tabBarIcon: ({ color, size }) => (
             <Shop
               variant={

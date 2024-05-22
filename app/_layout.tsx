@@ -10,6 +10,7 @@ import { setAccessToken } from './reduxStore/accessTokenSlice';
 import { fetchUserInfo } from './reduxStore/userSlice';
 import "react-native-reanimated"
 import { fetchAddress } from './reduxStore/addressSlice';
+import { CommentProvider } from './commentContext';
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -106,6 +107,7 @@ function RootLayoutNav() {
 
 function NavigationStack() {
   return (
+    <CommentProvider>
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(auth)/welcome" options={{ gestureEnabled: false }} />
       <Stack.Screen name="(auth)/setUsername" options={{ gestureEnabled: false }} />
@@ -124,6 +126,8 @@ function NavigationStack() {
       <Stack.Screen name="(user)/profile" />
       <Stack.Screen name="(modals)/manageAddresses" options={{ presentation: "modal" }} />
       <Stack.Screen name="(modals)/addAddress" options={{ presentation: "modal" }} />
+      <Stack.Screen name="(modals)/orderComment" options={{ presentation: "modal" }} />
     </Stack>
+    </CommentProvider>
   );
 }

@@ -288,7 +288,7 @@ const Page = () => {
 
       <TouchableOpacity
         onPress={addAddress}
-        className="bg-[#121212]/90 mb-2 py-6 flex justify-center flex-row  items-center rounded-2xl"
+        className=" border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-2xl"
       >
         <SaveAdd variant="Bulk" color={Colors.primary} size={22} />
         <Text style={{ fontFamily: "medium" }} className="text-[#FFFFFC] ml-2">

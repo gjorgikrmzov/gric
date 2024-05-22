@@ -35,7 +35,7 @@ const Page = () => {
     };
 
     const handleAddToCart = () => {
-        const differentStoreItemExists = cartItems.some(cartItem => cartItem.storeId !== storeId);
+        const differentStoreItemExists = cartItems.some(cartItem => storeId !== storeId);
 
         if (!isStoreOpen) {
             Alert.alert(
@@ -74,9 +74,9 @@ const Page = () => {
 
     return (
 
-        <View style={styles.header} className='h-full bg-[#0b0b0b]'>
+        <View style={styles.header} className='h-full bg-[#121212]'>
 
-            <View className='bg-[#0b0b0b] px-6 h-44 '>
+            <View className='bg-[#121212]/90 px-6 h-44 '>
                 <View className='flex flex-row justify-between items-center w-full'>
 
                     <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full' >
@@ -87,7 +87,7 @@ const Page = () => {
 
             </View>
 
-            <View className='flex-1 bg-[#121212]/90'>
+            <View className='flex-1 bg-[#0b0b0b]'>
                 <View className='mt-6 px-6'>
                     <View className='flex items-center flex-row'>
                         <Archive variant='Bulk' size={18} color={Colors.primary} />
@@ -100,7 +100,7 @@ const Page = () => {
 
 
                 <View className='absolute flex bottom-10 flex-row items-center px-6 gap-x-3'>
-                    <View className=' bg-[#0b0b0b] p-1 flex-row items-center rounded-2xl justify-between '>
+                    <View className=' bg-[#121212]/90 border-2 border-[#fffffc] p-1 flex-row items-center rounded-2xl justify-between '>
                         <TouchableOpacity onPress={decreaseQuantity} className='flex justify-center items-center w-12 h-10 rounded-xl '>
                             <Minus
                                 size={20}
@@ -120,7 +120,7 @@ const Page = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={handleAddToCart} className='flex-1 flex-row py-3.5 bg-[#0b0b0b] flex justify-center items-center rounded-2xl'>
+                    <TouchableOpacity onPress={handleAddToCart} className='flex-1 flex-row py-3.5 bg-[#121212]/90 border-2 border-[#1BD868] flex justify-center items-center rounded-2xl'>
                         <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
                         <Text style={{ fontFamily: "medium" }} className='text-[#FFFFFC] ml-2'>Додај во Корпа</Text>
                     </TouchableOpacity>

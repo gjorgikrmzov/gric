@@ -15,38 +15,23 @@ import React, { useState, useRef, useEffect } from "react";
 import { router } from "expo-router";
 import {
   ArrowLeft,
-  Bag2,
-  Coffee,
-  Element4,
-  Graph,
-  Heart,
-  Home2,
-  HomeHashtag,
   MessageQuestion,
   SearchNormal1,
   Shop,
-  ShoppingCart,
 } from "iconsax-react-native";
 import Colors from "../../../constants/Colors";
 import {
   GestureHandlerRootView,
-  RefreshControl,
 } from "react-native-gesture-handler";
 import { Easing } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, store } from "../../reduxStore";
-import { fetchStores } from "../../reduxStore/storeSlice";
+import { RootState } from "../../reduxStore";
 import StoreCard from "../../../components/Cards/storeCard";
-import { LinearGradient } from "expo-linear-gradient";
-import * as Haptics from "expo-haptics";
-import StoresList from "../../../components/List/allStoresList";
 
 const Page = () => {
-  const dispatch = useDispatch<any>();
 
   const { stores } = useSelector((state: RootState) => state.store);
   const { storeTypes } = useSelector((state: RootState) => state.storeType);
-  const { accessToken } = useSelector((state: RootState) => state.accessToken);
 
   const [search, setSearch] = useState<string>("");
 
@@ -56,11 +41,6 @@ const Page = () => {
   const [isFocused, setIsFocused] = useState(false);
   const searchBarResult = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
-
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const numberOfCartItems = useSelector(
-    (state: RootState) => state.cart.items.length
-  );
 
   useEffect(() => {
     if (search.trim() === "") {
@@ -147,19 +127,19 @@ const Page = () => {
   return (
     <GestureHandlerRootView>
       <View className="bg-[#0b0b0b] flex-1">
-        {/* <Animated.View className="px-6 flex flex-row items-center mt-4 mb-2 ">
-          <View className=" bg-[#fafafa]/90 flex-1 items-center flex-row px-5 rounded-3xl">
+        <Animated.View className="px-4 flex flex-row items-center mt-6 ">
+          <View className=" bg-[#121212]/90 flex-1 items-center flex-row px-5 rounded-3xl">
             {isFocused ? (
               <TouchableOpacity
                 onPress={handleBlur}
                 className=" flex justify-center items-center"
               >
-                <ArrowLeft size={22} color={Colors.dark} variant="Broken" />
+                <ArrowLeft size={22} color={Colors.white} variant="Broken" />
               </TouchableOpacity>
             ) : (
               <SearchNormal1
                 size={22}
-                color="#0b0b0b97"
+                color="#fffffc97"
                 className="flex justify-center items-center"
                 variant="Broken"
               />
@@ -171,13 +151,13 @@ const Page = () => {
               onFocus={handleFocus}
               onBlur={handleBlur}
               value={search}
-              className="text-[#0b0b0b] px-3 flex-1 "
+              className="text-[#fffffc] px-3 flex-1 "
               style={styles.input}
               placeholder="Пребарај"
-              placeholderTextColor="#0b0b0b97"
+              placeholderTextColor="#fffffc97"
             />
           </View>
-        </Animated.View> */}
+        </Animated.View>
 
         <Animated.View
           style={{ transform: [{ translateY: searchBarResult }] }}
@@ -197,10 +177,10 @@ const Page = () => {
                     className="w-full flex-row  flex items-center justify-between"
                   >
                     <View className="flex items-center flex-row gap-x-4">
-                      <Shop color="#757780" size={25} variant="Broken" />
-                      <View className="py-6 border-b border-[#0b0b0b]/10  w-full">
+                      <Shop color={Colors.primary} size={25} variant="Broken" />
+                      <View className="py-6 border-b border-[#fffffc]/10  w-full">
                         <Text
-                          className="text-[#0b0b0b] text-[16px] "
+                          className="text-[#fffffc] text-[16px] "
                           style={{ fontFamily: "medium" }}
                         >
                           {store.name}
@@ -213,15 +193,15 @@ const Page = () => {
 
             {filteredStores.length === 0 ? (
               <View className="flex-1 mt-6 justify-center items-center flex ">
-                <View className="w-14 h-14 bg-[#fafafa]/80 flex justify-center items-center rounded-lg">
+                <View className="w-14 h-14 bg-[#121212]/90 flex justify-center items-center rounded-lg">
                   <MessageQuestion
                     size={26}
-                    color={Colors.dark}
+                    color={Colors.white}
                     variant="Bulk"
                   />
                 </View>
                 <Text
-                  className="text-center mt-2 text-[#0b0b0b]/60 text-[16px]"
+                  className="text-center mt-2 text-[#fffffc]/60 text-[16px]"
                   style={{ fontFamily: "medium" }}
                 >
                   Нема пронајдено {"\n"} резултати
@@ -240,14 +220,13 @@ const Page = () => {
             <FlatList
               data={foodShops}
               scrollEnabled={false}
-              className="py-3"
+              className="py-2"
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => <StoreCard item={item} />}
               showsVerticalScrollIndicator={false}
             />
           </View>
         </ScrollView>
-
       </View>
     </GestureHandlerRootView>
   );

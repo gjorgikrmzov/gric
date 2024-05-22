@@ -15,6 +15,7 @@ import { RootState } from "../reduxStore";
 import { TouchableOpacity } from "react-native";
 import { deleteAddress, fetchAddress } from "../reduxStore/addressSlice";
 import { StatusBar } from "expo-status-bar";
+import * as Haptics from "expo-haptics";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
@@ -50,28 +51,27 @@ const Page = () => {
     } catch (error) {}
   };
 
-
-  
   const selectAddress = async (address: any) => {
     try {
-      const response = await fetch(`http://172.20.10.2:8080/selectAddress?addressId=${address.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `http://172.20.10.2:8080/selectAddress?addressId=${address.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (response.ok) {
+        Haptics.selectionAsync();
         dispatch(fetchAddress({ personId, accessToken }));
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-
-  
 
   return (
     <View style={styles.header} className="flex flex-1 bg-[#0b0b0b] ">
@@ -142,9 +142,7 @@ const Page = () => {
                         <Location
                           size={22}
                           variant={
-                            address.isSelected === true
-                              ? "Bold"
-                              : "Broken"
+                            address.isSelected === true ? "Bold" : "Broken"
                           }
                           color={Colors.white}
                         />
@@ -159,7 +157,10 @@ const Page = () => {
                             className="text-md text-[#fffffc] text-[15px]"
                             style={{ fontFamily: "medium" }}
                           >
-                            {address.street.substring(0, 15) + "..."} {address.streetNumber}
+                            {address.street.length > 15
+                              ? `${address.street.substring(0, 15)}...`
+                              : address.street}{" "}
+                            {address.streetNumber}
                           </Text>
                         </View>
                       </View>
@@ -205,13 +206,13 @@ const Page = () => {
         <View className="px-6 w-full pb-2.5">
           <TouchableOpacity
             onPress={() => router.push("/(modals)/addAddress")}
-            className="py-6 rounded-2xl flex-row flex justify-center items-center bg-[#1BD868]"
+            className="py-6 rounded-2xl flex-row flex justify-center items-center border-2 border-[#1BD868] "
           >
-            <LocationAdd size={22} color={Colors.dark} variant="Bulk" />
+            <LocationAdd size={22} color={Colors.primary} variant="Bulk" />
             <Text
-              className="ml-3 text-[#0b0b0b]"
+              className="ml-3 text-[#fffffc]"
               style={{ fontFamily: "medium" }}
-            > 
+            >
               Додај адреса
             </Text>
           </TouchableOpacity>

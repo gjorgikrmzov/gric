@@ -172,9 +172,9 @@ const Page = () => {
                         cartItems?.length !== 0 && (
                             <Animated.View>
                                 <Link href={'/cart'} asChild>
-                                    <TouchableOpacity className='w-full flex-row py-6 bg-[#1BD868] flex justify-center items-center rounded-2xl'>
-                                        <ShoppingCart variant='Bulk' size={22} color={Colors.dark} />
-                                        <Text style={{ fontFamily: "medium" }} className=' text-[#0b0b0b] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
+                                    <TouchableOpacity className='w-full flex-row py-6 border-2 bg-[#121212] border-[#1BD868] flex justify-center items-center rounded-2xl'>
+                                        <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
+                                        <Text style={{ fontFamily: "medium" }} className=' text-[#fffffc] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
                                     </TouchableOpacity>
                                 </Link>
                             </Animated.View>
