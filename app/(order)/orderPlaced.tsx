@@ -1,12 +1,25 @@
 import { Text, Pressable, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ArchiveTick, ArrowRight, Map1 } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
 import { router } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../reduxStore";
+import { fetchOrder } from "../reduxStore/orderSlice";
 
 const Page = () => {
+
+  const dispatch = useDispatch<any>()
+  const { accessToken } = useSelector((state: RootState) => state.accessToken)
+  const orders = useSelector((state: RootState) => state.orders)
+
+  useEffect(() => {
+    dispatch(fetchOrder(accessToken))
+  }, [])
+
+
   return (
     <SafeAreaView className="flex-1 bg-[#0b0b0b]">
       <Animated.View className="flex-1 flex justify-center items-center">
@@ -58,7 +71,7 @@ const Page = () => {
           onPress={() => router.push("/(order)/trackOrder")}
         >
           <Text className="text-white" style={{ fontFamily: "medium" }}>
-            Прати ја нарачката
+            Следи ја нарачката
           </Text>
           <Map1
             variant="Broken"

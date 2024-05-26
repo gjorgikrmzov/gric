@@ -8,9 +8,16 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Add,
+  AddSquare,
   ArrowRight,
   ArrowRight2,
   CloseSquare,
@@ -248,7 +255,9 @@ const Page = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push({pathname:"/orderComment", params: {comment}})}
+              onPress={() =>
+                router.push({ pathname: "/orderComment", params: { comment } })
+              }
               className="w-full flex-row flex items-center justify-between"
             >
               <View className="py-6 border-b flex flex-row items-center justify-between border-[#fffffc]/5  w-full">
@@ -258,17 +267,31 @@ const Page = () => {
                     size={20}
                     variant="Broken"
                   />
-                  <Text
-                    className="text-[#fffffc] ml-3 "
-                    style={{ fontFamily: "medium" }}
-                  >
-                    Остави коментар
-                  </Text>
+
+                  {comment ? (
+                    <View className="flex ml-3 flex-row items-center">
+                      <Text
+                        className="text-[#fffffc] "
+                        style={{ fontFamily: "medium" }}
+                      >
+                        Коментар:{" "}
+                      </Text>
+                      <Text
+                        className="text-[#fffffc]/60 "
+                        style={{ fontFamily: "medium" }}
+                      >
+                        {comment}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text  className="text-[#fffffc] ml-3 "
+                    style={{ fontFamily: "medium" }}>Остави коментар</Text>
+                  )}
                 </View>
                 {comment ? (
                   <TickSquare color={Colors.primary} variant="Bulk" size={20} />
                 ) : (
-                  <ArrowRight2 color={Colors.white} size={20} />
+                  <AddSquare color={Colors.white} size={20} />
                 )}
               </View>
             </TouchableOpacity>

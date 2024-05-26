@@ -50,3 +50,21 @@ export type User = {
     role: string,
     addresses: Address[]
 }
+
+export type orderItem = {
+    id: string,
+    storeItemId: string,
+    quantity: number
+}
+
+export type Order = {
+    id: string,
+    storeId: string,
+    customerId: string,
+    delivererId: string,
+    deliveryAddressId: string,
+    totalPrice: string,
+    comment: string,
+    status: string,
+    items: orderItem[]  
+}

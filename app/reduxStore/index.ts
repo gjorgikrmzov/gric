@@ -7,6 +7,7 @@ import cartSlice from './cartSlice'
 import accessTokenSlice from './accessTokenSlice'
 import userSlice from './userSlice'
 import addressSlice from './addressSlice'
+import orderSlice from './orderSlice'
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
         cart: cartSlice.reducer,
         accessToken: accessTokenSlice.reducer,
         user: userSlice.reducer,
-        addresses: addressSlice.reducer
+        addresses: addressSlice.reducer,
+        orders: orderSlice.reducer
         
     }
 })

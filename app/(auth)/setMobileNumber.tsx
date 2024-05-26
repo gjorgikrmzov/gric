@@ -76,7 +76,7 @@ const Page = () => {
 
                 <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
                     <View className='px-6 pb-6 justify-end'>
-                        <TouchableOpacity onPress={setAccMobileNumber} className='bg-[#121212]/90 flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
+                        <TouchableOpacity onPress={setAccMobileNumber} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Следно</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>

@@ -143,16 +143,16 @@ const Page = () => {
 
                 <View className='flex px-6 h-min flex-col gap-y-3'>
 
-                    <View className='w-full flex items-center flex-row bg-[#121212]/90  text-white border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
+                    <View className='w-full flex items-center flex-row bg-[#121212]/90  border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
                         <TextInput value={password}
-                            onChangeText={handlePasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
+                            onChangeText={handlePasswordChange} className='px-5 w-[90%] text-white' style={styles.input} placeholder='Лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
 
                         {isSecure ? (<EyeSlash onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />) : (<Eye onPress={toggleSecureEntry} color={Colors.white} variant='Broken' size={22} className='absolute right-5' />)}
                     </View>
 
-                    <View className='w-full flex items-center flex-row bg-[#121212]/90  text-white border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
+                    <View className='w-full flex items-center flex-row bg-[#121212]/90  border-2 border-[#fafafa]/0 rounded-2xl focus:border-[#1BD868]'>
                         <TextInput value={confirmPassword}
-                            onChangeText={handleConfirmPasswordChange} className='px-5 w-[90%]' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
+                            onChangeText={handleConfirmPasswordChange} className='px-5 w-[90%] text-white' style={styles.input} placeholder='Повтори лозинка' secureTextEntry={isSecure} placeholderTextColor='#fff' />
                     </View>
 
                     {errorMessage ? <Text className='mt-3 text-red-600' style={{ fontFamily: "medium" }}>{errorMessage}</Text> : null}
@@ -160,7 +160,7 @@ const Page = () => {
 
                 <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
                     <View className='px-6 pb-6  justify-end'>
-                        <TouchableOpacity onPress={handleCreateAccount} className='bg-[#121212]/90 flex flex-row items-center justify-center py-6 rounded-2xl'>
+                        <TouchableOpacity onPress={handleCreateAccount} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-6 rounded-2xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Креирај профил</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
                         </TouchableOpacity>

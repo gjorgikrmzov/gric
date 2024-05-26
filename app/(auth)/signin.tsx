@@ -90,7 +90,7 @@ const Page = () => {
             }
 
           <View className='px-6 pb-4 flex-1 justify-end'>
-            <TouchableOpacity onPress={signIn} className='bg-[#121212]/90 flex flex-row items-center justify-center py-6 rounded-2xl'>
+            <TouchableOpacity onPress={signIn} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-6 rounded-2xl'>
               <Text className='text-lg text-[#fffffc] ' style={{ fontFamily: "medium" }}>Најави се</Text>
               <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
             </TouchableOpacity>

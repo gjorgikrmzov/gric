@@ -52,6 +52,7 @@ import { fetchCategories } from "../reduxStore/categorySlice";
 import { fetchAddress } from "../reduxStore/addressSlice";
 import StoresList from "../../components/List/allStoresList";
 import SkeletonList from "../../components/List/skeletonList";
+import { fetchOrder } from "../reduxStore/orderSlice";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
@@ -78,7 +79,7 @@ const Page = () => {
   const [orderExists, setorderExists] = useState(false);
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken) {  	
       Promise.all([
         setloadingStores(false),
         dispatch(fetchStores(accessToken)),
@@ -151,6 +152,7 @@ const Page = () => {
     setRefreshing(true);
     setloadingStores(true);
     dispatch(fetchStores(accessToken));
+    dispatch(fetchCategories(accessToken)),
     dispatch(fetchStoresTypes(accessToken)).finally(() => {
       setRefreshing(false), setloadingStores(false);
     });
@@ -226,7 +228,7 @@ const Page = () => {
           />
         );
 
-      case "Тако":
+      case "Бурито":
         return (
           <Image
             tintColor={Colors.white}

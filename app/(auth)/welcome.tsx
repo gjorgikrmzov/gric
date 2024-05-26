@@ -10,7 +10,7 @@ const Page = () => {
     <SafeAreaView className='bg-[#0b0b0b] h-full'>
 
       <View className='bg-[#0b0b0b] pb-4 flex flex-col justify-between items-stretch pt-28 flex-1 px-6 z-20'>
-        <StatusBar style='dark' />
+        <StatusBar style='light' />
 
         <View className=''>
           <Text className='text-xl text-center mt-8 text-[#fffffc]/80' style={{ fontFamily: 'bold' }}>Добредојде на</Text>
@@ -23,11 +23,11 @@ const Page = () => {
             <Text className='text-[#fffffc]/70 text-lg mt-2 text-center' style={{ fontFamily: 'medium' }}>Добредојдовте на нашата апликација за достава на храна!</Text>
           </View>
 
-          <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/setUsername')} className='w-full  py-6 mt-3 flex flex-row justify-center items-center bg-[#121212]/90 rounded-2xl'>
+          <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/setUsername')} className='w-full  py-6 mt-3 flex flex-row justify-center items-center border-2 border-[#1BD868] bg-[#121212]/90 rounded-2xl'>
             <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Креирај профил</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/signIn')} className='w-full mt-3  py-6 flex flex-row justify-center items-center bg-[#121212]/90 rounded-2xl'>
+          <TouchableOpacity style={styles.input} onPress={() => router.push('/(auth)/signIn')} className='w-full mt-3  py-6 flex flex-row justify-center items-center border-2 border-[#1BD868] bg-[#121212]/90 rounded-2xl'>
             <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: 'medium' }}>Најави се</Text>
           </TouchableOpacity>
         </View>

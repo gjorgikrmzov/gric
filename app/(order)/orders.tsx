@@ -97,7 +97,7 @@ const Page = () => {
                                 </View>
 
                                 <View className='flex-1 items-center flex gap-x-2 flex-row justify-center mt-3'>
-                                    <TouchableOpacity onPress={() => router.push('/(order)/trackOrder')} className='flex items-center bg-[#121212]/90 px-3 flex-1 py-4 rounded-2xl'>
+                                    <TouchableOpacity onPress={() => router.push('/trackOrder')} className='flex items-center bg-[#121212]/90 px-3 flex-1 py-4 rounded-2xl'>
                                         <Text style={{ fontFamily: "medium" }} className='text-white'>Види нарачка</Text>
                                     </TouchableOpacity>
 

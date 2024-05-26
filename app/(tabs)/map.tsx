@@ -21,6 +21,7 @@ import {
   Element4,
   ExportSquare,
   HomeHashtag,
+  Location,
   MessageQuestion,
   SearchNormal1,
   Shop,
@@ -47,7 +48,7 @@ const Page = () => {
   const [isFocused, setIsFocused] = useState(false);
   const searchBarResult = useRef(new Animated.Value(0)).current;
   const headerOpacity = useRef(new Animated.Value(1)).current;
-  const [selectedType, setselectedType] = useState<string>("Сите");
+  const { addresses } = useSelector((state: RootState) => state.addresses);
 
   const INITIAL_REGION = {
     latitude: 41.43917545031447,
@@ -95,7 +96,7 @@ const Page = () => {
 
   const handleFocus = () => {
     setIsFocused(true);
-    inputRef.current?.focus()
+    inputRef.current?.focus();
     Animated.parallel([
       Animated.spring(searchBarResult, {
         toValue: -40,
@@ -135,6 +136,10 @@ const Page = () => {
     setSearch(text);
   };
 
+  const selectedAddress = addresses.find(
+    (address) => address.isSelected === true
+  );
+
   return (
     <GestureHandlerRootView>
       <View className="bg-[#0b0b0b] flex-1">
@@ -159,7 +164,11 @@ const Page = () => {
                     onPress={handleBlur}
                     className=" flex justify-center items-center"
                   >
-                    <ArrowLeft size={18} color={Colors.white} variant="Broken" />
+                    <ArrowLeft
+                      size={18}
+                      color={Colors.white}
+                      variant="Broken"
+                    />
                   </TouchableOpacity>
                 ) : (
                   <SearchNormal1
@@ -261,6 +270,22 @@ const Page = () => {
             provider={PROVIDER_DEFAULT}
             customMapStyle={customMapStyle}
           >
+            <Marker
+              coordinate={{
+                latitude: selectedAddress?.latitude!,
+                longitude: selectedAddress?.longitude!,
+              }}
+            >
+              <View className="-z-0 p-2 justify-center items-center flex rounded-2xl bg-[#fafafa]">
+                <Location
+                  size={19}
+                  variant="Bulk"
+                  color={
+                    Colors.dark
+                  }
+                />
+              </View>
+            </Marker>
             {stores.map((store, index) => (
               <Marker
                 key={index}
@@ -351,7 +376,11 @@ const Page = () => {
                 onPress={handleFocus}
                 className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fafafa]/5"
               >
-                <SearchNormal1 color={Colors.white} size={20} variant="Broken" />
+                <SearchNormal1
+                  color={Colors.white}
+                  size={20}
+                  variant="Broken"
+                />
               </TouchableOpacity>
             </View>
           </View>

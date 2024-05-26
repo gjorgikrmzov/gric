@@ -21,7 +21,6 @@ const Page = () => {
   }
 
 
-
   return (
     <Animated.View className='flex-1 pt-4 bg-[#0b0b0b]' entering={FadeIn.springify().delay(150).duration(200)}>
       <SafeAreaView className='flex-1 bg-[#0b0b0b]'>
@@ -57,7 +56,7 @@ const Page = () => {
 
         <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
           <View className='px-6  pb-6'>
-            <TouchableOpacity onPress={setAccName} className='bg-[#121212]/90 flex flex-row items-center self-end justify-center rounded-2xl w-1/2 py-5'>
+            <TouchableOpacity onPress={setAccName} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center self-end justify-center rounded-2xl w-1/2 py-5'>
               <Text className='text-lg text-[#FFFFFC]' style={{ fontFamily: "medium" }}>Следно</Text>
               <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
             </TouchableOpacity>

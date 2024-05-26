@@ -215,7 +215,7 @@ const Page = () => {
                       />
                       <Text
                         style={{ fontFamily: "medium" }}
-                        className="ml-2 text-[16px] text-[#0b0b0b]"
+                        className="ml-2 text-[16px] text-[#fffffc]"
                       >
                         Додај адреса
                       </Text>
