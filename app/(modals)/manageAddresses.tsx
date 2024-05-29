@@ -67,6 +67,7 @@ const Page = () => {
       if (response.ok) {
         Haptics.selectionAsync();
         dispatch(fetchAddress({ personId, accessToken }));
+        router.back()
       }
     } catch (error) {
       console.log(error);
@@ -211,7 +212,7 @@ const Page = () => {
         <View className="px-6 w-full pb-2.5">
           <TouchableOpacity
             onPress={() => router.push("/(modals)/addAddress")}
-            className="py-6 rounded-2xl flex-row flex justify-center items-center border-2 border-[#1BD868] "
+            className="py-6 rounded-3xl flex-row flex justify-center items-center border-2 border-[#1BD868] "
           >
             <LocationAdd size={22} color={Colors.primary} variant="Bulk" />
             <Text

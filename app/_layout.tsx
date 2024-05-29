@@ -127,6 +127,7 @@ function NavigationStack() {
       <Stack.Screen name="(modals)/manageAddresses" options={{ presentation: "modal" }} />
       <Stack.Screen name="(modals)/addAddress" options={{ presentation: "modal" }} />
       <Stack.Screen name="(modals)/orderComment" options={{ presentation: "modal" }} />
+      <Stack.Screen name="(modals)/orderDetails" options={{ presentation: "formSheet" }} />
     </Stack>
     </CommentProvider>
   );

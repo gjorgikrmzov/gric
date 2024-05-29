@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, TouchableOpacity, Pressable, Alert } from "react-native";
 import React, { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -58,10 +58,16 @@ const Page = () => {
   const storeId = cartItems.length > 0 ? cartItems[0].storeId : "";
   const selectedAddress = addresses.find(
     (address) => address.isSelected === true
-  );
-
+  );  
+  
   const createOrder = async () => {
     try {
+
+      if(!selectedAddress) { 
+        Alert.alert("Адреса на достава", "Внесете или одберете адреса", [
+          { text: "Во ред", style: "cancel" },
+        ]);
+      }
       const items = cartItems.map((item) => ({
         storeItemId: item.id,
         quantity: item.quantity,

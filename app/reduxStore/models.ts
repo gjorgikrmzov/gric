@@ -48,7 +48,8 @@ export type User = {
     email: string,
     mobileNumber: string,
     role: string,
-    addresses: Address[]
+    addresses: Address[],
+    storeId: ''
 }
 
 export type orderItem = {
@@ -66,5 +67,7 @@ export type Order = {
     totalPrice: string,
     comment: string,
     status: string,
+    createdAt: string,
+    doneAt: string,
     items: orderItem[]  
 }

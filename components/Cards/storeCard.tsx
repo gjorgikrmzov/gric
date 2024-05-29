@@ -100,7 +100,7 @@ const StoreCard = ({ item }: { item: any }) => {
               <Text
                 style={{ fontFamily: "medium" }}
                 className={
-                  item.isOpen ? "text-black text-xs" : "text-xs text-white/90"
+                  item.isOpen ? "text-white text-xs" : "text-xs text-white/90"
                 }
               >
                 {item.isOpen ? "Отворено" : "Затворено"}

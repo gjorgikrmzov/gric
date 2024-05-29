@@ -21,6 +21,7 @@ const Layout = () => {
   const currentPath = usePathname();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.user);
+
   return (
     <Tabs
       screenOptions={{
@@ -57,37 +58,52 @@ const Layout = () => {
             />
           ),
         }}
-        redirect={user.role === "DELIVERER"}
+        redirect={user.role === "DELIVERER" || user.role === "STORE"}
       />
 
       <Tabs.Screen
         name="(stores)"
         options={{
-          tabBarLabel: "Истражи",
-          
+          tabBarLabel: "Гриц",
+
           headerRight: () => (
-            <Pressable onPress={() => router.push('/cart')} className="w-11 h-11 border rounded-2xl border-[#fffffc]/5 mr-4 flex justify-center items-center">
+            <Pressable
+              onPress={() => router.push("/cart")}
+              className="w-11 h-11 border rounded-2xl border-[#fffffc]/5 mr-4 flex justify-center items-center"
+            >
               <ShoppingCart size={18} variant="Broken" color={Colors.white} />
             </Pressable>
           ),
           headerTitle: () => (
             <View className="border-[#fffffc]/5 justify-center self-start border px-4 rounded-2xl flex flex-row items-center ">
-              <SearchNormal1 size={16} variant="Broken"  color={'#fffffc80'}/>
-              <TextInput className=" text-white flex-1 py-3.5 text-xs ml-2 " style={{fontFamily: 'medium'}} placeholderTextColor='#fffffc80' placeholder="Пребарај" />
+              <SearchNormal1 size={16} variant="Broken" color={"#fffffc80"} />
+              <TextInput
+                className=" text-white flex-1 py-3.5 text-xs ml-2 "
+                style={{ fontFamily: "medium" }}
+                placeholderTextColor="#fffffc80"
+                placeholder="Пребарај"
+              />
             </View>
           ),
           headerShown: false,
-          headerTitleContainerStyle: {width: '100%', position: 'relative', left: 0, bottom: 0},
+          headerTitleContainerStyle: {
+            width: "100%",
+            position: "relative",
+            left: 0,
+            bottom: 0,
+          },
           headerShadowVisible: false,
           headerRightContainerStyle: {
-            position: 'relative', bottom: 0, right: 0
+            position: "relative",
+            bottom: 0,
+            right: 0,
           },
           headerTitleStyle: {
             fontFamily: "heavy",
             color: "#1BD868",
             fontSize: 26,
           },
-          headerStyle: {backgroundColor: '#0b0b0b', height: 100},
+          headerStyle: { backgroundColor: "#0b0b0b", height: 100 },
           tabBarIcon: ({ color, size }) => (
             <Shop
               variant={
@@ -102,7 +118,7 @@ const Layout = () => {
             />
           ),
         }}
-        redirect={user.role === "DELIVERER"}
+        redirect={user.role === "DELIVERER" || user.role === "STORE"}
       />
 
       <Tabs.Screen
@@ -118,7 +134,7 @@ const Layout = () => {
             />
           ),
         }}
-        redirect={user.role === "DELIVERER"}
+        redirect={user.role === "DELIVERER" || user.role === "STORE"}
       />
 
       <Tabs.Screen
@@ -141,7 +157,7 @@ const Layout = () => {
             />
           ),
         }}
-        redirect={user.role === "DELIVERER"}
+        redirect={user.role === "DELIVERER" || user.role === "STORE"}
       />
 
       <Tabs.Screen
@@ -151,13 +167,13 @@ const Layout = () => {
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <DirectboxNotif
-              variant={currentPath === "/orders" ? "Bold" : "Broken"}
+              variant={currentPath === "/newOrders" || currentPath === '/acceptedOrders' ? "Bold" : "Broken"}
               size={size}
               color={color}
             />
           ),
         }}
-        redirect={user.role === "CUSTOMER"}
+        redirect={user.role === "CUSTOMER" || user.role === "STORE"}
       />
 
       <Tabs.Screen
@@ -173,7 +189,39 @@ const Layout = () => {
             />
           ),
         }}
-        redirect={user.role === "CUSTOMER"}
+        redirect={user.role === "CUSTOMER" || user.role === "STORE"}
+      />
+
+      <Tabs.Screen
+        name="(store)/(orders)"
+        options={{
+          tabBarLabel: "Нарачки",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <DirectboxNotif
+              variant={currentPath === "/acceptedOrders" || currentPath === "/newOrders" ? "Bold" : "Broken"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+        redirect={user.role === "DELIVERER" || user.role === "CUSTOMER"}
+      />
+
+      <Tabs.Screen
+        name="(store)/profile"
+        options={{
+          tabBarLabel: "Профил",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <User
+              variant={currentPath === "/profile" ? "Bold" : "Broken"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+        redirect={user.role === "DELIVERER" || user.role === "CUSTOMER"}
       />
     </Tabs>
   );

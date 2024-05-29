@@ -169,7 +169,7 @@ const Page = () => {
           </Text>
         </View>
 
-        <View className="absolute flex bottom-10 flex-row items-center px-6 gap-x-3">
+        <View style={styles.bottomButton} className="absolute flex flex-row items-center px-6 gap-x-3">
           <View className=" bg-[#121212]/90 border-2 border-[#fffffc] p-1 flex-row items-center rounded-2xl justify-between ">
             <TouchableOpacity
               onPress={decreaseQuantity}
@@ -190,7 +190,7 @@ const Page = () => {
 
           <TouchableOpacity
             onPress={handleAddToCart}
-            className="flex-1 flex-row py-3.5 bg-[#121212]/90 border-2 border-[#1BD868] flex justify-center items-center rounded-2xl"
+            className="flex-1 flex-row py-3.5  bg-[#121212]/90 border-2 border-[#1BD868] flex justify-center items-center rounded-2xl"
           >
             <ShoppingCart variant="Bulk" size={22} color={Colors.primary} />
             <Text
@@ -212,4 +212,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: Platform.OS === "android" ? 40 : 30,
   },
+  bottomButton: {
+    bottom: Platform.OS === "android" ? 16 : 40,
+  }
 });

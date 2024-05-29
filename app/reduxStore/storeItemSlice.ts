@@ -3,7 +3,7 @@ import { StoreItem } from './models'
 
 interface FetchStoreItemsPayload {
     id: string | undefined;
-    accessToken: string
+    accessToken: string | null
 }
 
 export const fetchStoreItems = createAsyncThunk("fetchStoreItems", async (payload: FetchStoreItemsPayload) => {

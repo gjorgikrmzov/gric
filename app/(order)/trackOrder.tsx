@@ -50,7 +50,7 @@ const Page = () => {
 
   const dispatch = useDispatch<any>();
   const [currentSheetIndex, setcurrentSheetIndex] = useState(0);
-  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
+  const snapPoints = useMemo(() => ["25%", "50%", "76%"], []);
   const { storeItems } = useSelector((state: RootState) => state.storeItem);
   const [refreshing, setRefreshing] = useState(false);
   const { addresses } = useSelector((state: RootState) => state.addresses);
@@ -115,7 +115,7 @@ const Page = () => {
         );
 
         return (
-          <View key={index} className="bg-[#0b0b0b] flex-1">
+          <View key={order.id} className="bg-[#0b0b0b] flex-1">
             <StatusBar style="auto" />
             <View
               style={styles.header}
@@ -272,7 +272,7 @@ const Page = () => {
                             className="text-[#fffffc]/60 text-xs"
                             style={{ fontFamily: "medium" }}
                           >
-                            {order.storeId}
+                            {order.delivererId}
                           </Text>
                           <Text
                             style={{ fontFamily: "medium" }}
@@ -364,57 +364,55 @@ const Page = () => {
                           orderStoreItem.id === item.storeItemId
                       );
                       return (
-                        <>
-                          <View
-                            key={index}
-                            className="bg-[#121212]/90 flex flex-row justify-between items-end py-4 px-6"
-                          >
-                            <View className="flex flex-row items-center">
-                              <View className="bg-[#0b0b0b] rounded-xl w-14 h-14"></View>
-                              <View className="flex-1 flex flex-row justify-between items-start">
-                                <View className="ml-3">
-                                  <Text
-                                    style={{ fontFamily: "medium" }}
-                                    className=" text-[#fffffc]"
-                                  >
-                                    {orderStoreItem.name}
-                                  </Text>
-                                  <Text
-                                    style={{ fontFamily: "medium" }}
-                                    className="mt-1 text-[#fffffc]/70 text-xs"
-                                  >
-                                    {orderStoreItem.description}
-                                  </Text>
-                                </View>
-
+                        <View
+                          key={index}
+                          className="bg-[#121212]/90 flex flex-row justify-between items-end py-4 px-6"
+                        >
+                          <View className="flex flex-row items-center">
+                            <View className="bg-[#0b0b0b] rounded-xl w-14 h-14"></View>
+                            <View className="flex-1 flex flex-row justify-between items-start">
+                              <View className="ml-3">
                                 <Text
                                   style={{ fontFamily: "medium" }}
-                                  className=" text-[#fffffc] text-[16px]"
+                                  className=" text-[#fffffc]"
                                 >
-                                  {item.quantity}
+                                  {orderStoreItem.name}
+                                </Text>
+                                <Text
+                                  style={{ fontFamily: "medium" }}
+                                  className="mt-1 text-[#fffffc]/70 text-xs"
+                                >
+                                  {orderStoreItem.description}
                                 </Text>
                               </View>
+
+                              <Text
+                                style={{ fontFamily: "medium" }}
+                                className=" text-[#fffffc] text-[16px]"
+                              >
+                                {item.quantity}
+                              </Text>
                             </View>
                           </View>
-
-                          <View className="mt-4 px-6 flex-1 justify-between flex-row items-center">
-                            <Text
-                              style={{ fontFamily: "medium" }}
-                              className="text-[15px] text-[#fffffc]"
-                            >
-                              Вкупно
-                            </Text>
-                            <Text
-                              className="text-[#25D366] text-[15px]"
-                              style={{ fontFamily: "medium" }}
-                            >
-                               {order.totalPrice}
-                            </Text>
-                          </View>
-                        </>
+                        </View>
                       );
                     })}
+
                   </View>
+                    <View className="mt-4 px-6 flex-1 justify-between flex-row items-center">
+                      <Text
+                        style={{ fontFamily: "medium" }}
+                        className="text-[15px] text-[#fffffc]"
+                      >
+                        Вкупно
+                      </Text>
+                      <Text
+                        className="text-[#25D366] text-[15px]"
+                        style={{ fontFamily: "medium" }}
+                      >
+                        {order.totalPrice}
+                      </Text>
+                    </View>
                 </BottomSheetScrollView>
               </View>
             </BottomSheet>

@@ -23,7 +23,8 @@ const initialState: User = {
     firstName: "",
     lastName: "",
     role: "",
-    addresses: []
+    addresses: [],
+    storeId: ''
 }
 
 const userSlice = createSlice({
@@ -42,6 +43,7 @@ const userSlice = createSlice({
             state.mobileNumber = action.payload.mobileNumber
             state.role = action.payload.role
             state.addresses = action.payload.addresses
+            state.storeId = action.payload.storeId
         })
     }
 

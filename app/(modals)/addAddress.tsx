@@ -5,29 +5,30 @@ import {
   Platform,
   TextInput,
   Alert,
-  Pressable,
-  ActivityIndicator,
+  Vibration,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import {
   ArrowDown,
-  CloseCircle,
+  ArrowRight,
+  Edit,
+  InfoCircle,
+  Information,
   Location,
   SaveAdd,
-  TickCircle,
 } from "iconsax-react-native";
 import { router } from "expo-router";
 import Colors from "../../constants/Colors";
+import * as ExpoLocation from "expo-location";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reduxStore";
 import { fetchAddress } from "../reduxStore/addressSlice";
-import { StatusBar } from "expo-status-bar";
-import * as expoLocation from "expo-location";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { customMapStyle } from "../../mapStyle";
-
-const GOOGLE_API_KEY = "AIzaSyCEpWqaSJleG-l3EO4uqpliX5ADoUGrsUA";
+import Animated, { FadeIn, FadeInDown, FadeInRight, FadeInUp, FadeOut, FadeOutLeft } from "react-native-reanimated";
+import debounce from 'lodash.debounce'
+import { map } from "lodash";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
@@ -40,178 +41,84 @@ const Page = () => {
     longitudeDelta: 0.1,
   };
 
+  const [mapRegion, setMapRegion] = useState(INITIAL_REGION);
+
   const personId = useSelector((state: RootState) => state.user.id);
+
   const [addressDescription, setaddressDescription] = useState<string>("");
   const [street, setstreet] = useState<any>(null);
-
-  const [location, setlocation] = useState<expoLocation.LocationObject | any>(
-    null
-  );
   const [streetNumber, setstreetNumber] = useState<any>(null);
   const [flat, setFlat] = useState<string>("");
   const [apartment, setApartment] = useState<string>("");
 
-  const [addressSuccess, setaddressSuccess] = useState<boolean | null>(null);
-  const [loadingLocation, setloadingLocation] = useState(false);
+  const [next, setnext] = useState(false);
 
-  const allowedCity = "Strumica";
-
-  const isWithinCityBounds = (addressComponents: any[]) => {
-    for (const component of addressComponents) {
-      if (component.types.includes("locality")) {
-        return component.long_name === allowedCity;
-      }
-    }
-    return false;
-  };
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await expoLocation.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return;
-      }
-
-      let location = await expoLocation.getCurrentPositionAsync({});
-      setlocation(location);
-    })();
-  }, []);
-
-  useEffect(() => {
-    const fetchAddress = async () => {
-      setloadingLocation(true);
-      if (location) {
-        const { latitude, longitude } = location.coords;
-        try {
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`
-          );
-          const data = await response.json();
-          if (data.results.length > 0) {
-            const addressComponents = data.results[0].address_components;
-            let streetNumber = null;
-            let streetName = null;
-
-            addressComponents.forEach((component: any) => {
-              if (component.types.includes("street_number")) {
-                streetNumber = component.long_name;
-              }
-              if (component.types.includes("route")) {
-                streetName = component.long_name;
-              }
-            });
-
-            setstreet(streetName);
-            setstreetNumber(streetNumber);
-            setaddressSuccess(true)
-          } else {
-            setstreet(null);
-            setstreetNumber(null);
-            setaddressSuccess(false)
-            Alert.alert("Адреса на достава", "Нема пронајдено адреса.");
-          }
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setloadingLocation(false);
-        }
-      }
-    };
-
-    fetchAddress();
-  }, [location]);
-
-  const getCoordsForAddress = async () => {
+  const handleRegionChangeComplete = debounce(async (newRegion: any) => {
     try {
-      const fullAddress = `${streetNumber} ${street}`;
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${fullAddress}&key=${GOOGLE_API_KEY}`
-      );
+      const addressResponse = await ExpoLocation.reverseGeocodeAsync({
+        latitude: newRegion.latitude,
+        longitude: newRegion.longitude,
+      });
+  
+      if (addressResponse.length > 0) {
+        const { street, streetNumber } = addressResponse[0];
+        const newAddress = `${street || ""} ${streetNumber || ""}`;
+        setstreet(street);
+        setstreetNumber(streetNumber);
+      }
+    } catch (error) {}
+  
+    setMapRegion(newRegion);
+  }, 1000); 
 
-      const data = await response.json();
-      if (data.results && data.results.length > 0 && data.results[0].geometry) {
-        const addressComponents = data.results[0].address_components;
-        const newLocation = {
-          coords: {
-            latitude: data.results[0].geometry.location.lat,
-            longitude: data.results[0].geometry.location.lng,
-            altitude: 0,
-            accuracy: 0,
-            altitudeAccuracy: 0,
-            heading: 0,
-            speed: 0,
-          },
-          timestamp: Date.now(),
-        };
-        setlocation(newLocation);
-        setaddressSuccess(true)
-        
+
+
+  const addAddress = async () => {
+    try {
+      if (!addressDescription) {
+        Alert.alert(
+          "Адреса на достава",
+          "Полето 'зачувај адреса како' е празно.",
+          [{ text: "Океј", style: "cancel" }]
+        );
+      } else if (street === null) {
+        Alert.alert("Адреса на достава", "Внесете име и број на улица.", [
+          { text: "Океј", style: "cancel" },
+        ]);
       } else {
-        setaddressSuccess(false)
+        const response = await fetch(
+          `http://172.20.10.2:8080/address?personId=${personId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              name: addressDescription,
+              street: street,
+              streetNumber: streetNumber,
+              flat: flat,
+              apartment: apartment,
+              latitude: mapRegion?.latitude,
+              longitude: mapRegion?.longitude,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          dispatch(fetchAddress({ personId, accessToken }));
+          router.back();
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
 
- const addAddress = async () => {
-  if (!location || !location.coords) {
-    Alert.alert("Адреса на достава", "Адресата не е пронајдена", [
-      { text: "Во ред", style: "cancel" },
-    ]);
-    return;
-  }
-
-  const { latitude, longitude } = location.coords;
-
-  try {
-    if (!addressDescription) {
-      Alert.alert(
-        "Адреса на достава",
-        "Полето 'зачувај адреса како' е празно.",
-        [{ text: "Во ред", style: "cancel" }]
-      );
-    } else if (!street || !streetNumber) {
-      Alert.alert("Адреса на достава", "Внесете име и број на улица.", [
-        { text: "Во ред", style: "cancel" },
-      ]);
-    } else {
-      const response = await fetch(
-        `http://172.20.10.2:8080/address?personId=${personId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            name: addressDescription,
-            street: street,
-            streetNumber: streetNumber,
-            flat: flat,
-            apartment: apartment,
-            latitude: latitude,
-            longitude: longitude,
-            isSelected: false,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        dispatch(fetchAddress({ personId, accessToken }));
-        router.back();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 
   return (
     <View style={styles.header} className="bg-[#0b0b0b] px-6 flex-1">
-      <StatusBar style="light" />
-
       <View className="flex flex-row items-center justify-between">
         <TouchableOpacity
           onPress={() => router.back()}
@@ -234,8 +141,8 @@ const Page = () => {
         </Text>
       </View>
 
-      <View className="mt-5 flex-1">
-        <View className="opacity-100">
+      {next ? (
+        <Animated.View entering={FadeInDown.springify().delay(150).duration(800)} className="mt-5 flex-1">
           <View className="flex  flex-row items-center ml-1">
             <Location variant="Bulk" color={Colors.primary} size={18} />
             <Text
@@ -246,34 +153,14 @@ const Page = () => {
             </Text>
           </View>
           <View className="flex flex-row items-center space-x-2 mt-2">
-            <View className="flex-1 justify-between px-5 flex-row border-2  rounded-2xl border-[#121212]/80 bg-[#121212]/80 items-center">
-              <TextInput
-                onEndEditing={getCoordsForAddress}
-                onChangeText={(text) => setstreet(text)}
-                value={street ?? ""}
-                style={{ fontFamily: "medium" }}
-                className="flex-1  py-5  text-white  "
-                placeholder="Име на улица"
-                placeholderTextColor="#fafafa97"
-              />
-
-              {loadingLocation ? (
-                <ActivityIndicator size={"small"} />
-              ) : (
-                <>
-                  {addressSuccess ? (
-                    <TickCircle
-                      size={18}
-                      variant="Bulk"
-                      color={Colors.primary}
-                    />
-                  ) : (
-                    <CloseCircle size={18} variant="Bulk" color="#aaa" />
-                  )}
-                </>
-              )}
-            </View>
-
+            <TextInput
+              onChangeText={(text) => setstreet(text)}
+              value={street !== null ? street : ""}
+              style={{ fontFamily: "medium" }}
+              className="px-5 flex-1  py-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80 "
+              placeholder="Име на улица"
+              placeholderTextColor="#fffffc97"
+            />
             <TextInput
               onChangeText={(text) => setstreetNumber(text)}
               value={streetNumber}
@@ -281,11 +168,11 @@ const Page = () => {
               style={{ fontFamily: "medium" }}
               className="p-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80 "
               placeholder="Број"
-              placeholderTextColor="#fafafa97"
+              placeholderTextColor="#fffffc97"
             />
           </View>
 
-          <View className="mt-2">
+          <View className="mt-3">
             <TextInput
               value={addressDescription}
               selectionColor={Colors.primary}
@@ -293,11 +180,11 @@ const Page = () => {
               style={{ fontFamily: "medium" }}
               className=" px-5 py-5 border-2 border-[#121212]/80 text-white rounded-2xl bg-[#121212]/80"
               placeholder="Зачувај како:  Дома/Работа.."
-              placeholderTextColor="#fafafa97"
+              placeholderTextColor="#fffffc97"
             />
           </View>
 
-          <View className="mt-2">
+          <View className="mt-3">
             <View className="flex flex-row space-x-2 items-center">
               <TextInput
                 onChangeText={(text) => setFlat(text)}
@@ -306,7 +193,7 @@ const Page = () => {
                 selectionColor={Colors.primary}
                 className="flex-1 px-5 py-5 border-2 border-[#121212]/80 text-white focus:border-2  rounded-2xl bg-[#121212]/80 "
                 placeholder="Број на кат"
-                placeholderTextColor="#fafafa97"
+                placeholderTextColor="#fffffc97"
               />
               <TextInput
                 onChangeText={(text) => setApartment(text)}
@@ -315,46 +202,77 @@ const Page = () => {
                 selectionColor={Colors.primary}
                 className="flex-1 px-5 py-5 border-2 border-[#121212]/80 text-white focus:border-2  rounded-2xl bg-[#121212]/80"
                 placeholder="Број на стан"
-                placeholderTextColor="#fafafa97"
+                placeholderTextColor="#fffffc97"
               />
             </View>
           </View>
-        </View>
+        </Animated.View>
+      ) : (
+        <></>
+      )}
 
-        {location && (
-          <View className="flex-1 my-2.5 overflow-hidden rounded-2xl">
+      {next ? null : (
+        <Animated.View exiting={FadeOut.springify().duration(600)} className="mt-6 flex-1">
+          <View className="flex flex-row items-center justify-center">
+            <Information size={18} color={Colors.primary} variant="Bulk" />
+            <Text
+              style={{ fontFamily: "medium" }}
+              className="text-white/80 ml-1"
+            >
+              Наместете го пинот на вашата локација
+            </Text>
+          </View>
+
+          <View className="rounded-3xl my-2 border-2 border-[#0b0b0b] flex-1  overflow-hidden">
             <MapView
-              className="w-full flex-1"
+              region={mapRegion}
+              showsUserLocation
+              onRegionChangeComplete={handleRegionChangeComplete}
+              className="w-full flex h-full justify-center relative items-center"
               showsCompass={false}
-              focusable
-              initialRegion={INITIAL_REGION}
+              maxDelta={0.05}
               provider={PROVIDER_DEFAULT}
               customMapStyle={customMapStyle}
-            >
-              <Marker
-                coordinate={{
-                  latitude: location?.coords.latitude!,
-                  longitude: location?.coords.longitude!,
-                }}
-              >
-                <View className="-z-0 p-2 justify-center items-center flex rounded-2xl bg-[#fafafa]">
-                  <Location size={19} variant="Bulk" color={Colors.dark} />
-                </View>
-              </Marker>
-            </MapView>
+            />
+            <View pointerEvents="none" style={styles.markerFixed}>
+              <Location size={28} color={Colors.white} variant="Bold" />
+            </View>
           </View>
-        )}
-      </View>
+        </Animated.View>
+      )}
 
-      <TouchableOpacity
-        onPress={addAddress}
-        className=" border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-2xl"
-      >
-        <SaveAdd variant="Bulk" color={Colors.primary} size={22} />
-        <Text style={{ fontFamily: "medium" }} className="text-[#FFFFFC] ml-2">
-          Зачувај адреса
-        </Text>
-      </TouchableOpacity>
+      {next ? (
+        <TouchableOpacity
+          onPress={addAddress}
+          className="bg-[#121212] border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-3xl"
+        >
+          <SaveAdd variant="Bulk" color={Colors.primary} size={22} />
+          <Text
+            style={{ fontFamily: "medium" }}
+            className="text-[#FFFFFC] ml-2"
+          >
+            Зачувај адреса
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => setnext(true)}
+          className="bg-[#121212] border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-3xl"
+        >
+          <Text
+            style={{ fontFamily: "medium" }}
+            className="text-[#FFFFFC] ml-2"
+          >
+            Следно
+          </Text>
+          <ArrowRight
+            variant="Broken"
+            className="ml-2"
+            color={Colors.primary}
+            size={22}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
