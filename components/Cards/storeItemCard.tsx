@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useRouter } from 'expo-router'
 import { Image } from 'expo-image'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../app/reduxStore'
+import { PressableScale } from 'react-native-pressable-scale'
 
 const StoreItemCard = ({ item, storeId, isOpen }: { item: any, storeId: string, isOpen:any }) => {
 
@@ -17,7 +17,7 @@ const StoreItemCard = ({ item, storeId, isOpen }: { item: any, storeId: string, 
     };
 
     return (
-        <TouchableOpacity onPress={() => router.push({ pathname: '/storeItem/[id]', params: { storeId: storeId, id: item.id, name: item.name, description: item.description, price: item.price, imageUrl: item.imageUrl, isOpen, category: getCategoryName(item.categoryId) } }) as any} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1 }} className='border-[#0b0b0b]/5'>
+        <PressableScale onPress={() => router.push({ pathname: '/storeItem/[id]', params: { storeId: storeId, id: item.id, name: item.name, description: item.description, price: item.price, imageUrl: item.imageUrl, isOpen, category: getCategoryName(item.categoryId) } }) as any} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1 }} className='border-[#0b0b0b]/5'>
             <View style={{ flex: 1 }}>
                 <Text className='hidden'>{getCategoryName(item.categoryId)}</Text>
                 <Text style={{ color: '#fffffc', fontSize: 16, marginTop: 2, fontFamily: "semibold" }}>{item.name}</Text>
@@ -26,7 +26,7 @@ const StoreItemCard = ({ item, storeId, isOpen }: { item: any, storeId: string, 
             </View>
             <Image source={item.imageUrl} contentFit='contain' className='flex justify-center items-center bg-[#7577804C]/10 rounded-2xl overflow-hidden w-24 h-24' />
 
-        </TouchableOpacity>
+        </PressableScale>
     )
 }
 

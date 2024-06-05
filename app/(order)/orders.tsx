@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -21,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reduxStore";
 import { Order } from "../reduxStore/models";
 import { fetchOrder } from "../reduxStore/orderSlice";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const screenWidth = Dimensions.get("window").width;
@@ -72,15 +67,26 @@ const Page = () => {
       return { ...order, storeName };
     });
 
+  const formatTime = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-[#0b0b0b]">
       <View className="px-6 py-4 flex flex-row gap-x-3 items-center justify-between">
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.back()}
           className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
         >
           <ArrowLeft variant="Broken" size={20} color={Colors.white} />
-        </TouchableOpacity>
+        </PressableScale>
         <Text
           className="text-lg text-[#fffffc]"
           style={{ fontFamily: "medium" }}
@@ -100,7 +106,7 @@ const Page = () => {
         <View className="justify-center w-full items-center flex">
           <View className="flex flex-col justify-center items-center w-full ">
             <View className="flex flex-row">
-              <TouchableOpacity
+              <PressableScale
                 className=" w-44 h-16 flex justify-center items-center py-4"
                 onPress={() => onTabPress("currentOrder")}
               >
@@ -114,8 +120,8 @@ const Page = () => {
                 >
                   Нарачки во тек
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </PressableScale>
+              <PressableScale
                 className=" w-44 h-16 flex justify-center items-center py-4"
                 onPress={() => onTabPress("allOrders")}
               >
@@ -129,7 +135,7 @@ const Page = () => {
                 >
                   Завршени
                 </Text>
-              </TouchableOpacity>
+              </PressableScale>
             </View>
             <View className="w-full flex absolute left-0 bottom-0 h-1 bg-[#fffffc]/10 ">
               <Animated.View
@@ -143,7 +149,7 @@ const Page = () => {
 
       <View className=" flex-1">
         {selectedTab === "currentOrder" ? (
-            <View className=" flex-1 justify-center items-center mt-6 flex-row">
+          <View className=" flex-1 justify-center items-center mt-6 flex-row">
             {currentOrder.length === 0 ? (
               <View className="flex flex-1 justify-center items-center flex-col">
                 <View className="flex justify-center items-center w-28 h-28 rounded-3xl bg-[#121212]/90">
@@ -190,7 +196,7 @@ const Page = () => {
                             className="text-[#fffffc]/60 text-xs"
                             style={{ fontFamily: "semibold" }}
                           >
-                            {order.createdAt}
+                            {formatTime(order.createdAt)}
                           </Text>
                           <Text
                             className="text-[#fffffc]/60 "
@@ -206,7 +212,7 @@ const Page = () => {
                     </View>
 
                     <View className="flex-1 items-center flex gap-x-2 flex-row justify-center mt-3">
-                      <TouchableOpacity
+                      <PressableScale
                         onPress={() => router.push("/trackOrder")}
                         className="flex items-center bg-[#121212]/90 px-3 flex-1 py-4 rounded-2xl"
                       >
@@ -216,7 +222,7 @@ const Page = () => {
                         >
                           Види нарачка
                         </Text>
-                      </TouchableOpacity>
+                      </PressableScale>
                     </View>
                   </View>
                 ))}
@@ -234,7 +240,7 @@ const Page = () => {
 
             <ScrollView className="h-full flex flex-col  w-full">
               {finishedOrders.map((order, index) => (
-                <TouchableOpacity
+                <PressableScale
                   key={index}
                   className="rotunded-3xl jusify-start flex flex-row items-center border-b border-[#fffffc]/10 py-5"
                 >
@@ -276,7 +282,7 @@ const Page = () => {
                       </View>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </PressableScale>
               ))}
             </ScrollView>
           </View>

@@ -8,7 +8,6 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import {
   GestureHandlerRootView,
-  TouchableOpacity,
 } from "react-native-gesture-handler";
 import { ArrowLeft, Heart } from "iconsax-react-native";
 import { StyleSheet } from "react-native";
@@ -22,6 +21,7 @@ import { Image } from "expo-image";
 import StoresByCategoryList from "../components/List/storesByCategoryList";
 import SkeletonList from "../components/List/skeletonList";
 import { StatusBar } from "expo-status-bar";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const { name, id } = useLocalSearchParams<{ name: string; id: any }>();
@@ -135,12 +135,12 @@ const Page = () => {
         >
           <View className="flex z-[999] mt-4">
             <View className="w-full px-6 flex-row items-center">
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.back()}
                 className="flex justify-center items-center  rounded-full"
               >
                 <ArrowLeft variant="Broken" size={24} color={Colors.white} />
-              </TouchableOpacity>
+              </PressableScale>
 
               {isScrolled && (
                 <Text

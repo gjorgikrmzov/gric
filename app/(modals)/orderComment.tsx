@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import {
   ArrowDown,
@@ -19,6 +18,7 @@ import {
 import Colors from "../../constants/Colors";
 import * as Haptics from 'expo-haptics'
 import { useComment } from "../commentContext";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   
@@ -27,12 +27,12 @@ const Page = () => {
   return (
     <View className="flex-1 px-6 bg-[#0b0b0b]" style={styles.header}>
       <View className="flex flex-row items-center justify-between">
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.back()}
           className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
         >
           <CloseSquare variant="Broken" size={20} color={Colors.white} />
-        </TouchableOpacity>
+        </PressableScale>
         <Text
           className="text-lg text-[#fffffc]"
           style={{ fontFamily: "medium" }}

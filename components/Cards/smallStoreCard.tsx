@@ -1,31 +1,26 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
 import { Heart } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/reduxStore";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
+import { PressableScale } from "react-native-pressable-scale";
+import getStoreType from "../../utils/getStoreType";
 
 const MiniStoreCard = ({ item }: { item: any }) => {
   const router = useRouter();
-  const { storeTypes } = useSelector((state: RootState) => state.storeType);
-
-  const getStoreTypeName = (storeTypeId: string) => {
-    const storeType = storeTypes?.find((type) => type.id === storeTypeId);
-    return storeType ? storeType.name : "Unknown Type";
-  };
 
   const handleRouteStoreDetails = (store: any) => {
-    const storeTypeName = getStoreTypeName(store.storeTypeId);
+    const storeType = getStoreType(store.storeType)
     router.push({
       pathname: "/store/[id]",
       params: {
         id: store.id,
         name: store.name,
         isOpen: store.isOpen,
-        storeTypeName,
+        storeType: storeType,
         address: JSON.stringify(store.address),
         imageUrl: store.imageUrl,
       },
@@ -37,7 +32,7 @@ const MiniStoreCard = ({ item }: { item: any }) => {
 
   return (
     <>
-      <TouchableOpacity
+      <PressableScale
         className="mt-3 pb-1 flex flex-row items-center"
         onPress={() => handleRouteStoreDetails(item)}
       >
@@ -64,9 +59,9 @@ const MiniStoreCard = ({ item }: { item: any }) => {
           />
           <View className="w-24 h-24 p-2 relative overflow-hidden">
             <View className="flex flex-row items-center justify-end w-full">
-              <TouchableOpacity className="z-[999] flex flex-row items-center">
+              <PressableScale className="z-[999] flex flex-row items-center">
                 <Heart color={Colors.white} size={16} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </View>
@@ -84,7 +79,7 @@ const MiniStoreCard = ({ item }: { item: any }) => {
                 className="text-[#fffffc]/60 text-xs mt-0.5"
                 style={{ fontFamily: "medium" }}
               >
-                {getStoreTypeName(item.storeTypeId)}・
+                {getStoreType(item.storeType)}・
                 {item.isOpen ? "Отворено" : "Затворено"}
               </Text>
             </View>
@@ -94,7 +89,7 @@ const MiniStoreCard = ({ item }: { item: any }) => {
                         </View> */}
           </View>
         </View>
-      </TouchableOpacity>
+      </PressableScale>
     </>
   );
 };

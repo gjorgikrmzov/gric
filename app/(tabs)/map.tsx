@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Animated,
   Easing,
   ScrollView,
@@ -36,6 +35,8 @@ import { Image } from "expo-image";
 import { TextInput } from "react-native";
 import { Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { PressableScale } from "react-native-pressable-scale";
+import getStoreType from "../../utils/getStoreType";
 
 const Page = () => {
   const snapPoints = useMemo(() => ["25%"], []);
@@ -58,12 +59,6 @@ const Page = () => {
   };
 
   const { stores } = useSelector((state: RootState) => state.store);
-  const { storeTypes } = useSelector((state: RootState) => state.storeType);
-
-  const getStoreTypeName = (storeTypeId: string) => {
-    const storeType = storeTypes.find((type) => type.id === storeTypeId);
-    return storeType ? storeType.name : "Unknown Type";
-  };
 
   const handleMarkerPress = (store: any) => {
     setSelectedStoreId(store.id);
@@ -80,13 +75,13 @@ const Page = () => {
   };
 
   const handleRouteStoreDetails = (store: any) => {
-    const storeTypeName = getStoreTypeName(store.storeTypeId);
+    const storeType = getStoreType(store.storeType);
     router.push({
       pathname: "/store/[id]",
       params: {
         id: store.id,
         name: store.name,
-        storeTypeName,
+        storeType,
         isOpen: store.isOpen,
         address: JSON.stringify(store.address),
         imageUrl: store.imageUrl,
@@ -149,18 +144,18 @@ const Page = () => {
             className="flex px-4  left-0 z-20  w-full flex-row items-center justify-between"
           >
             {isFocused ? null : (
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => router.back()}
                 className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
               >
                 <ArrowLeft variant="Broken" size={20} color={Colors.white} />
-              </TouchableOpacity>
+              </PressableScale>
             )}
 
             <Animated.View className=" mx-2 flex flex-row flex-1 items-center  ">
               <View className=" bg-[#121212]/90  py-5 flex-1 items-center flex-row px-5  rounded-full">
                 {isFocused ? (
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={handleBlur}
                     className=" flex justify-center items-center"
                   >
@@ -169,7 +164,7 @@ const Page = () => {
                       color={Colors.white}
                       variant="Broken"
                     />
-                  </TouchableOpacity>
+                  </PressableScale>
                 ) : (
                   <SearchNormal1
                     size={18}
@@ -194,12 +189,12 @@ const Page = () => {
             </Animated.View>
 
             {selectedStoreId !== null ? (
-              <TouchableOpacity
+              <PressableScale
                 onPress={() => setSelectedStoreId(null)}
                 className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
               >
                 <CloseCircle variant="Broken" size={20} color={Colors.white} />
-              </TouchableOpacity>
+              </PressableScale>
             ) : null}
           </View>
 
@@ -219,7 +214,7 @@ const Page = () => {
               {stores.map(
                 (store, index) =>
                   index < 5 && (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => handleRouteStoreDetails(store)}
                       key={index}
                       className="w-full flex-row  flex items-center justify-between"
@@ -235,7 +230,7 @@ const Page = () => {
                           </Text>
                         </View>
                       </View>
-                    </TouchableOpacity>
+                    </PressableScale>
                   )
               )}
 
@@ -299,7 +294,7 @@ const Page = () => {
               >
                 <View className="flex items-center flex-1">
                   {selectedStoreId === store.id && (
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => handleRouteStoreDetails(store)}
                       className="w-32 relative flex-1 flex justify-center items-start bg-[#fffffc] mb-2 rounded-2xl"
                     >
@@ -314,7 +309,7 @@ const Page = () => {
                         style={{ fontFamily: "bold" }}
                         className="ml-2.5 mr-2.5 text-[10px] mb-0.5 uppercase text-[#0b0b0b]/80"
                       >
-                        {getStoreTypeName(store.storeTypeId)}
+                        {getStoreType(store.storeType)}
                       </Text>
 
                       <Text
@@ -323,9 +318,9 @@ const Page = () => {
                       >
                         {store.name}
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   )}
-                  <TouchableOpacity
+                  <PressableScale
                     className={
                       selectedStoreId === store.id
                         ? "-z-0 p-2 justify-center items-center flex rounded-xl bg-[#0b0b0b]"
@@ -341,7 +336,7 @@ const Page = () => {
                           : Colors.dark
                       }
                     />
-                  </TouchableOpacity>
+                  </PressableScale>
                 </View>
               </Marker>
             ))}
@@ -372,7 +367,7 @@ const Page = () => {
             </View>
 
             <View className="flex-row items-center gap-x-2">
-              <TouchableOpacity
+              <PressableScale
                 onPress={handleFocus}
                 className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fafafa]/5"
               >
@@ -381,7 +376,7 @@ const Page = () => {
                   size={20}
                   variant="Broken"
                 />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </BottomSheet>

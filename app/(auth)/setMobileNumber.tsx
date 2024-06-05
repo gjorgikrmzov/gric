@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeft, ArrowRight} from 'iconsax-react-native'
@@ -6,6 +6,7 @@ import Colors from '../../constants/Colors'
 import { router, useLocalSearchParams } from 'expo-router'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { CountryPicker } from "react-native-country-codes-picker";
+import { PressableScale } from 'react-native-pressable-scale'
 
 const Page = () => {
 
@@ -49,10 +50,10 @@ const Page = () => {
             <SafeAreaView className='flex-1 bg-[#0b0b0b]'>
 
                 <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
-                    <TouchableOpacity className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+                    <PressableScale className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
                         <ArrowLeft variant='Broken' size={20} color={Colors.white} />
                         <Text style={{ fontFamily: 'medium' }} className='text-[#FAFAFA] ml-1'>Назад</Text>
-                    </TouchableOpacity>
+                    </PressableScale>
 
                     <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>
                 </View>
@@ -63,10 +64,10 @@ const Page = () => {
                 </View>
 
                 <View className='flex px-6 h-min flex-row  gap-y-3'>
-                    <TouchableOpacity onPress={() => setShow(true)} className='px-4 flex justify-center flex-row items-center py-5 rounded-2xl bg-[#121212]/90'>
+                    <PressableScale onPress={() => setShow(true)} className='px-4 flex justify-center flex-row items-center py-5 rounded-2xl bg-[#121212]/90'>
                         <Text style={{ fontFamily: 'medium' }} className='text-lg'>{countryFlag}</Text>
                         <Text style={{ fontFamily: 'medium' }} className='ml-2 text-white '>{countryCode}</Text>
-                    </TouchableOpacity>
+                    </PressableScale>
 
                     <TextInput value={mobileNumber}
                         onChangeText={handleTextChange} maxLength={10} keyboardType='phone-pad' className=' text-white ml-2 flex-1 px-5 bg-[#121212]/90 rounded-2xl  fffffcer-2 border-[#fafafa]/0 focus:border-2 focus:border-[#1BD868]' style={styles.input} placeholder='78 239 880' placeholderTextColor='#fffffc97' />
@@ -76,10 +77,10 @@ const Page = () => {
 
                 <KeyboardAvoidingView style={{ flex: 1 }} className='justify-end' behavior='position'>
                     <View className='px-6 pb-6 justify-end'>
-                        <TouchableOpacity onPress={setAccMobileNumber} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-2xl'>
+                        <PressableScale onPress={setAccMobileNumber} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-5 w-1/2 self-end rounded-3xl'>
                             <Text className='text-lg text-[#FFFFFC] ' style={{ fontFamily: "medium" }}>Следно</Text>
                             <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
-                        </TouchableOpacity>
+                        </PressableScale>
                     </View>
                 </KeyboardAvoidingView>
 

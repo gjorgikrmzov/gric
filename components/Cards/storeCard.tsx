@@ -1,32 +1,27 @@
 import { View, Text, ActivityIndicator, Animated } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { TouchableOpacity } from "react-native";
 import { Heart } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/reduxStore";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
+import { PressableScale } from "react-native-pressable-scale";
+import getStoreType from "../../utils/getStoreType";
 
 const StoreCard = ({ item }: { item: any }) => {
   const router = useRouter();
-  const { storeTypes } = useSelector((state: RootState) => state.storeType);
   const [loaded, setLoaded] = useState(true);
 
-  const getStoreTypeName = (storeTypeId: string) => {
-    const storeType = storeTypes?.find((type) => type.id === storeTypeId);
-    return storeType ? storeType.name : "Unknown Type";
-  };
-
   const handleRouteStoreDetails = (store: any) => {
-    const storeTypeName = getStoreTypeName(store.storeTypeId);
+    const storeType = getStoreType(store.storeType)
     router.push({
       pathname: "/store/[id]",
       params: {
         id: store.id,
         name: store.name,
         isOpen: store.isOpen,
-        storeTypeName,
+        storeType: storeType,
         address: JSON.stringify(store.address),
         imageUrl: store.imageUrl,
       },
@@ -36,9 +31,10 @@ const StoreCard = ({ item }: { item: any }) => {
   const openingTimeParts = item.openingHour.split(":");
   const openingTime = openingTimeParts[0] + ":" + openingTimeParts[1];
 
+
   return (
     <>
-      <TouchableOpacity
+      <PressableScale
         className="mt-3 pb-1"
         onPress={() => handleRouteStoreDetails(item)}
       >
@@ -67,11 +63,11 @@ const StoreCard = ({ item }: { item: any }) => {
             className="absolute h-full left-0 rounded-2xl top-0 w-full"
           />
 
-          <View className="w-full h-40 p-5 relative overflow-hidden">
+          <View className="w-full h-40 p-4 relative overflow-hidden">
             <View className="flex flex-row items-center justify-end w-full">
-              <TouchableOpacity className="z-[999] flex flex-row items-center">
+              <PressableScale className="z-[999] flex flex-row items-center">
                 <Heart color={Colors.white} size={20} />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </View>
@@ -86,7 +82,7 @@ const StoreCard = ({ item }: { item: any }) => {
                 className="text-[#ffffff]/60 text-xs"
                 style={{ fontFamily: "medium" }}
               >
-                {getStoreTypeName(item.storeTypeId)}
+                {getStoreType(item.storeType)}
               </Text>
             </View>
 
@@ -108,7 +104,7 @@ const StoreCard = ({ item }: { item: any }) => {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </PressableScale>
     </>
   );
 };

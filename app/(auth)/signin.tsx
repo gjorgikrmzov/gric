@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Keyboard, StyleSheet, Platform} from 'react-native'
+import { View, Text, TextInput, Keyboard, StyleSheet, Platform, TouchableOpacity} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ArrowLeft, ArrowRight, Eye, EyeSlash } from 'iconsax-react-native'
@@ -8,6 +8,7 @@ import Animated, { FadeIn } from 'react-native-reanimated'
 import { useDispatch } from 'react-redux'
 import { setAccessToken } from '../reduxStore/accessTokenSlice'
 import * as SecureStore from 'expo-secure-store';
+import { PressableScale } from 'react-native-pressable-scale'
 
 const Page = () => {
 
@@ -59,10 +60,10 @@ const Page = () => {
         <TouchableOpacity activeOpacity={1} className='flex-1' onPress={() => Keyboard.dismiss()}>
 
           <View className='px-6 flex flex-row gap-x-3 items-center justify-between '>
-            <TouchableOpacity className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
+            <PressableScale className='bg-[#121212]/90 px-3 py-2.5 flex rounded-xl flex-row items-center' onPress={() => router.back()} >
               <ArrowLeft variant='Broken' size={20} color={Colors.white} />
               <Text style={{ fontFamily: 'medium' }} className='text-[#FFFFFC] ml-1'>Назад</Text>
-            </TouchableOpacity>
+            </PressableScale>
 
             <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>
           </View>
@@ -90,10 +91,10 @@ const Page = () => {
             }
 
           <View className='px-6 pb-4 flex-1 justify-end'>
-            <TouchableOpacity onPress={signIn} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-6 rounded-2xl'>
+            <PressableScale onPress={signIn} className='bg-[#121212]/90 border-2 border-[#1BD868] flex flex-row items-center justify-center py-6 rounded-3xl'>
               <Text className='text-lg text-[#fffffc] ' style={{ fontFamily: "medium" }}>Најави се</Text>
               <ArrowRight color={Colors.primary} className='ml-2' variant='Linear' size={22} />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
 

@@ -45,11 +45,11 @@ const Page = () => {
     configurePushNotifications()
   }, [])
 
-  const acceptOrder = (item: any) => {
-    router.push({pathname: '/(modals)/storeOrderDetails', params: { id: item.id}})
+  const openOrder = (item: any) => {
+    router.push({pathname: '/(modals)/delivererOrderDetails', params: { id: item.id}})
   };
 
-  const newOrders = orders.filter((order) => order.status === "CREATED");
+  const newOrders = orders.filter((order) => order.status === "ACCEPTED");
 
   useEffect(() => {
     dispatch(fetchOrder(accessToken))
@@ -76,7 +76,7 @@ const Page = () => {
       className="mt-6"
         data={newOrders}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <StoreOrderCard item={item} handleOpenOrder={() => acceptOrder(item)} />}
+        renderItem={({ item }) => <StoreOrderCard item={item} handleOpenOrder={() => openOrder(item)} />}
       />
     </View>
   );

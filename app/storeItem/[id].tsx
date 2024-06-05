@@ -7,7 +7,6 @@ import {
   Minus,
   ShoppingCart,
 } from "iconsax-react-native";
-import { TouchableOpacity } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import Colors from "../../constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +14,7 @@ import { addItem, clearCart } from "../reduxStore/cartSlice";
 import { RootState } from "../reduxStore";
 import { Image } from "expo-image";
 import { fetchOrder } from "../reduxStore/orderSlice";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const { imageUrl, storeId, id, name, description, price, isOpen, category } =
@@ -126,12 +126,12 @@ const Page = () => {
     <View style={styles.header} className="h-full bg-[#121212]">
       <View className="bg-[#121212]/90 px-6 h-44 ">
         <View className="flex flex-row justify-between items-center w-full">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             className="w-14 h-14 flex justify-center items-center bg-[#fafafa]/10 rounded-full"
           >
             <ArrowDown variant="Broken" size={20} color={Colors.white} />
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
 
@@ -171,24 +171,24 @@ const Page = () => {
 
         <View style={styles.bottomButton} className="absolute flex flex-row items-center px-6 gap-x-3">
           <View className=" bg-[#121212]/90 border-2 border-[#fffffc] p-1 flex-row items-center rounded-2xl justify-between ">
-            <TouchableOpacity
+            <PressableScale
               onPress={decreaseQuantity}
               className="flex justify-center items-center w-12 h-10 rounded-xl "
             >
               <Minus size={20} color={Colors.white} variant="Linear" />
-            </TouchableOpacity>
+            </PressableScale>
 
             <Text className="text-[16px] text-[#fafafa]">{itemQuantity}</Text>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={increaseQuantity}
               className="flex justify-center items-center w-12 h-10 rounded-xl "
             >
               <Add size={20} color={Colors.white} variant="Linear" />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
 
-          <TouchableOpacity
+          <PressableScale
             onPress={handleAddToCart}
             className="flex-1 flex-row py-3.5  bg-[#121212]/90 border-2 border-[#1BD868] flex justify-center items-center rounded-2xl"
           >
@@ -199,7 +199,7 @@ const Page = () => {
             >
               Додај во Корпа
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
     </View>

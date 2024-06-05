@@ -1,19 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { User } from './models'
-
+import * as SecureStore from 'expo-secure-store'
+import { router } from 'expo-router'
 
 export const fetchUserInfo = createAsyncThunk("fetchUserInfo", async (accessToken: string | null) => {
     try {
-        const data = await fetch('http://172.20.10.2:8080/person', {
+        const response = await fetch('http://172.20.10.2:8080/person', {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         })
-        return data.json()
+        if(response.status == 403){
+            await SecureStore.deleteItemAsync('accessToken')
+            router.replace('/(auth)/welcome')
+        }
+        return response.json()
     } catch (error) {
         console.log(error)
     }
+
+    
 })
 
 const initialState: User = {

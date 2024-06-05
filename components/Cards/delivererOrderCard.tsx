@@ -1,18 +1,20 @@
-import { View, Text, Pressable, Easing, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/reduxStore";
 import { fetchStoreItems } from "../../app/reduxStore/storeItemSlice";
 import { ExportSquare, InfoCircle } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
+import { PressableScale } from "react-native-pressable-scale";
 
-const OrderCard = ({
+const DelivererOrderCard = ({
   item,
   handleOpenOrder,
 }: {
   item: any;
   handleOpenOrder: () => void;
 }) => {
+  
   const dispatch = useDispatch<any>();
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
   const id = item.storeId;
@@ -21,19 +23,23 @@ const OrderCard = ({
     dispatch(fetchStoreItems({ id, accessToken }));
   }, []);
 
+  const formatTime = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
   return (
-    <Pressable
+    <PressableScale
       onPress={handleOpenOrder}
       className="border-b bg-[#121212] border-[#fffffc]/10  py-5 px-6 "
     >
       <View className="flex flex-row flex-1 justify-between items-end">
         <View className="flex flex-col gap-y-2">
-          
           <Text
             style={{ fontFamily: "medium" }}
             className="text-white/60 text-xs"
           >
-            Креирана во 16:32
+            Готова во: {formatTime(item.doneAt)}
           </Text>
           <Text style={{ fontFamily: "medium" }} className=" text-white mt-1">
             Број на нарачка: {item?.id}
@@ -58,8 +64,8 @@ const OrderCard = ({
           </Text>
         </View>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 };
 
-export default OrderCard;
+export default DelivererOrderCard;

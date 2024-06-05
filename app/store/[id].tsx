@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, Animated, FlatList, StyleSheet, Platform, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { View, Text, ScrollView, Animated, FlatList, StyleSheet, Platform, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Heart, Location, ShoppingCart } from 'iconsax-react-native'
 import { Link, router, useLocalSearchParams } from 'expo-router'
@@ -11,17 +11,17 @@ import { ActivityIndicator } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import StoreItemCard from '../../components/Cards/storeItemCard'
 import { Image } from 'expo-image'
+import { PressableScale } from 'react-native-pressable-scale'
 
 const Page = () => {
 
 
     const dispatch = useDispatch<any>();
 
-    const { address, id, name, storeTypeName, isOpen, imageUrl } = useLocalSearchParams<{ address: any, id: any, name: string, storeTypeName: string, isOpen: string, imageUrl: string }>();
+    const { address, id, name, storeType, isOpen, imageUrl } = useLocalSearchParams<{ address: any, id: any, name: string, storeType: string, isOpen: string, imageUrl: string }>();
     const { accessToken } = useSelector((state: RootState) => state.accessToken);
     const { storeItems } = useSelector((state: RootState) => state.storeItem);
     const cartItems = useSelector((state: RootState) => state.cart.items);
-    const {categories}  = useSelector((state: RootState) => state.category)
 
     const [loadingItems, setLoadingItems] = useState(true);
     const isStoreOpen = isOpen === 'true';
@@ -70,15 +70,15 @@ const Page = () => {
                 <StatusBar style='light' />
                 <Animated.View style={[styles.header, {backgroundColor: headerBackgroundColor}]} className= 'flex z-[999] pb-4  absolute top-0' >
                     <View className='w-full px-6 flex-row items-center justify-between'>
-                        <TouchableOpacity onPress={() => router.back()} className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
+                        <PressableScale onPress={() => router.back()} className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
                             <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-                        </TouchableOpacity>
+                        </PressableScale>
 
                         <Animated.Text className='text-[16px] text-white'  style={{ fontFamily: 'medium', opacity: textOpacity }}>{name}</Animated.Text>
 
-                        <TouchableOpacity className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
+                        <PressableScale className={isScrolled ? 'w-14 h-14 flex justify-center items-center border border-[#fafafa]/5 bg-[#0b0b0b]/90 rounded-full' : 'w-14 h-14 flex justify-center items-center bg-[#0b0b0b]/90 rounded-full'} >
                             <Heart variant='Broken' size={20} color={Colors.white} />
-                        </TouchableOpacity>
+                        </PressableScale>
                     </View>
 
                     {/* <Animated.View style={{ opacity: textOpacity }} className=''>
@@ -90,13 +90,13 @@ const Page = () => {
 
                             className='h-min bg-[#FFFFFC] mt-4 '  >
                             {categories.map((category, index) => (
-                                <TouchableOpacity
+                                <PressableScale
                                     className="py-4 flex px-3 justify-center items-center"
                                     key={index}
                                     // onPress={() => handleCategoryChange(category as Category)}
                                 >
                                     <Text style={{ fontFamily: 'medium' }}>{category.name}</Text>
-                                </TouchableOpacity>
+                                </PressableScale>
                             ))}
 
                             <View className="w-full absolute left-0 bottom-0 h-1 bg-[#F0F1F3]">
@@ -122,7 +122,7 @@ const Page = () => {
                         <View className='z-[50] flex-1 justify-end flex fixed'>
 
 
-                            <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeTypeName}</Text>
+                            <Text className=' text-[#FFFFFC]/60 mt-8 uppercase ' style={{ fontFamily: "bold" }}>{storeType}</Text>
 
                             <Text className=' text-3xl  text-[#FFFFFC]' style={{ fontFamily: "bold" }}>{name}</Text>
 
@@ -172,10 +172,10 @@ const Page = () => {
                         cartItems?.length !== 0 && (
                             <Animated.View>
                                 <Link href={'/cart'} asChild>
-                                    <TouchableOpacity className='w-full flex-row py-6 border-2 bg-[#121212] border-[#1BD868] flex justify-center items-center rounded-2xl'>
+                                    <PressableScale className='w-full flex-row py-6 border-2 bg-[#121212] border-[#1BD868] flex justify-center items-center rounded-3xl'>
                                         <ShoppingCart variant='Bulk' size={22} color={Colors.primary} />
                                         <Text style={{ fontFamily: "medium" }} className=' text-[#fffffc] ml-2'>Корпа <Text style={{ fontFamily: 'extrabold' }}>·</Text> {cartItems?.length}</Text>
-                                    </TouchableOpacity>
+                                    </PressableScale>
                                 </Link>
                             </Animated.View>
                         )}
@@ -259,13 +259,13 @@ export default Page
 
                         className='h-min bg-[#FFFFFC]'  >
                         {categories.map((category, index) => (
-                            <TouchableOpacity
+                            <PressableScale
                                 className="w-24 py-5 justify-center items-center"
                                 key={category}
                                 onPress={() => handleCategoryChange(category as Category)}
                             >
                                 <Text style={{ fontFamily: 'medium' }}>{category}</Text>
-                            </TouchableOpacity>
+                            </PressableScale>
                         ))}
 
                         <View className="w-full absolute left-0 bottom-0 h-1 bg-[#F0F1F3]">

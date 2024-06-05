@@ -1,9 +1,10 @@
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
 import React from 'react'
 import Colors from '../../constants/Colors'
 import { router } from 'expo-router'
 import { ArrowLeft, Notification } from 'iconsax-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { PressableScale } from 'react-native-pressable-scale'
 
 
 const Page = () => {
@@ -13,9 +14,9 @@ const Page = () => {
 
       <View className='h-full bg-[#0b0b0b]'>
         <View className='px-6 py-4 flex flex-row gap-x-3 items-center justify-between'>
-          <TouchableOpacity onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full' >
+          <PressableScale onPress={() => router.back()} className='w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full' >
             <ArrowLeft variant='Broken' size={20} color={Colors.white} />
-          </TouchableOpacity>
+          </PressableScale>
           <Text className='text-lg text-[#fffffc]' style={{ fontFamily: 'medium' }}>Известувања</Text>
 
           <Text className='text-4xl text-[#1BD868]' style={{ fontFamily: "heavy" }}>G</Text>

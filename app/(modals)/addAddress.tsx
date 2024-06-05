@@ -8,7 +8,6 @@ import {
   Vibration,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
 import {
   ArrowDown,
   ArrowRight,
@@ -29,6 +28,7 @@ import { customMapStyle } from "../../mapStyle";
 import Animated, { FadeIn, FadeInDown, FadeInRight, FadeInUp, FadeOut, FadeOutLeft } from "react-native-reanimated";
 import debounce from 'lodash.debounce'
 import { map } from "lodash";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
@@ -120,12 +120,12 @@ const Page = () => {
   return (
     <View style={styles.header} className="bg-[#0b0b0b] px-6 flex-1">
       <View className="flex flex-row items-center justify-between">
-        <TouchableOpacity
+        <PressableScale
           onPress={() => router.back()}
           className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
         >
           <ArrowDown variant="Broken" size={20} color={Colors.white} />
-        </TouchableOpacity>
+        </PressableScale>
 
         <Text
           className="text-lg text-[#fffffc]"
@@ -242,7 +242,7 @@ const Page = () => {
       )}
 
       {next ? (
-        <TouchableOpacity
+        <PressableScale
           onPress={addAddress}
           className="bg-[#121212] border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-3xl"
         >
@@ -253,9 +253,9 @@ const Page = () => {
           >
             Зачувај адреса
           </Text>
-        </TouchableOpacity>
+        </PressableScale>
       ) : (
-        <TouchableOpacity
+        <PressableScale
           onPress={() => setnext(true)}
           className="bg-[#121212] border-2 border-[#1BD868] mb-2 py-6 flex justify-center flex-row  items-center rounded-3xl"
         >
@@ -271,7 +271,7 @@ const Page = () => {
             color={Colors.primary}
             size={22}
           />
-        </TouchableOpacity>
+        </PressableScale>
       )}
     </View>
   );

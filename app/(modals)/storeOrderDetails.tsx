@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Platform, StyleSheet } from "react-native";
+import { View, Text, Platform, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { ArrowDown, InfoCircle } from "iconsax-react-native";
 import Colors from "../../constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchOrder } from "../reduxStore/orderSlice";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface OrderItem {
   id: string;
@@ -55,12 +56,12 @@ const Page = () => {
     >
       <View className="">
         <View className="flex px-8 mb-6 flex-row items-center justify-between">
-          <Pressable
+          <PressableScale
             onPress={() => router.back()}
             className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
           >
             <ArrowDown variant="Broken" size={20} color={Colors.white} />
-          </Pressable>
+          </PressableScale>
 
           <Text
             className="text-lg text-[#fffffc]"
@@ -80,6 +81,8 @@ const Page = () => {
           const orderStoreItem = storeItems.find(
             (storeItem) => storeItem.id === orderItem.storeItemId
           );
+        
+          
           return (
             <View key={index} className="flex flex-col ">
               <View className="bg-[#121212]/90 border-b border-[#fffffc]/5 px-6 py-4 flex flex-row  w-full items-center justify-between">
@@ -119,74 +122,74 @@ const Page = () => {
           );
         })}
 
-        {orderDetails.comment && (
-          <View className="mt-4 flex items-center flex-row">
+        {orderDetails.customerComment && (
+          <View className="mt-4 px-6 flex items-center flex-row">
             <InfoCircle variant="Bulk" size={15} color={Colors.primary} />
             <Text
               style={{ fontFamily: "medium" }}
-              className="ml-1 text-xs text-white/80"
+              className="ml-1 text-white"
             >
-              Коментар: {orderDetails.comment}
+              Коментар: {orderDetails.customerComment}
             </Text>
           </View>
         )}
       </View>
 
-      <View className="px-6 flex flex-col">
+      <View className=" flex flex-col">
         {orderDetails.status === 'ACCEPTED' ? (null) : (
-        <View className="flex border-t border-[#fffffc]/5 pt-4 space-x-2 flex-row items-center justify-center">
-          <Pressable onPress={() => setdoneAt('PT10M')} className={doneAt === 'PT10M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
+        <View className="flex border-t  border-[#fffffc]/5 pt-4 space-x-2 flex-row items-center justify-center">
+          <PressableScale onPress={() => setdoneAt('PT10M')} className={doneAt === 'PT10M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
             <Text
               style={{ fontFamily: "medium" }}
               className=" text-white"
             >
               10 мин
             </Text>
-          </Pressable>
+          </PressableScale>
 
-          <Pressable onPress={() => setdoneAt('PT15M')} className={doneAt === 'PT15M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
+          <PressableScale onPress={() => setdoneAt('PT15M')} className={doneAt === 'PT15M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
             <Text
               style={{ fontFamily: "medium" }}
               className=" text-white"
             >
               15 мин
             </Text>
-          </Pressable>
+          </PressableScale>
 
 
-          <Pressable onPress={() => setdoneAt('PT20M')} className={doneAt === 'PT20M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
+          <PressableScale onPress={() => setdoneAt('PT20M')} className={doneAt === 'PT20M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
             <Text
               style={{ fontFamily: "medium" }}
               className=" text-white"
             >
               20 мин
             </Text>
-          </Pressable>
+          </PressableScale>
 
 
-          <Pressable onPress={() => setdoneAt('PT25M')} className={doneAt === 'PT25M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
+          <PressableScale onPress={() => setdoneAt('PT25M')} className={doneAt === 'PT25M' ? "py-2.5 px-3 border-2 border-[#25D366]  rounded-xl bg-[#121212]/90 flex justify-center items-center" : "py-2.5 px-3 border-2 border-[#fffffc]/40 rounded-xl bg-[#121212]/90 flex justify-center items-center"}>
             <Text
               style={{ fontFamily: "medium" }}
               className=" text-white"
             >
               25 мин
             </Text>
-          </Pressable>
+          </PressableScale>
 
         </View>)}
 
-        <View className="flex  flex-row items-center mt-3  gap-x-2  ">
-          <Pressable className="py-4 flex-1 rounded-2xl bg-[#fffffc]/10 flex justify-center items-center">
+        <View className="flex px-6 flex-row items-center mt-3  gap-x-2  ">
+          <PressableScale className="py-4 flex-1 rounded-2xl bg-[#fffffc]/10 flex justify-center items-center">
             <Text
               style={{ fontFamily: "medium" }}
               className="text-[13px] text-white"
             >
               Одбиј
             </Text>
-          </Pressable>
+          </PressableScale>
 
           {orderDetails.status === "ACCEPTED" ? null : (
-            <Pressable
+            <PressableScale
               onPress={acceptOrder}
               className="py-4 flex-1 rounded-2xl border-2 bg-[#25D366]/90 flex justify-center items-center"
             >
@@ -196,7 +199,7 @@ const Page = () => {
               >
                 Прифати
               </Text>
-            </Pressable>
+            </PressableScale>
           )}
         </View>
       </View>

@@ -1,10 +1,8 @@
 import { View, Text, FlatList, Pressable } from "react-native";
-import React, { useMemo, useRef, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reduxStore";
-import OrderCard from "../../../../components/Cards/storeOrderCard";
-import { CloseCircle, CloseSquare, DirectboxNotif } from "iconsax-react-native";
+import {  DirectboxNotif } from "iconsax-react-native";
 import Colors from "../../../../constants/Colors";
 import { router } from "expo-router";
 import StoreOrderCard from "../../../../components/Cards/storeOrderCard";
@@ -14,10 +12,10 @@ const Page = () => {
   const { orders } = useSelector((state: RootState) => state.orders);
 
   const acceptOrder = (item: any) => {
-    router.push({pathname: '/(modals)/storeOrderDetails', params: { id: item.id}})
+    router.push({pathname: '/(modals)/delivererOrderDetails', params: { id: item.id}})
   };
 
-  const acceptedOrders = orders.filter((order) => order.status === "ACCEPTED");
+  const acceptedOrders = orders.filter((order) => order.status === "FINISHED");
 
   return (
     <View className="flex-1 bg-[#0b0b0b]">

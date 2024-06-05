@@ -6,7 +6,6 @@ import {
   TextInput,
   Keyboard,
   Alert,
-  TouchableOpacity,
 } from "react-native";
 import React, {
   useCallback,
@@ -44,6 +43,7 @@ import { RootState } from "../reduxStore";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import { Image } from "expo-image";
 import { useComment } from "../commentContext";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface CartItemType {
   id: string;
@@ -96,7 +96,7 @@ const CartItem: React.FC<CartItemProps> = React.memo(
             </Text>
           </View>
           <View className="bg-[#121212]/90 px-1 py-1 flex-row items-center rounded-xl justify-between w-24">
-            <TouchableOpacity
+            <PressableScale
               onPress={() =>
                 handleDecreaseQuantity(
                   cartItem.storeId,
@@ -111,9 +111,9 @@ const CartItem: React.FC<CartItemProps> = React.memo(
               ) : (
                 <Minus size={20} color={Colors.white} variant="Linear" />
               )}
-            </TouchableOpacity>
+            </PressableScale>
             <Text className="text-[#fffffc]">{cartItem.quantity}</Text>
-            <TouchableOpacity
+            <PressableScale
               onPress={() =>
                 handleIncreaseQuantity(
                   cartItem.storeId,
@@ -124,7 +124,7 @@ const CartItem: React.FC<CartItemProps> = React.memo(
               className="bg-[#121212]/90 flex justify-center items-center w-7 h-7 rounded-lg"
             >
               <Add size={20} color={Colors.white} variant="Linear" />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
       </View>
@@ -211,14 +211,14 @@ const Page = () => {
               Корпа
             </Text>
           </View>
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push("/(order)/orders")}
             className="px-4 bg-[#121212]/90 rounded-2xl py-3"
           >
             <Text style={{ fontFamily: "semibold" }} className="text-white">
               Нарачки
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
 
         <View
@@ -237,7 +237,7 @@ const Page = () => {
 
           <View className="w-full h-1 bg-[#757780]/10"></View>
           <View className="px-6">
-            <TouchableOpacity
+            <PressableScale
               onPress={handleRemoveCart}
               className="w-full flex-row flex items-center justify-between"
             >
@@ -252,9 +252,9 @@ const Page = () => {
                   </Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() =>
                 router.push({ pathname: "/orderComment", params: { comment } })
               }
@@ -294,7 +294,7 @@ const Page = () => {
                   <AddSquare color={Colors.white} size={20} />
                 )}
               </View>
-            </TouchableOpacity>
+            </PressableScale>
 
             <View className="flex flex-row my-6 justify-between items-center">
               <Text
@@ -313,14 +313,14 @@ const Page = () => {
           </View>
 
           <View className="px-6 mb-4 flex">
-            <TouchableOpacity
+            <PressableScale
               onPress={() =>
                 router.push({
                   pathname: "/(order)/checkout",
                   params: { subtotal, cartItems },
                 } as any)
               }
-              className="w-full flex-row py-6 border-2 border-[#1BD868]  flex justify-center items-center rounded-2xl"
+              className="w-full flex-row py-6 border-2 border-[#1BD868]  flex justify-center items-center rounded-3xl"
             >
               <Text style={{ fontFamily: "medium" }} className="text-[#fffffc]">
                 Кон наплата
@@ -331,7 +331,7 @@ const Page = () => {
                 className="ml-2"
                 color={Colors.primary}
               />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
 
@@ -355,11 +355,11 @@ const Page = () => {
         </View>
 
         <View className="px-6">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push("/stores")}
             className={
               cartItems.length == 0
-                ? "mb-4 w-full flex-row py-6 border-2 border-[#1BD868] bg-[#121212]/90 flex justify-center items-center rounded-2xl"
+                ? "mb-4 w-full flex-row py-6 border-2 border-[#1BD868] bg-[#121212]/90 flex justify-center items-center rounded-3xl"
                 : "hidden"
             }
           >
@@ -370,7 +370,7 @@ const Page = () => {
             >
               Пребарај Ресторани
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
     </GestureHandlerRootView>

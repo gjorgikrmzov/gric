@@ -1,4 +1,4 @@
-import { Text, Pressable, View } from "react-native";
+import { Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reduxStore";
 import { fetchOrder } from "../reduxStore/orderSlice";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
 
@@ -40,20 +41,21 @@ const Page = () => {
       </Animated.View>
 
       <View className="gap-y-3 px-6">
-        <Pressable
-          className="border rounded-2xl py-5 flex flex-row items-center justify-center  border-[#fffffc] "
-          onPress={() => router.push("/(tabs)/")}
+      <PressableScale
+          className="rounded-3xl bg-[#121212]/90 py-6 flex flex-row items-center justify-center border-2 border-[#1BD868]  "
+          onPress={() => router.push("/(order)/trackOrder")}
         >
           <Text className="text-white" style={{ fontFamily: "medium" }}>
-            Врати се на почетна
+            Следи ја нарачката
           </Text>
-          <ArrowRight
+          <Map1
             variant="Broken"
             size={20}
             className="ml-2"
             color={Colors.primary}
           />
-        </Pressable>
+        </PressableScale>
+
 
         <View className="flex flex-row justify-center items-center gap-x-2">
           <View className="w-20 h-[1px] bg-[#fffffc]/10"></View>
@@ -66,20 +68,20 @@ const Page = () => {
           <View className="w-20 h-[1px] bg-[#fffffc]/10"></View>
         </View>
 
-        <Pressable
-          className="border rounded-2xl py-5 flex flex-row items-center justify-center  border-[#fffffc] mb-4 "
-          onPress={() => router.push("/(order)/trackOrder")}
+        <PressableScale
+          className="rounded-3xl bg-[#121212]/90 py-6 flex flex-row mb-4 items-center justify-center border-2 border-[#fffffc]/80 "
+          onPress={() => router.push("/(tabs)/")}
         >
           <Text className="text-white" style={{ fontFamily: "medium" }}>
-            Следи ја нарачката
+            Врати се на почетна
           </Text>
-          <Map1
+          <ArrowRight
             variant="Broken"
             size={20}
             className="ml-2"
             color={Colors.primary}
           />
-        </Pressable>
+        </PressableScale>
       </View>
     </SafeAreaView>
   );

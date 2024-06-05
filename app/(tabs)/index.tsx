@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   RefreshControl,
   StyleSheet,
@@ -53,14 +52,16 @@ import { fetchAddress } from "../reduxStore/addressSlice";
 import StoresList from "../../components/List/allStoresList";
 import SkeletonList from "../../components/List/skeletonList";
 import { fetchOrder } from "../reduxStore/orderSlice";
+import { PressableScale } from "react-native-pressable-scale";
+import { fetchUserInfo } from "../reduxStore/userSlice";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
 
   const { stores } = useSelector((state: RootState) => state.store);
-  const { storeTypes } = useSelector((state: RootState) => state.storeType);
   const { categories } = useSelector((state: RootState) => state.category);
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
+  const { orders } = useSelector((state: RootState) => state.orders);
 
   const { addresses } = useSelector((state: RootState) => state.addresses);
   const personId = useSelector((state: RootState) => state.user.id);
@@ -76,14 +77,13 @@ const Page = () => {
   const searchResult = useSharedValue(0);
   const inputY = useSharedValue(0);
 
-  const [orderExists, setorderExists] = useState(false);
-
   useEffect(() => {
-    if (accessToken) {  	
+    if (accessToken) {
       Promise.all([
         setloadingStores(false),
         dispatch(fetchStores(accessToken)),
-        dispatch(fetchStoresTypes(accessToken)),
+        dispatch(fetchOrder(accessToken)),
+        dispatch(fetchUserInfo(accessToken)),
         dispatch(fetchCategories(accessToken)),
         dispatch(fetchAddress({ personId, accessToken })),
       ])
@@ -143,30 +143,28 @@ const Page = () => {
     setSearch(text);
   };
 
-  const getStoreTypeName = (storeTypeId: string) => {
-    const storeType = storeTypes?.find((type) => type.id === storeTypeId);
-    return storeType ? storeType.name : "Unknown Type";
-  };
+
 
   const onRefresh = () => {
     setRefreshing(true);
     setloadingStores(true);
-    dispatch(fetchStores(accessToken));
-    dispatch(fetchCategories(accessToken)),
-    dispatch(fetchStoresTypes(accessToken)).finally(() => {
-      setRefreshing(false), setloadingStores(false);
-    });
+    dispatch(fetchStores(accessToken)),
+      dispatch(fetchOrder(accessToken)),
+      dispatch(fetchUserInfo(accessToken)),
+      dispatch(fetchCategories(accessToken))
+      .finally(() => {
+        setRefreshing(false), setloadingStores(false);
+      });
   };
 
   const handleRouteStoreDetails = (store: any) => {
-    const storeTypeName = getStoreTypeName(store.storeTypeId);
     router.push({
       pathname: "/store/[id]",
       params: {
         id: store.id,
         name: store.name,
         isOpen: store.isOpen,
-        storeTypeName,
+        storeType: store.storeType,
         address: JSON.stringify(store.address),
         imageUrl: store.imageUrl,
       },
@@ -248,6 +246,15 @@ const Page = () => {
     }
   };
 
+
+  const formatTime = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <>
       <View className="w-screen  h-screen absolute z-0 left-0 top-0 bg-[#0b0b0b]"></View>
@@ -256,7 +263,7 @@ const Page = () => {
         <StatusBar style="light" />
 
         <View className="bg-[#0b0b0b] z-0 border-b  border-[#757780]/5 px-6 py-1 pb-6 flex justify-between items-center flex-row ">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push("/(modals)/manageAddresses")}
           >
             <View className="flex items-center flex-row ml-1">
@@ -293,22 +300,22 @@ const Page = () => {
                 </Text>
               )}
             </View>
-          </TouchableOpacity>
+          </PressableScale>
 
           <View className="flex flex-row items-center gap-x-2">
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.push("/(user)/notifications")}
               className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fffffc]/5"
             >
               <Notification1 color={Colors.white} size={20} variant="Broken" />
-            </TouchableOpacity>
+            </PressableScale>
 
-            <TouchableOpacity
+            <PressableScale
               onPress={() => router.push("/(user)/profile")}
               className="w-14 h-14 flex justify-center items-center rounded-full border border-[#fffffc]/5"
             >
               <User color={Colors.white} size={20} variant="Broken" />
-            </TouchableOpacity>
+            </PressableScale>
           </View>
         </View>
 
@@ -347,7 +354,7 @@ const Page = () => {
             <Animated.View className="mt-3" style={animatedInputStyle}>
               <View className="mx-6 z-[999] items-center bg-[#121212]/90 flex-row px-5 rounded-3xl">
                 {isFocused ? (
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={onBlur}
                     className=" flex justify-center items-center"
                   >
@@ -356,7 +363,7 @@ const Page = () => {
                       color={Colors.white}
                       variant="Broken"
                     />
-                  </TouchableOpacity>
+                  </PressableScale>
                 ) : (
                   <SearchNormal1
                     size={20}
@@ -400,7 +407,7 @@ const Page = () => {
                   {filteredStores.map(
                     (store, index) =>
                       index < 5 && (
-                        <TouchableOpacity
+                        <PressableScale
                           onPress={() => handleRouteStoreDetails(store)}
                           key={index}
                           className="w-full flex-row  flex items-center justify-between"
@@ -420,7 +427,7 @@ const Page = () => {
                               </Text>
                             </View>
                           </View>
-                        </TouchableOpacity>
+                        </PressableScale>
                       )
                   )}
 
@@ -460,7 +467,7 @@ const Page = () => {
             >
               <Animated.View
                 entering={FadeIn.springify().duration(300).delay(100)}
-                className="flex flex-row items-center mt-2 px-7 gap-x-2"
+                className="flex flex-row items-center px-7 gap-x-2"
               >
                 {categories &&
                   categories.map(
@@ -497,38 +504,52 @@ const Page = () => {
           </View>
         </ScrollView>
 
-        {/* <View
-          className={
-            orderExists
-              ? "px-6 flex w-full justify-center items-center absolute bottom-4"
-              : "hidden"
-          }
-        >
-          <TouchableOpacity
-            onPress={() => router.push("/(order)/trackOrder")}
-            className="w-full p-4 rounded-2xl flex items-center justify-between flex-row bg-[#0b0b0b] shadow-md"
-          >
-            <View className="flex flex-row items-center  space-x-3">
-              <View className=" flex justify-center items-center w-20 h-20 bg-[#7577804C]/10 rounded-2xl overflow-hidden"></View>
-              <View className="flex flex-col">
-                <Text
-                  className=" text-[#fffffc]/80 uppercase"
-                  style={{ fontFamily: "semibold" }}
-                >
-                  Бу Хаус
-                </Text>
-                <Text
-                  className=" mt-1 text-[#fffffc]"
-                  style={{ fontFamily: "medium" }}
-                >
-                  x1 Бонапарата
-                </Text>
-              </View>
-            </View>
+        {orders.length !== 0 && (
+          <View className=" flex w-full px-6 justify-center bottom-3 items-center absolute">
+            <PressableScale
+              onPress={() => router.push("/(order)/trackOrder")}
+              className="w-full border-2 border-[#1BD868] p-4 flex items-center rounded-3xl justify-between flex-row bg-[#0b0b0b]"
+            >
+              {orders.map((order, index) => {
+                const storeOrder = stores.find(
+                  (store) => String(order.storeId) == String(store.id)
+                );
+                return (
+                  <View
+                    key={index}
+                    className="flex flex-row items-center  space-x-3"
+                  >
+                    <Image
+                      source={storeOrder?.imageUrl}
+                      className="flex justify-center items-center w-20 h-20 bg-[#121212]/90 rounded-2xl overflow-hidden"
+                    />
+                    <View className="flex flex-col">
+                      <Text
+                        className=" text-[#fffffc] text-[15px]"
+                        style={{ fontFamily: "medium" }}
+                      >
+                        {storeOrder?.name}
+                      </Text>
+                      
+                      <Text
+                        className=" text-[#fffffc]/60 text-[11px]"
+                        style={{ fontFamily: "medium" }}
+                      >
+                        Креирана во:{" "}
+                        <Text className="text-[#fffffc]">
+                          {formatTime(order.createdAt)}
+                        </Text>
+                        
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
 
-            <Timer variant="Bulk" color={Colors.primary} size={36} />
-          </TouchableOpacity>
-        </View> */}
+              <Timer variant="Bulk" color={Colors.primary} size={36} />
+            </PressableScale>
+          </View>
+        )}
       </SafeAreaView>
     </>
   );

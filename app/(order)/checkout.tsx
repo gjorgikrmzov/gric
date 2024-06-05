@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Pressable, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import React, { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -22,6 +22,7 @@ import { RootState, store } from "../reduxStore";
 import { clearCart } from "../reduxStore/cartSlice";
 import * as Haptics from "expo-haptics";
 import { useComment } from "../commentContext";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const { subtotal } = useLocalSearchParams();
@@ -31,7 +32,7 @@ const Page = () => {
   const { addresses } = useSelector((state: RootState) => state.addresses);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const { accessToken } = useSelector((state: RootState) => state.accessToken);
-  const {comment, setComment} = useComment();
+  const { comment, setComment } = useComment();
 
   const deliveryCost = 100;
   const subtotalNumber = Number(subtotal) || 0;
@@ -58,12 +59,11 @@ const Page = () => {
   const storeId = cartItems.length > 0 ? cartItems[0].storeId : "";
   const selectedAddress = addresses.find(
     (address) => address.isSelected === true
-  );  
-  
+  );
+
   const createOrder = async () => {
     try {
-
-      if(!selectedAddress) { 
+      if (!selectedAddress) {
         Alert.alert("Адреса на достава", "Внесете или одберете адреса", [
           { text: "Во ред", style: "cancel" },
         ]);
@@ -80,35 +80,37 @@ const Page = () => {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          customerId: personId,
+          customer: {
+            id: personId
+          },
           storeId: storeId,
           deliveryAddressId: selectedAddress?.id,
           status: "CREATED",
-          comment: comment,
+          customerComment: comment,
           items: items,
         }),
       });
 
       if (response.ok) {
         router.push("/orderPlaced");
-        setComment('');
+        setComment("");
         dispatch(clearCart());
       }
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
-  
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full flex flex-col justify-start bg-[#0b0b0b]">
         <View className="px-6 py-4 flex flex-row gap-x-3 items-center justify-between">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
           >
             <ArrowLeft variant="Broken" size={20} color={Colors.white} />
-          </TouchableOpacity>
+          </PressableScale>
           <Text
             className="text-lg text-[#fafafa]"
             style={{ fontFamily: "medium" }}
@@ -144,7 +146,10 @@ const Page = () => {
 
               <View className="w-full mt-3">
                 {selectedAddress ? (
-                  <TouchableOpacity className="border-b border-[#fafafa]/5 px-6 w-full py-4  flex flex-row items-center justify-between">
+                  <PressableScale
+                    onPress={() => router.push("/(modals)/manageAddresses")}
+                    className="border-b border-[#fafafa]/5 px-6 w-full py-4  flex flex-row items-center justify-between"
+                  >
                     <View className="flex-col items-start">
                       <View className="flex flex-row items-center">
                         <Location
@@ -196,20 +201,17 @@ const Page = () => {
                       </View>
                     </View>
 
-                    <TouchableOpacity
-                      onPress={() => router.push("/(modals)/manageAddresses")}
-                      className="p-3"
-                    >
+                    <PressableScale className="p-3">
                       <ExportSquare
                         variant="Linear"
                         size={20}
                         color={Colors.white}
                       />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
+                    </PressableScale>
+                  </PressableScale>
                 ) : (
                   <View>
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => router.push("/manageAddresses")}
                       className="border-b border-[#fffffc]/5 px-6 w-full py-6  flex flex-row items-center justify-start"
                     >
@@ -225,7 +227,7 @@ const Page = () => {
                       >
                         Додај адреса
                       </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                   </View>
                 )}
               </View>
@@ -245,13 +247,9 @@ const Page = () => {
                 >
                   Начин на плаќање
                 </Text>
-                {/* <View className='flex mt-2 flex-row items-center'>
-                                    <Money size={22} variant='Bold' color={Colors.dark} />
-                                    <Text className='ml-2 text-[16px] text-[#fffffc]' style={{ fontFamily: 'medium' }}>Плаќањето се врши при достава!</Text>
-                                </View> */}
               </View>
               <View className="flex flex-row gap-x-2 mt-3">
-                <Pressable
+                <PressableScale
                   onPress={handleSelectCardPayment}
                   className={
                     cardPayment
@@ -272,9 +270,9 @@ const Page = () => {
                   >
                     Со Картичка
                   </Text>
-                </Pressable>
+                </PressableScale>
 
-                <Pressable
+                <PressableScale
                   onPress={handleSelectOnDeliveryPayment}
                   className={
                     ondeliveryPayment
@@ -295,7 +293,7 @@ const Page = () => {
                   >
                     При достава
                   </Text>
-                </Pressable>
+                </PressableScale>
               </View>
             </View>
           </ScrollView>
@@ -358,7 +356,7 @@ const Page = () => {
             </View>
 
             <View className="px-6 mb-4">
-              <TouchableOpacity
+              <PressableScale
                 onPress={createOrder}
                 className="w-full flex-row py-6 border-2 border-[#1BD868] flex justify-center items-center rounded-2xl"
               >
@@ -374,7 +372,7 @@ const Page = () => {
                   size={24}
                   color={Colors.primary}
                 />
-              </TouchableOpacity>
+              </PressableScale>
             </View>
           </View>
         </BottomSheet>

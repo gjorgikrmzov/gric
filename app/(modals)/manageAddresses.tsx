@@ -12,10 +12,10 @@ import Colors from "../../constants/Colors";
 import { router } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reduxStore";
-import { TouchableOpacity } from "react-native";
 import { deleteAddress, fetchAddress } from "../reduxStore/addressSlice";
 import { StatusBar } from "expo-status-bar";
 import * as Haptics from "expo-haptics";
+import { PressableScale } from "react-native-pressable-scale";
 
 const Page = () => {
   const dispatch = useDispatch<any>();
@@ -85,12 +85,12 @@ const Page = () => {
 
       <View className="bg-[#0b0b0b] flex-1">
         <View className="flex px-6 flex-row items-center justify-between">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.back()}
             className="w-14 h-14 flex justify-center items-center bg-[#121212]/90 rounded-full"
           >
             <ArrowDown variant="Broken" size={20} color={Colors.white} />
-          </TouchableOpacity>
+          </PressableScale>
           <Text
             className="text-lg text-[#fffffc]"
             style={{ fontFamily: "medium" }}
@@ -138,7 +138,7 @@ const Page = () => {
             <ScrollView>
               <View className="mt-4 w-full flex-1">
                 {sortedAddresses?.map((address, index) => (
-                  <TouchableOpacity
+                  <PressableScale
                     onPress={() => selectAddress(address)}
                     key={index}
                     className="border-b border-[#fffffc]/5 px-6 w-full py-5 flex flex-row items-center justify-between"
@@ -196,13 +196,13 @@ const Page = () => {
                       </View>
                     </View>
 
-                    <TouchableOpacity
+                    <PressableScale
                       onPress={() => handleDeleteAddress(address.id)}
                       className="w-10 h-10 flex justify-center items-center rounded-xl border border-[#0b0b0b]/5 bg-[#121212]/90"
                     >
                       <Trash size={18} color={Colors.white} variant="Broken" />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
+                    </PressableScale>
+                  </PressableScale>
                 ))}
               </View>
             </ScrollView>
@@ -210,7 +210,7 @@ const Page = () => {
         )}
 
         <View className="px-6 w-full pb-2.5">
-          <TouchableOpacity
+          <PressableScale
             onPress={() => router.push("/(modals)/addAddress")}
             className="py-6 rounded-3xl flex-row flex justify-center items-center border-2 border-[#1BD868] "
           >
@@ -221,7 +221,7 @@ const Page = () => {
             >
               Додај адреса
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         </View>
       </View>
     </View>

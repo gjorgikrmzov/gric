@@ -1,7 +1,7 @@
 export type Store = { 
     id: number,
     name: string,
-    storeTypeId: string,
+    storeType: string,
     isOpen: boolean,
     address?: Address,
     imageUrl: string
@@ -54,18 +54,20 @@ export type User = {
 
 export type orderItem = {
     id: string,
-    storeItemId: string,
-    quantity: number
+    quantity: number,
+    name: string,
+    price: string
 }
 
 export type Order = {
     id: string,
     storeId: string,
-    customerId: string,
-    delivererId: string,
+    customer: User,
+    deliverer: User,
     deliveryAddressId: string,
     totalPrice: string,
-    comment: string,
+    customerComment: string,
+    storeComment: string,
     status: string,
     createdAt: string,
     doneAt: string,
